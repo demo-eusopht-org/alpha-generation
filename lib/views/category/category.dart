@@ -64,6 +64,7 @@ class _CategoryListState extends State<CategoryList> {
                   itemCount: ItemList.items.length,
                   itemBuilder: (BuildContext context, int index) {
                     final item = ItemList.items[index];
+                    final sno = (index + 1).toString();
                     return InkWell(
                       onTap: () {
                         Get.to(() => ProductDetails(item: item));
@@ -75,6 +76,17 @@ class _CategoryListState extends State<CategoryList> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Text(
+                                  sno,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 Image.asset(
                                   item.imageName,
                                   width: 120,

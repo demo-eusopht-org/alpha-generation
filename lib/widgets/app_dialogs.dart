@@ -28,6 +28,7 @@ class AppDialogs {
               onPressed: onSecondaryTap,
               child: Text(secondaryLabel),
             ),
+            SizedBox(width: 5,),
             ElevatedButton(
               onPressed: () {
                 onConfirm();

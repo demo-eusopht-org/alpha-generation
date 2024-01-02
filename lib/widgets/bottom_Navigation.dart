@@ -15,24 +15,44 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int selectedPage = 0;
-  final screens = [HomeScreen(), CategoryList(), AddProduct()];
+  final screens = [
+    HomeScreen(),
+    CategoryList(),
+    AddProduct(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: ConvexAppBar(
+          top: -20,
           height: 50,
           backgroundColor: Constants.backgroundContColor,
           items: [
             TabItem(
               icon: Icons.home,
+              activeIcon: Icon(
+                Icons.home,
+                color: Colors.black,
+                size: 35,
+              ),
             ),
             TabItem(
               icon: Icons.shopping_cart,
+              activeIcon: Icon(
+                Icons.shopping_cart,
+                color: Colors.black,
+                size: 35,
+              ),
             ),
             TabItem(
               icon: Icons.manage_accounts,
+              activeIcon: Icon(
+                Icons.manage_accounts,
+                color: Colors.black,
+                size: 35,
+              ),
             ),
           ],
           onTap: (int index) {
