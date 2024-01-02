@@ -232,8 +232,11 @@ class _AddProductState extends State<AddProduct> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      fileName ?? 'Upload',
+                                    Container(
+                                      width: 120,
+                                      child: Text(
+                                        fileName ?? 'Upload',
+                                      ),
                                     ),
                                     Icon(
                                       Icons.add,
@@ -280,10 +283,13 @@ class _AddProductState extends State<AddProduct> {
                             dialogTitle: 'Finance with it',
                             label: 'Finance with it',
                             secondaryLabel: 'Cancel',
-                            onConfirm: () {},
+                            onConfirm: () {
+                              Get.offAll(
+                                () => MainScreen(),
+                              );
+                            },
                             onSecondaryTap: () => Get.back(),
                           );
-                          Get.offAll(() => MainScreen());
                         },
                         child: Text(
                           'Submit',

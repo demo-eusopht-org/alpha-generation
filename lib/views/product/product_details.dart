@@ -103,9 +103,14 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Image.asset(
-                    popularLocations[selectedImageIndex]['image'].toString(),
-                    height: 250,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      popularLocations[selectedImageIndex]['image'].toString(),
+                      height: 250,
+                      width: 300,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   Sliderproduct(
                       popularLocations: popularLocations,

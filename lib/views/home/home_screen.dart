@@ -8,6 +8,7 @@ import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
 import '../../widgets/icon_text.dart';
+import '../auth_view/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isKeyboardOpen = false;
   final searchFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -60,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildListIcon(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: buildListIcon(),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -129,12 +134,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildListIcon() {
     return IconText(
-      icon: Icons.menu,
+      icon: Icons.settings,
       text: '',
       onTap: () {
-        // Get.to(
-        //   () => CategoryList(),
-        // );
+        showMenu<int>(
+          context: context,
+          position: RelativeRect.fromLTRB(0, 0, 100, 0),
+          items: [
+            PopupMenuItem(
+              value: 1,
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Logout'),
+                        content: Text('Are you sure you want to log out?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.to(LoginScreen());
+                            },
+                            child: Text('Logout'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Cancel'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 10),
+                    Text("Logout")
+                  ],
+                ),
+              ),
+            ),
+          ],
+          elevation: 2,
+        );
       },
     );
   }

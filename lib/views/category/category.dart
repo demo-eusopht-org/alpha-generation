@@ -185,8 +185,13 @@ class _CategoryListState extends State<CategoryList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                    onTap: () => Get.back(),
-                    child: Image.asset('assets/images/back_arrow.png')),
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
