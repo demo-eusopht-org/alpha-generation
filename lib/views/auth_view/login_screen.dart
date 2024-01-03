@@ -22,15 +22,19 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.white,
         height: kBottomNavigationBarHeight,
         child: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              Get.to(() => SignupScreen());
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Constants.loginButtonColor,
-              foregroundColor: Colors.white,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            // height: MediaQuery.of(context).size.height * 0.2,
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(() => SignupScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Constants.loginButtonColor,
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Sign Up'),
             ),
-            child: Text('Sign Up'),
           ),
         ),
       ),
@@ -115,18 +119,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Constants.loginButtonColor,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        Get.to(
-                          () => MainScreen(),
-                        );
-                      },
-                      child: Text(
-                        'Login',
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.loginButtonColor,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          Get.to(
+                            () => MainScreen(),
+                          );
+                        },
+                        child: Text(
+                          'Login',
+                        ),
                       ),
                     ),
                   ],

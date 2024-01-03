@@ -104,12 +104,6 @@ class _CategoryListState extends State<CategoryList> {
                                       fWeight: FontWeight.w700,
                                       fSize: 28.0,
                                     ),
-                                    textWidget(
-                                      text: '${item.price}',
-                                      color: Colors.black,
-                                      fWeight: FontWeight.w500,
-                                      fSize: 21.0,
-                                    ),
                                     RatingBar.builder(
                                       itemSize: 25,
                                       initialRating: ratingStar,
@@ -128,7 +122,13 @@ class _CategoryListState extends State<CategoryList> {
                                           ratingStar = rating;
                                         });
                                       },
-                                    )
+                                    ),
+                                    textWidget(
+                                      text: '${item.price}',
+                                      color: Colors.black,
+                                      fWeight: FontWeight.w500,
+                                      fSize: 21.0,
+                                    ),
                                   ],
                                 ),
                               ],
