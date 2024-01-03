@@ -5,6 +5,12 @@ import 'package:noble_vintage/views/splash_screen.dart';
 void main() {
   runApp(const MyApp());
 }
+//
+// void main() => runApp(
+//   DevicePreview(
+//     builder: (context) => const MyApp(),
+//   ),
+// );
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

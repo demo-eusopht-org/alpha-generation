@@ -159,8 +159,8 @@ class _AddProductState extends State<AddProduct> {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                  left: 5,
-                                  right: 5,
+                                  left: 6,
+                                  right: 6,
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
