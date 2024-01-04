@@ -38,12 +38,15 @@ class _ProductDetailsState extends State<ProductDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Estimated',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: Colors.black,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Text(
+                      'Estimated',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   Stack(
@@ -105,11 +108,47 @@ class _ProductDetailsState extends State<ProductDetails> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      popularLocations[selectedImageIndex]['image'].toString(),
-                      height: 250,
-                      width: 300,
-                      fit: BoxFit.fill,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Container(
+                        //   width: Get.width * 0.01,
+                        // ),
+                        Spacer(),
+                        Image.asset(
+                          popularLocations[selectedImageIndex]['image']
+                              .toString(),
+                          height: 250,
+                          width: Get.width * 0.75,
+                          fit: BoxFit.fill,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 2.5,
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Image.asset('assets/images/search_icon.png'),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Image.asset('assets/images/fav_icon.png'),
+                              Text(
+                                '65',
+                                style: GoogleFonts.dmSans(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Sliderproduct(
@@ -127,9 +166,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: [
                           Text(
                             'Beirutimes - Patek Philippe',
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
                           ),
                           Text(
                             'Nautilus 7118R',
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Text(
                             'Description:',
@@ -142,7 +194,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Text(
                             'The Patek Philippe Nautilus 7118R: A radiant fusion of rose gold elegance and timeless sophistication. Its diamond-adorned bezel and sunburst brown dial exude luxury, while its precision movement reflects horological mastery at its finest.',
                             style: GoogleFonts.inter(
-                              fontSize: 20,
+                              fontSize: 17,
                               fontWeight: FontWeight.w400,
                               color: Colors.black,
                             ),
@@ -208,10 +260,13 @@ class _ProductDetailsState extends State<ProductDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset('assets/images/back_arrow.png')),
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -220,7 +275,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 30, left: 20, right: 20),
+                      margin: EdgeInsets.only(top: 30, left: 20, right: 30),
                       child: Text(
                         'PRODUCT DETAILS',
                         style: TextStyle(

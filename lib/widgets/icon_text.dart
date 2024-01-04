@@ -29,7 +29,6 @@ class IconText extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.white,
-              decoration: TextDecoration.underline,
               decorationColor: Colors.white,
               decorationThickness: 2.0,
             ),

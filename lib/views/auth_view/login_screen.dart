@@ -5,6 +5,9 @@ import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/auth_view/signup_screen.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_textfield.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -17,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: Container(
         width: 120,
         color: Colors.white,
@@ -24,16 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.5,
-            // height: MediaQuery.of(context).size.height * 0.2,
-            child: ElevatedButton(
+            height: MediaQuery.of(context).size.height * 0.055,
+            child: RoundedElevatedButton(
+              text: 'Sign up',
               onPressed: () {
-                Get.to(() => SignupScreen());
+                Get.to(
+                  () => SignupScreen(),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.loginButtonColor,
-                foregroundColor: Colors.white,
-              ),
-              child: Text('Sign Up'),
             ),
           ),
         ),
@@ -83,58 +85,52 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 50,
                       ),
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
+                    CustomTextField(
+                      hintText: 'Email Address',
+                    ),
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //     contentPadding: EdgeInsets.all(0.0),
+                    //     isDense: true,
+                    //     hintText: 'Email address',
+                    //     hintStyle: GoogleFonts.inter(
+                    //       fontSize: 14,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: 10),
-                    TextFormField(
-                      obscureText: hidePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            hidePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              hidePassword = !hidePassword;
-                            });
-                          },
-                        ),
-                      ),
+                    CustomTextField(
+                      showPasswordHideButton: true,
+                      hintText: 'Password',
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    Text(
-                      'Forgot Password?',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        'Forgot Password?',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Constants.loginButtonColor,
-                          foregroundColor: Colors.white,
-                        ),
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: RoundedElevatedButton(
+                        text: 'Login',
                         onPressed: () {
                           Get.to(
                             () => MainScreen(),
                           );
                         },
-                        child: Text(
-                          'Login',
-                        ),
                       ),
                     ),
                   ],

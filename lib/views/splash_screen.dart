@@ -5,7 +5,7 @@ import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/auth_view/signup_screen.dart';
 
-import '../widgets/custom_button.dart';
+import '../widgets/splash_button.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.25,
                       height: MediaQuery.of(context).size.height * 0.06,
-                      child: RoundedElevatedButton(
+                      child: RoundedElevatedButtonSplash(
                         onPressed: () {
                           Get.to(
                             () => LoginScreen(),
@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.25,
                       height: MediaQuery.of(context).size.height * 0.06,
-                      child: RoundedElevatedButton(
+                      child: RoundedElevatedButtonSplash(
                         onPressed: () {
                           Get.to(
                             () => SignupScreen(),

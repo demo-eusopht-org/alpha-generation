@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:noble_vintage/views/splash_screen.dart';
 
+import 'utils/constants.dart';
+
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Constants.backgroundContColor,
+    ),
+  );
   runApp(const MyApp());
 }
-
-// void main() => runApp(
-//       DevicePreview(
-//         enabled: kDebugMode,
-//         builder: (context) => const MyApp(),
-//       ),
-//     );
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

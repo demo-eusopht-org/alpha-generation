@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Constants.backgroundContColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 10.0,
+          // vertical: 5.0,
           horizontal: 10.0,
         ),
         child: Column(
@@ -62,10 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: buildListIcon(),
-                ),
+                buildListIcon(),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -73,13 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10.0,
                     ),
                     child: Container(
+                      height: 40,
                       margin: EdgeInsets.only(top: 30),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                        ),
                         child: Row(
                           children: [
                             Icon(Icons.search, color: Colors.grey),
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildListIcon() {
     return IconText(
       icon: Icons.settings,
-      text: '',
+      text: 'Settings',
       onTap: () {
         showMenu<int>(
           context: context,

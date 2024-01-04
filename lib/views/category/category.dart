@@ -10,7 +10,8 @@ import '../../utils/constants.dart';
 import '../../widgets/icon_text.dart';
 
 class CategoryList extends StatefulWidget {
-  const CategoryList({super.key});
+  final bool showBackArrow;
+  CategoryList({super.key, required this.showBackArrow});
 
   @override
   State<CategoryList> createState() => _CategoryListState();
@@ -23,127 +24,130 @@ class _CategoryListState extends State<CategoryList> {
     double ratingStar = 0;
 
     return Scaffold(
-      body: Column(
-        children: [
-          topContainer(),
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Constants.backgroundContColor,
-                  Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            topContainer(),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Constants.backgroundContColor,
+                    Colors.white,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [
+                    0.5,
+                    0.5,
+                  ],
+                  tileMode: TileMode.decal,
+                ),
+              ),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  customButton('All'),
+                  customButton('Shirts'),
+                  customButton('Bags'),
+                  customButton('Watches'),
+                  customButton('Jewellery'),
+                  customButton('Dresses'),
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [
-                  0.5,
-                  0.5,
-                ],
-                tileMode: TileMode.decal,
               ),
             ),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                customButton('All'),
-                customButton('Shirts'),
-                customButton('Bags'),
-                customButton('Watches'),
-                customButton('Jewellery'),
-                customButton('Dresses'),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 7,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                ListView.builder(
-                  itemCount: ItemList.items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final item = ItemList.items[index];
-                    final sno = (index + 1).toString();
-                    return InkWell(
-                      onTap: () {
-                        Get.to(() => ProductDetails(item: item));
-                      },
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  sno,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
+            Expanded(
+              flex: 7,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  ListView.builder(
+                    itemCount: ItemList.items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final item = ItemList.items[index];
+                      final sno = (index + 1).toString();
+                      return InkWell(
+                        onTap: () {
+                          Get.to(() => ProductDetails(item: item));
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    sno,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Image.asset(
-                                  item.imageName,
-                                  width: 120,
-                                  // height: 120,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    textWidget(
-                                      text: item.name,
-                                      color: Colors.black,
-                                      fWeight: FontWeight.w700,
-                                      fSize: 28.0,
-                                    ),
-                                    RatingBar.builder(
-                                      itemSize: 25,
-                                      initialRating: ratingStar,
-                                      minRating: 0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding:
-                                          EdgeInsets.symmetric(horizontal: 0.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Image.asset(
+                                    item.imageName,
+                                    width: 120,
+                                    // height: 120,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      textWidget(
+                                        text: item.name,
+                                        color: Colors.black,
+                                        fWeight: FontWeight.w700,
+                                        fSize: 28.0,
                                       ),
-                                      onRatingUpdate: (rating) {
-                                        setState(() {
-                                          ratingStar = rating;
-                                        });
-                                      },
-                                    ),
-                                    textWidget(
-                                      text: '${item.price}',
-                                      color: Colors.black,
-                                      fWeight: FontWeight.w500,
-                                      fSize: 21.0,
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      RatingBar.builder(
+                                        itemSize: 25,
+                                        initialRating: ratingStar,
+                                        minRating: 0,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemPadding: EdgeInsets.symmetric(
+                                            horizontal: 0.0),
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          setState(() {
+                                            ratingStar = rating;
+                                          });
+                                        },
+                                      ),
+                                      textWidget(
+                                        text: '${item.price}',
+                                        color: Colors.black,
+                                        fWeight: FontWeight.w500,
+                                        fSize: 21.0,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+                            Divider(),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -197,13 +201,14 @@ class _CategoryListState extends State<CategoryList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Image.asset(
-                    'assets/images/back_arrow.png',
-                  ),
-                ),
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: widget.showBackArrow
+                        ? Image.asset(
+                            'assets/images/back_arrow.png',
+                          )
+                        : SizedBox.shrink()),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -211,29 +216,25 @@ class _CategoryListState extends State<CategoryList> {
                       vertical: 10.0,
                     ),
                     child: Container(
+                      height: 40,
                       margin: EdgeInsets.only(top: 30),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.search, color: Colors.grey),
-                            SizedBox(width: 4.0),
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      child: TextField(
+                        decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.8),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                          hintText: 'Search',
+                          contentPadding: EdgeInsets.zero,
+                          floatingLabelAlignment: FloatingLabelAlignment.center,
                         ),
                       ),
                     ),

@@ -16,27 +16,32 @@ class DefaultWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Constants.backgroundContColor,
+      extendBodyBehindAppBar: false,
+      extendBody: false,
       bottomNavigationBar: bottomBar,
-      body: Container(
-        constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width,
-          minHeight: MediaQuery.of(context).size.height,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Constants.backgroundContColor,
-              Colors.white,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [
-              blueRatio,
-              blueRatio,
-            ],
+      body: SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width,
+            minHeight: MediaQuery.of(context).size.height,
           ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Constants.backgroundContColor,
+                Colors.white,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [
+                blueRatio,
+                blueRatio,
+              ],
+            ),
+          ),
+          child: child,
         ),
-        child: child,
       ),
     );
   }

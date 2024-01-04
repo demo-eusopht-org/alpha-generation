@@ -17,7 +17,9 @@ class _MainScreenState extends State<MainScreen> {
   int selectedPage = 0;
   final screens = [
     HomeScreen(),
-    CategoryList(),
+    CategoryList(
+      showBackArrow: false,
+    ),
     AddProduct(),
   ];
   @override

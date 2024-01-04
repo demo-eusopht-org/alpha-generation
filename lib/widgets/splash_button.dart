@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 
-class RoundedElevatedButton extends StatelessWidget {
+class RoundedElevatedButtonSplash extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final double borderRadius;
   final bool loading;
 
-  RoundedElevatedButton({
+  RoundedElevatedButtonSplash({
     required this.onPressed,
     required this.text,
     this.borderRadius = 20.0,
@@ -22,7 +22,7 @@ class RoundedElevatedButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius), // Rounded corners
         ),
-        backgroundColor: Constants.backgroundContColor,
+        backgroundColor:Colors.white,
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(
           horizontal: 10.0,
@@ -36,12 +36,12 @@ class RoundedElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       child: loading
           ? SizedBox(
-              height: 35,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Colors.white),
-              ),
-            )
-          : textWidget(text: text, color: Colors.white, fSize: 15.0),
+        height: 35,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.white),
+        ),
+      )
+          : textWidget(text: text, color: Colors.black),
     );
   }
 }

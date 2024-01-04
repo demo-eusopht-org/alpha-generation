@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
+import 'package:noble_vintage/widgets/custom_button.dart';
 
-import '../../utils/constants.dart';
+import '../../widgets/custom_textfield.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -68,71 +69,37 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                       SizedBox(height: 20),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Email address',
-                        ),
+                      CustomTextField(
+                        hintText: 'Email address',
                       ),
                       SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Username',
-                        ),
+                      CustomTextField(
+                        hintText: 'Username',
                       ),
                       SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              hidePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                hidePassword = !hidePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        obscureText: hidePassword,
+                      CustomTextField(
+                        showPasswordHideButton: true,
+                        hintText: 'Password',
                       ),
                       SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Repeat Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              hidePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                hidePassword = !hidePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        obscureText: hidePassword,
+                      CustomTextField(
+                        showPasswordHideButton: true,
+                        hintText: 'Repeat Password',
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Constants.loginButtonColor,
-                          onPrimary: Colors.white,
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        child: RoundedElevatedButton(
+                          text: 'Sign up',
+                          onPressed: () {
+                            Get.to(
+                              () => MainScreen(),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Get.to(
-                            () => MainScreen(),
-                          );
-                        },
-                        child: Text('Sign up'),
                       ),
                     ],
                   ),
