@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 import 'package:noble_vintage/widgets/custom_button.dart';
 
@@ -100,6 +101,62 @@ class _SignupScreenState extends State<SignupScreen> {
                             );
                           },
                         ),
+                      ),
+                      Container(
+                        height: Get.height * 0.15,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.backgroundContColor,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Image(
+                              image: AssetImage(
+                                "assets/images/Google.png",
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 24, right: 8),
+                              child: Text(
+                                'Sign in with Google',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Sign up later',
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Constants.backgroundContColor,
+                        ),
+                      ),
+                      Container(
+                        height: Get.height * 0.04,
+                      ),
+                      Text(
+                        'Terms Of Services',
+                        style: GoogleFonts.inter(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline),
                       ),
                     ],
                   ),

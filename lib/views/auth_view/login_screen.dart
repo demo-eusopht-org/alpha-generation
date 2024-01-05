@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/views/auth_view/signup_screen.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
 import '../../widgets/custom_button.dart';
@@ -21,25 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: Container(
-        width: 120,
-        color: Colors.white,
-        height: kBottomNavigationBarHeight,
-        child: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.055,
-            child: RoundedElevatedButton(
-              text: 'Sign up',
-              onPressed: () {
-                Get.to(
-                  () => SignupScreen(),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
@@ -133,6 +113,51 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
+                    Container(
+                      height: Get.height * 0.1,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Constants.backgroundContColor,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Image(
+                            image: AssetImage(
+                              "assets/images/Google.png",
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 24, right: 8),
+                            child: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: Get.height * 0.1,
+                    ),
+                    Text(
+                      'Terms Of Services',
+                      style: GoogleFonts.inter(
+                          fontSize: 12, fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline
+                      ),
+                    )
                   ],
                 ),
               ),

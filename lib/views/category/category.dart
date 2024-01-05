@@ -10,8 +10,11 @@ import '../../utils/constants.dart';
 import '../../widgets/icon_text.dart';
 
 class CategoryList extends StatefulWidget {
-  final bool showBackArrow;
-  CategoryList({super.key, required this.showBackArrow});
+  // final bool showBackArrow;
+  CategoryList({
+    super.key,
+    // required this.showBackArrow
+  });
 
   @override
   State<CategoryList> createState() => _CategoryListState();
@@ -201,14 +204,15 @@ class _CategoryListState extends State<CategoryList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: widget.showBackArrow
-                        ? Image.asset(
-                            'assets/images/back_arrow.png',
-                          )
-                        : SizedBox.shrink()),
+                  onTap: () {
+                    Get.back();
+                  },
+                  child:
+                      // widget.showBackArrow
+                      Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

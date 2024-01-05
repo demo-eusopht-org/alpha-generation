@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/views/category/category.dart';
 import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
 import '../../widgets/icon_text.dart';
-import '../auth_view/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultWidget(
-      blueRatio: isKeyboardOpen ? 0.6 : 0.35,
+      blueRatio: isKeyboardOpen ? 0.6 : 0.4,
       child: Column(
         // mainAxisSize: MainAxisSize.max,
         children: [
@@ -62,19 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildListIcon(),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 10.0,
+                      horizontal: 50.0,
+                      vertical: 40.0,
                     ),
                     child: Container(
                       height: 40,
-                      margin: EdgeInsets.only(top: 30),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white.withOpacity(
+                          0.8,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          8.0,
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -82,8 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.search, color: Colors.grey),
-                            SizedBox(width: 4.0),
+                            Icon(
+                              Icons.search,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              width: 4.0,
+                            ),
                             Expanded(
                               child: TextField(
                                 focusNode: searchFocus,
@@ -102,12 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                buildUploadIcon(),
+                // buildUploadIcon(),
               ],
             ),
             Text(
               'Home',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: Constants.splashTextColor,
                 fontSize: 30,
                 fontWeight: FontWeight.w400,
@@ -134,53 +142,56 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildListIcon() {
     return IconText(
-      icon: Icons.settings,
-      text: 'Settings',
+      icon: Icons.menu,
+      text: '',
       onTap: () {
-        showMenu<int>(
-          context: context,
-          position: RelativeRect.fromLTRB(0, 0, 100, 0),
-          items: [
-            PopupMenuItem(
-              value: 1,
-              child: InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Logout'),
-                        content: Text('Are you sure you want to log out?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Get.to(LoginScreen());
-                            },
-                            child: Text('Logout'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('Cancel'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 10),
-                    Text("Logout")
-                  ],
-                ),
-              ),
-            ),
-          ],
-          elevation: 2,
+        Get.to(
+          CategoryList(),
         );
+        // showMenu<int>(
+        //   context: context,
+        //   position: RelativeRect.fromLTRB(0, 0, 100, 0),
+        //   items: [
+        //     PopupMenuItem(
+        //       value: 1,
+        //       child: InkWell(
+        //         onTap: () {
+        //           showDialog(
+        //             context: context,
+        //             builder: (BuildContext context) {
+        //               return AlertDialog(
+        //                 title: Text('Logout'),
+        //                 content: Text('Are you sure you want to log out?'),
+        //                 actions: [
+        //                   TextButton(
+        //                     onPressed: () {
+        //                       Get.to(LoginScreen());
+        //                     },
+        //                     child: Text('Logout'),
+        //                   ),
+        //                   TextButton(
+        //                     onPressed: () {
+        //                       Navigator.pop(context);
+        //                     },
+        //                     child: Text('Cancel'),
+        //                   ),
+        //                 ],
+        //               );
+        //             },
+        //           );
+        //         },
+        //         child: Row(
+        //           children: [
+        //             Icon(Icons.logout),
+        //             SizedBox(width: 10),
+        //             Text("Logout")
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        //   elevation: 2,
+        // );
       },
     );
   }

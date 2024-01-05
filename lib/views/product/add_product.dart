@@ -13,6 +13,7 @@ import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 
 import '../../utils/constants.dart';
+import '../../widgets/add_product_fields.dart';
 import '../../widgets/icon_text.dart';
 
 class AddProduct extends StatefulWidget {
@@ -24,6 +25,7 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   DateTime? selectedDate;
+  List<String> selectedValues = [];
   List<XFile> images = [];
   PlatformFile? file;
   String? fileName;
@@ -79,10 +81,8 @@ class _AddProductState extends State<AddProduct> {
   }
 
   List<String> variantsList = [
-    'Shirts',
-    "Bags",
+    'Leather Products',
     "Watches",
-    "Tshirts",
   ];
   @override
   Widget build(BuildContext context) {
@@ -127,126 +127,157 @@ class _AddProductState extends State<AddProduct> {
                             ),
                           ),
                           options: variantsList,
-                          selectedValues: selectedCheckBoxValue,
-                          onChanged: (List<String> value) {
-                            print("${selectedCheckBoxValue}");
+                          selectedValues: selectedValues,
+                          onChanged: (List<String> selectedList) {
+                            setState(() {
+                              if (selectedList.isNotEmpty) {
+                                selectedValues = [
+                                  selectedList[0]
+                                ]; // Update selected value
+                              } else {
+                                selectedValues
+                                    .clear(); // Reset if no value is selected
+                              }
+                            });
+                            print("$selectedValues");
                           },
                           whenEmpty: 'Select Category',
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Purchase Date:',
-                            style: GoogleFonts.inter(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          AddProductFields(
+                            text: 'Product Title',
+                            hintText: 'Enter',
                           ),
-                          InkWell(
-                            onTap: () async {
-                              await _showDatePicker1();
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 40,
-                              width: Get.width * 0.5,
-                              decoration: BoxDecoration(
-                                color: Constants.showDateContColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 6,
-                                  right: 6,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                          SizedBox(
+                            height: 10,
+                          ),
+                          AddProductFields(
+                            text: 'Description',
+                            hintText: 'Enter',
+                            maxLines: 3,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          AddProductFields(
+                            text: 'Serial Number',
+                            hintText: 'Enter',
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      selectedDate != null
-                                          ? DateFormat(
-                                              'dd-MM-yyyy',
-                                            ).format(
-                                              selectedDate!,
-                                            )
-                                          : 'Enter Date',
-                                    ),
-                                    Icon(
-                                      Icons.calendar_month,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          pickSingleFile();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  'Certificate of the',
-                                  style: GoogleFonts.inter(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text(
-                                  'Watch',
-                                  style: GoogleFonts.inter(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              height: 40,
-                              width: Get.width * 0.5,
-                              decoration: BoxDecoration(
-                                color: Constants.showDateContColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 5,
-                                  right: 5,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 120,
-                                      child: Text(
-                                        fileName ?? 'Upload',
+                                      'Purchase Date:',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
                                       ),
                                     ),
-                                    Icon(
-                                      Icons.add,
+                                    InkWell(
+                                      onTap: () async {
+                                        await _showDatePicker1();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Constants.showDateContColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 6,
+                                            right: 6,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                selectedDate != null
+                                                    ? DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).format(
+                                                        selectedDate!,
+                                                      )
+                                                    : 'Enter Date',
+                                              ),
+                                              Icon(
+                                                Icons.calendar_month,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Certificate/Documents',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await pickSingleFile();
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Constants.showDateContColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                            right: 5,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: 120,
+                                                child: Text(
+                                                  fileName ?? 'Upload',
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.add,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 20,
