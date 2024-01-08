@@ -128,6 +128,15 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10,),
+                Text(
+                  'Sign up later',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),

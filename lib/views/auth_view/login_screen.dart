@@ -71,17 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomTextField(
                       hintText: 'Email Address',
                     ),
-                    // TextFormField(
-                    //   decoration: InputDecoration(
-                    //     contentPadding: EdgeInsets.all(0.0),
-                    //     isDense: true,
-                    //     hintText: 'Email address',
-                    //     hintStyle: GoogleFonts.inter(
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w500,
-                    //     ),
-                    //   ),
-                    // ),
                     SizedBox(height: 10),
                     CustomTextField(
                       showPasswordHideButton: true,
@@ -154,9 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Terms Of Services',
                       style: GoogleFonts.inter(
-                          fontSize: 12, fontWeight: FontWeight.w400,
-                      decoration: TextDecoration.underline
-                      ),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline),
                     )
                   ],
                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:noble_vintage/model/category_model.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/slider.dart';
 
@@ -9,7 +8,7 @@ import '../../utils/constants.dart';
 import '../../widgets/icon_text.dart';
 
 class ProductDetails extends StatefulWidget {
-  final CategoryItem item;
+  final Map<String, dynamic> item;
   const ProductDetails({super.key, required this.item});
 
   @override
@@ -99,137 +98,155 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          topContainer(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Container(
-                        //   width: Get.width * 0.01,
-                        // ),
-                        Spacer(),
-                        Image.asset(
-                          popularLocations[selectedImageIndex]['image']
-                              .toString(),
-                          height: 250,
-                          width: Get.width * 0.75,
-                          fit: BoxFit.fill,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 2.5,
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Image.asset('assets/images/search_icon.png'),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Image.asset('assets/images/fav_icon.png'),
-                              Text(
-                                '65',
-                                style: GoogleFonts.dmSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Sliderproduct(
-                      popularLocations: popularLocations,
-                      ontap: (index) {
-                        selectedImageIndex = index;
-                        setState(() {});
-                      }),
-                  // Slider(),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15, top: 10),
-                    child: SingleChildScrollView(
-                      child: Column(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Column(
+          children: [
+            topContainer(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Beirutimes - Patek Philippe',
-                            style: GoogleFonts.inter(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black,
-                            ),
+                          // Container(
+                          //   width: Get.width * 0.01,
+                          // ),
+                          // Spacer(),
+                          Image.asset(
+                            popularLocations[selectedImageIndex]['image']
+                                .toString(),
+                            height: 250,
+                            width: Get.width * 0.75,
+                            // fit: BoxFit.fill,
                           ),
-                          Text(
-                            'Nautilus 7118R',
-                            style: GoogleFonts.inter(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Description:',
-                            style: GoogleFonts.inter(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            'The Patek Philippe Nautilus 7118R: A radiant fusion of rose gold elegance and timeless sophistication. Its diamond-adorned bezel and sunburst brown dial exude luxury, while its precision movement reflects horological mastery at its finest.',
-                            style: GoogleFonts.inter(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                            ),
-                          ),
-                          // Row(
-                          //   mainAxisAlignment:
-                          //       MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Column(
-                          //       children: [
-                          //         Text('Estimated'),
-                          //         Image.asset(
-                          //           'assets/images/estimated_box.png',
-                          //         )
-                          //       ],
-                          //     ),
-                          //     Column(
-                          //       children: [
-                          //         Text('Rating'),
-                          //         Image.asset(
-                          //           'assets/images/rating_box.png',
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ],
-                          // )
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //     horizontal: 2.5,
+                          //   ),
+                          //   // child: Column(
+                          //   //   children: [
+                          //   //     SizedBox(
+                          //   //       height: 30,
+                          //   //     ),
+                          //   //     Image.asset('assets/images/search_icon.png'),
+                          //   //     SizedBox(
+                          //   //       height: 10,
+                          //   //     ),
+                          //   //     Image.asset('assets/images/fav_icon.png'),
+                          //   //     Text(
+                          //   //       '65',
+                          //   //       style: GoogleFonts.dmSans(
+                          //   //         fontWeight: FontWeight.w400,
+                          //   //         fontSize: 17,
+                          //   //         color: Colors.white,
+                          //   //       ),
+                          //   //     ),
+                          //   //   ],
+                          //   // ),
+                          // ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Sliderproduct(
+                        popularLocations: popularLocations,
+                        ontap: (index) {
+                          selectedImageIndex = index;
+                          setState(() {});
+                        }),
+                    // Slider(),
+                    Padding(
+                      padding: EdgeInsets.only(left: 15, top: 10),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Beirutimes - Patek Philippe',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              'Nautilus 7118R',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Purchase Date:1/2/24 ',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Image.asset('assets/images/certificate.png'),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Description:',
+                              style: GoogleFonts.inter(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              'The Patek Philippe Nautilus 7118R: A radiant fusion of rose gold elegance and timeless sophistication. Its diamond-adorned bezel and sunburst brown dial exude luxury, while its precision movement reflects horological mastery at its finest.',
+                              style: GoogleFonts.inter(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
+                            ),
+                            // Row(
+                            //   mainAxisAlignment:
+                            //       MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Column(
+                            //       children: [
+                            //         Text('Estimated'),
+                            //         Image.asset(
+                            //           'assets/images/estimated_box.png',
+                            //         )
+                            //       ],
+                            //     ),
+                            //     Column(
+                            //       children: [
+                            //         Text('Rating'),
+                            //         Image.asset(
+                            //           'assets/images/rating_box.png',
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ],
+                            // )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

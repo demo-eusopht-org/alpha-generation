@@ -3,7 +3,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:noble_vintage/model/category_model.dart';
 import 'package:noble_vintage/views/product/add_product.dart';
-import 'package:noble_vintage/views/product/product_details.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 
 import '../../utils/constants.dart';
@@ -72,7 +71,7 @@ class _CategoryListState extends State<CategoryList> {
                       final sno = (index + 1).toString();
                       return InkWell(
                         onTap: () {
-                          Get.to(() => ProductDetails(item: item));
+                          // Get.to(() => ProductDetails(item: widget.item));
                         },
                         child: Column(
                           children: [

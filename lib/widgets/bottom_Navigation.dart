@@ -1,11 +1,13 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/home/home_screen.dart';
 
 import '../views/product/add_product.dart';
+import '../views/settings/profile.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -16,17 +18,22 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
+  // final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   int selectedPage = 0;
-  final screens = [
-    HomeScreen(),
-    AddProduct(),
-    Container(),
-  ];
+  final screens = [HomeScreen(), AddProduct(), Profile()];
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
+
+  // void _handleSignIn() async {
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (error) {
+  //     print('Error signing in: $error');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +63,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             ),
             TabItem(
-              icon: CupertinoIcons.person,
+              icon: Icon(
+                Icons.person,
+                color: Colors.grey,
+              ),
               activeIcon: Icon(
-                CupertinoIcons.person,
+                Icons.person,
                 color: Colors.black,
                 size: 35,
               ),
@@ -76,45 +86,50 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        Container(
+                          width: Get.width * 0.72,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Constants.backgroundContColor,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            Get.back();
-                            selectedPage = index;
-                            _tabController.index = selectedPage;
-                            setState(() {});
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Image(
-                                  image: AssetImage(
-                                    "assets/images/Google.png",
+                            onPressed: () {
+                              // _handleSignIn();
+                              Get.back();
+                              selectedPage = index;
+                              _tabController.index = selectedPage;
+                              setState(() {});
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                      "assets/images/Google.png",
+                                    ),
+                                    height: 18.0,
+                                    width: 20,
                                   ),
-                                  height: 18.0,
-                                  width: 24,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 24, right: 8),
-                                  child: Text(
-                                    'Sign in with Google',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.w600,
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Text(
+                                      'Continue with Google',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -127,47 +142,60 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                         //   },
                         //   child: Text('Sign In with Google'),
                         // ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        Container(
+                          width: Get.width * 0.72,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Constants.backgroundContColor,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            Get.back();
-                            selectedPage = index;
-                            _tabController.index = selectedPage;
-                            setState(() {});
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Image(
-                                  image: AssetImage(
-                                    "assets/images/email_image.png",
+                            onPressed: () {
+                              Get.back();
+                              selectedPage = index;
+                              _tabController.index = selectedPage;
+                              setState(() {});
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Image(
+                                    image: AssetImage(
+                                      "assets/images/email.png",
+                                    ),
+                                    height: 18.0,
+                                    width: 24,
                                   ),
-                                  height: 18.0,
-                                  width: 24,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 24, right: 8),
-                                  child: Text(
-                                    'Get going with Email',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.w600,
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 12),
+                                    child: Text(
+                                      'Continue with Email',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Sign up later',
+                          style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                              color: Colors.white),
                         ),
                       ],
                     ),

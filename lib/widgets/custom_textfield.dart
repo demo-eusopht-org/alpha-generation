@@ -38,7 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? IconButton(
                 constraints: BoxConstraints(
                   maxHeight: 15,
-                  maxWidth: 20,
+                  maxWidth: 30,
                 ),
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),

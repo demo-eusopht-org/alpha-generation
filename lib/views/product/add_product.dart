@@ -26,6 +26,8 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   DateTime? selectedDate;
   List<String> selectedValues = [];
+  bool productSelected = false;
+  ProductItem? selectedProductItem;
   List<XFile> images = [];
   PlatformFile? file;
   String? fileName;
@@ -128,6 +130,17 @@ class _AddProductState extends State<AddProduct> {
                           ),
                           options: variantsList,
                           selectedValues: selectedValues,
+                          // selectedProductItem != null
+                          //     ? [selectedProductItem!]
+                          //     : [],
+                          // onChanged: (List<ProductItem> newList) {
+                          //   log('NAMES: ${newList}');
+                          //   if (newList.isNotEmpty) {
+                          //     selectedProductItem = newList.first;
+                          //     newList.clear();
+                          //     setState(() {});
+                          //   }
+                          // },
                           onChanged: (List<String> selectedList) {
                             setState(() {
                               if (selectedList.isNotEmpty) {
@@ -135,8 +148,7 @@ class _AddProductState extends State<AddProduct> {
                                   selectedList[0]
                                 ]; // Update selected value
                               } else {
-                                selectedValues
-                                    .clear(); // Reset if no value is selected
+                                selectedValues.clear();
                               }
                             });
                             print("$selectedValues");
@@ -311,7 +323,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         onPressed: () {
                           AppDialogs.showConfirmDialog(
-                            dialogTitle: 'Finance with it',
+                            dialogTitle: 'Finance With It',
                             label: 'Finance with it',
                             secondaryLabel: 'Cancel',
                             onConfirm: () {
@@ -395,20 +407,23 @@ class _AddProductState extends State<AddProduct> {
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Image.asset(
-                    'assets/images/back_arrow.png',
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 20,
             ),
+            // // Row(
+            // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // //   crossAxisAlignment: CrossAxisAlignment.start,
+            // //   children: [
+            // //     // InkWell(
+            // //     //   onTap: () {
+            // //     //   Navigator.pop(context);
+            // //     //   },
+            // //     //   child: Image.asset(
+            // //     //     'assets/images/back_arrow.png',
+            // //     //   ),
+            // //     // ),
+            // //   ],
+            // ),
             Text(
               'Add Product ',
               style: TextStyle(
@@ -439,4 +454,9 @@ class _AddProductState extends State<AddProduct> {
       onTap: () {},
     );
   }
+}
+
+enum ProductItem {
+  leatherProduct,
+  watches,
 }

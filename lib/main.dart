@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: GetMaterialApp(
-        title: 'Flutter Demo',
+        title: 'Alpha Generation',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,

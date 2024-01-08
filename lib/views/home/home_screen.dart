@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/views/category/category.dart';
 import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
@@ -145,9 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
       icon: Icons.menu,
       text: '',
       onTap: () {
-        Get.to(
-          CategoryList(),
-        );
+        // Get.to(
+        //   CategoryList(),
+        // );
         // showMenu<int>(
         //   context: context,
         //   position: RelativeRect.fromLTRB(0, 0, 100, 0),

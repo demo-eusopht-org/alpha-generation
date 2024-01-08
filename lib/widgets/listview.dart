@@ -3,6 +3,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../views/product/product_details.dart';
+
 class PopularLocationsList extends StatelessWidget {
   final List<Map<String, String>> popularLocations = [
     {
@@ -58,16 +60,19 @@ class PopularLocationsList extends StatelessWidget {
       crossAxisSpacing: 10,
       itemCount: popularLocations.length,
       itemBuilder: (BuildContext context, int index) {
+        final item = popularLocations[index];
         return PopularLocationItem(
-          onTap: () {},
           // onTap: () {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => CategoryList(),
-          //     ),
-          //   );
+          //   Get.to(() => ProductDetails(item: item));
           // },
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetails(item: item),
+              ),
+            );
+          },
           name: popularLocations[index]['name']!,
           title: popularLocations[index]['title']!,
           image: popularLocations[index]['image']!,
