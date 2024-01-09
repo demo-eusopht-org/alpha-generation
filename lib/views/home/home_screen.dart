@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
+import '../../model/enums/product_type_enum.dart';
 import '../../widgets/icon_text.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ProductType selectedProductType = ProductType.all;
   bool isKeyboardOpen = false;
   final searchFocus = FocusNode();
 
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultWidget(
-      blueRatio: isKeyboardOpen ? 0.6 : 0.4,
+      blueRatio: isKeyboardOpen ? 0.5 : 0.3,
       child: Column(
         // mainAxisSize: MainAxisSize.max,
         children: [
@@ -56,70 +57,100 @@ class _HomeScreenState extends State<HomeScreen> {
           // vertical: 5.0,
           horizontal: 10.0,
         ),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
+            SizedBox(
+              width: 40,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 40.0,
+                ),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(
+                      0.8,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      8.0,
+                    ),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 50.0,
-                      vertical: 40.0,
+                      horizontal: 15.0,
                     ),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(
-                          0.8,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: Colors.grey,
                         ),
-                        borderRadius: BorderRadius.circular(
-                          8.0,
+                        SizedBox(
+                          width: 4.0,
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(
-                              width: 4.0,
-                            ),
-                            Expanded(
-                              child: TextField(
-                                focusNode: searchFocus,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
+                        Expanded(
+                          child: TextField(
+                            focusNode: searchFocus,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Search',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
-                // buildUploadIcon(),
-              ],
-            ),
-            Text(
-              'Home',
-              style: GoogleFonts.inter(
-                color: Constants.splashTextColor,
-                fontSize: 30,
-                fontWeight: FontWeight.w400,
               ),
             ),
+            PopupMenuButton<ProductType>(
+              padding: EdgeInsets.zero,
+              icon: Image.asset(
+                'assets/images/filter_icon.png',
+                height: 50,
+                width: 50,
+              ),
+              onSelected: (newType) {
+                selectedProductType = newType;
+                setState(() {});
+              },
+              itemBuilder: (context) {
+                return ProductType.values.map((type) {
+                  return PopupMenuItem<ProductType>(
+                    value: type,
+                    child: Row(
+                      children: [
+                        IgnorePointer(
+                          child: Radio<ProductType>(
+                            value: type,
+                            groupValue: selectedProductType,
+                            onChanged: (newType) {},
+                          ),
+                        ),
+                        Text(type.getLabel()),
+                      ],
+                    ),
+                  );
+                }).toList();
+              },
+            )
+            // Icon(Icons.add)
+            // InkWell(
+            //   onTap: (){},
+            //   child: Image.asset(
+            //     'assets/images/filter_icon.png',
+            //     height: 50,
+            //     width: 50,
+            //   ),
+            // )
           ],
         ),
       ),
@@ -128,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildUploadIcon() {
     return IconText(
-      text: 'Upload',
+      text: '',
       icon: Icons.camera_alt,
       onTap: () {
         Get.to(

@@ -59,8 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
             top: MediaQuery.of(context).size.height * 0.2,
             child: Image.asset(
               'assets/images/Logo_Alpha.png',
-              height: 70,
-              width: 70,
+              height: 80,
+              width: 80,
             ),
           ),
           Center(
@@ -128,7 +128,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Sign up later',
                   style: GoogleFonts.inter(

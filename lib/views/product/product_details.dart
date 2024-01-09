@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return DefaultWidget(
-      blueRatio: 0.4,
+      blueRatio: 0.35,
       bottomBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -107,50 +107,47 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Container(
-                          //   width: Get.width * 0.01,
-                          // ),
-                          // Spacer(),
-                          Image.asset(
-                            popularLocations[selectedImageIndex]['image']
-                                .toString(),
-                            height: 250,
-                            width: Get.width * 0.75,
-                            // fit: BoxFit.fill,
-                          ),
-                          // Padding(
-                          //   padding: EdgeInsets.symmetric(
-                          //     horizontal: 2.5,
-                          //   ),
-                          //   // child: Column(
-                          //   //   children: [
-                          //   //     SizedBox(
-                          //   //       height: 30,
-                          //   //     ),
-                          //   //     Image.asset('assets/images/search_icon.png'),
-                          //   //     SizedBox(
-                          //   //       height: 10,
-                          //   //     ),
-                          //   //     Image.asset('assets/images/fav_icon.png'),
-                          //   //     Text(
-                          //   //       '65',
-                          //   //       style: GoogleFonts.dmSans(
-                          //   //         fontWeight: FontWeight.w400,
-                          //   //         fontSize: 17,
-                          //   //         color: Colors.white,
-                          //   //       ),
-                          //   //     ),
-                          //   //   ],
-                          //   // ),
-                          // ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Container(
+                        //   width: Get.width * 0.01,
+                        // ),
+                        // Spacer(),
+                        Image.asset(
+                          popularLocations[selectedImageIndex]['image']
+                              .toString(),
+                          height: 250,
+                          width: Get.width * 0.75,
+                          // fit: BoxFit.fill,
+                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(
+                        //     horizontal: 2.5,
+                        //   ),
+                        //   // child: Column(
+                        //   //   children: [
+                        //   //     SizedBox(
+                        //   //       height: 30,
+                        //   //     ),
+                        //   //     Image.asset('assets/images/search_icon.png'),
+                        //   //     SizedBox(
+                        //   //       height: 10,
+                        //   //     ),
+                        //   //     Image.asset('assets/images/fav_icon.png'),
+                        //   //     Text(
+                        //   //       '65',
+                        //   //       style: GoogleFonts.dmSans(
+                        //   //         fontWeight: FontWeight.w400,
+                        //   //         fontSize: 17,
+                        //   //         color: Colors.white,
+                        //   //       ),
+                        //   //     ),
+                        //   //   ],
+                        //   // ),
+                        // ),
+                      ],
                     ),
                     Sliderproduct(
                         popularLocations: popularLocations,
@@ -292,7 +289,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 30, left: 20, right: 30),
+                      margin: EdgeInsets.only(top: 10, left: 20, right: 30),
                       child: Text(
                         'PRODUCT DETAILS',
                         style: TextStyle(

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:multiselect/multiselect.dart';
+import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/views/product/view_selected_file.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
@@ -27,7 +27,6 @@ class _AddProductState extends State<AddProduct> {
   DateTime? selectedDate;
   List<String> selectedValues = [];
   bool productSelected = false;
-  ProductItem? selectedProductItem;
   List<XFile> images = [];
   PlatformFile? file;
   String? fileName;
@@ -69,10 +68,24 @@ class _AddProductState extends State<AddProduct> {
 
   Future<void> _showDatePicker1() async {
     DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 730)));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(Duration(days: 730)),
+      // Modify the theme of the date picker
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            hintColor: Colors.black,
+            colorScheme: ColorScheme.light(
+              primary: Constants.backgroundContColor,
+            ),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
 
     if (pickedDate != null) {
       setState(() {
@@ -114,47 +127,61 @@ class _AddProductState extends State<AddProduct> {
                       Container(
                         height: 100,
                         padding: const EdgeInsets.all(20),
-                        child: DropDownMultiSelect(
-                          decoration: InputDecoration(
-                            fillColor: Theme.of(context).colorScheme.onPrimary,
-                            focusColor: Theme.of(context).colorScheme.onPrimary,
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(4),
-                              ),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 1.5,
-                              ),
-                            ),
+                        child: DropdownMenu<ProductType>(
+                          dropdownMenuEntries: List.generate(
+                            ProductType.values.length,
+                            (index) {
+                              return DropdownMenuEntry(
+                                value: ProductType.values[index],
+                                label: ProductType.values[index].getLabel(),
+                              );
+                            },
                           ),
-                          options: variantsList,
-                          selectedValues: selectedValues,
-                          // selectedProductItem != null
-                          //     ? [selectedProductItem!]
-                          //     : [],
-                          // onChanged: (List<ProductItem> newList) {
-                          //   log('NAMES: ${newList}');
-                          //   if (newList.isNotEmpty) {
-                          //     selectedProductItem = newList.first;
-                          //     newList.clear();
-                          //     setState(() {});
-                          //   }
-                          // },
-                          onChanged: (List<String> selectedList) {
-                            setState(() {
-                              if (selectedList.isNotEmpty) {
-                                selectedValues = [
-                                  selectedList[0]
-                                ]; // Update selected value
-                              } else {
-                                selectedValues.clear();
-                              }
-                            });
-                            print("$selectedValues");
-                          },
-                          whenEmpty: 'Select Category',
+                          hintText: 'Select Category',
+                          width: Get.width * 0.7,
                         ),
+
+                        // child: DropDownMultiSelect(
+                        //   decoration: InputDecoration(
+                        //     fillColor: Theme.of(context).colorScheme.onPrimary,
+                        //     focusColor: Theme.of(context).colorScheme.onPrimary,
+                        //     enabledBorder: const OutlineInputBorder(
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(4),
+                        //       ),
+                        //       borderSide: BorderSide(
+                        //         color: Colors.grey,
+                        //         width: 1.5,
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   options: variantsList,
+                        //   selectedValues: selectedValues,
+                        //   // selectedProductItem != null
+                        //   //     ? [selectedProductItem!]
+                        //   //     : [],
+                        //   // onChanged: (List<ProductItem> newList) {
+                        //   //   log('NAMES: ${newList}');
+                        //   //   if (newList.isNotEmpty) {
+                        //   //     selectedProductItem = newList.first;
+                        //   //     newList.clear();
+                        //   //     setState(() {});
+                        //   //   }
+                        //   // },
+                        //   onChanged: (List<String> selectedList) {
+                        //     setState(() {
+                        //       if (selectedList.isNotEmpty) {
+                        //         selectedValues = [
+                        //           selectedList[0]
+                        //         ]; // Update selected value
+                        //       } else {
+                        //         selectedValues.clear();
+                        //       }
+                        //     });
+                        //     print("$selectedValues");
+                        //   },
+                        //   whenEmpty: 'Select Category',
+                        // ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,7 +416,7 @@ class _AddProductState extends State<AddProduct> {
             ? Image.file(
                 File(file.path),
                 fit: BoxFit.cover,
-              ) // Show selected image if available
+              )
             : Icon(
                 Icons.add,
                 color: Constants.splashTextColor,
@@ -454,9 +481,4 @@ class _AddProductState extends State<AddProduct> {
       onTap: () {},
     );
   }
-}
-
-enum ProductItem {
-  leatherProduct,
-  watches,
 }
