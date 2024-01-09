@@ -17,8 +17,7 @@ class DefaultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Constants.backgroundContColor,
-      extendBodyBehindAppBar: false,
-      extendBody: false,
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: bottomBar,
       body: SafeArea(
         child: Container(

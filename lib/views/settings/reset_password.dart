@@ -128,7 +128,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             color: Constants.backgroundContColor,
           ),
           Positioned(
-            top: 60,
+            top: 65,
             right: 0,
             left: 0,
             child: Text(
@@ -142,13 +142,16 @@ class _ResetPasswordState extends State<ResetPassword> {
             ),
           ),
           Positioned(
-            top: 10,
+            top: 15,
             left: 20,
             child: InkWell(
-                onTap: (){
-                  Get.back();
-                },
-                child: Image.asset('assets/images/back_arrow.png')),
+              onTap: () {
+                Get.back();
+              },
+              child: Image.asset(
+                'assets/images/back_arrow.png',
+              ),
+            ),
           ),
         ],
       ),

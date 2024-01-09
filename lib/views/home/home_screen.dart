@@ -117,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'assets/images/filter_icon.png',
                 height: 50,
                 width: 50,
+                color: Colors.white,
               ),
               onSelected: (newType) {
                 selectedProductType = newType;

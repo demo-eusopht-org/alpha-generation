@@ -43,7 +43,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       'Estimated',
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                     ),
@@ -166,7 +166,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               }),
                           // Slider(),
                           Padding(
-                            padding: EdgeInsets.only(left: 15, top: 10),
+                            padding: EdgeInsets.only(left: 20, top: 10),
                             child: SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +310,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         style: GoogleFonts.inter(
                           color: Constants.splashTextColor,
                           fontSize: 20,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),

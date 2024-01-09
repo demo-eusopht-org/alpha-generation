@@ -26,15 +26,12 @@ class AppDialogs {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              width: Get.width * 0.32,
-              child: ElevatedButton(
-                onPressed: onSecondaryTap,
-                child: Text(
-                  secondaryLabel,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                  ),
+            ElevatedButton(
+              onPressed: onSecondaryTap,
+              child: Text(
+                secondaryLabel,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -51,7 +48,6 @@ class AppDialogs {
                 style: GoogleFonts.inter(
                   fontSize: 12,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
           ],

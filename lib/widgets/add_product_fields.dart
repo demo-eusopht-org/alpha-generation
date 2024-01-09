@@ -25,10 +25,11 @@ class AddProductFields extends StatelessWidget {
           ),
         ),
         TextField(
+          style: TextStyle(color: Colors.white),
           maxLines: maxLines,
           decoration: InputDecoration(
             isDense: true,
-            fillColor: Constants.showDateContColor,
+            fillColor: Constants.backgroundContColor,
             filled: true,
             hintText: hintText,
             suffixIconConstraints: BoxConstraints(
@@ -41,7 +42,7 @@ class AddProductFields extends StatelessWidget {
             hintStyle: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
+              color: Colors.white,
             ),
           ),
         ),
