@@ -4,21 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:noble_vintage/views/settings/reset_password.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/profile_textfield.dart';
 import '../auth_view/login_screen.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ResetPasswordState extends State<ResetPassword> {
   File? _image;
 
   Future<void> getImage() async {
@@ -79,48 +78,30 @@ class _ProfileState extends State<Profile> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: (size.height * 0.28) + (profileSize / 2),
-                  ),
+                  SizedBox(height: (size.height * 0.28)),
                   ProfileTextFields(
-                    text: 'Email address',
-                    hintText: 'example.@gmail.com',
+                    text: 'Old password',
+                    hintText: '*************',
+                    obscureText: true,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   ProfileTextFields(
-                    text: 'Username',
-                    hintText: 'Lorem Ipsum',
+                    text: 'New password',
+                    hintText: '*************',
+                    obscureText: true,
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ProfileTextFields(
-                        text: 'Password',
-                        hintText: '*************',
-                        obscureText: true,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => ResetPassword());
-                        },
-                        child: Text(
-                          'Reset Password?',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Constants.backgroundContColor,
-                          ),
-                        ),
-                      )
-                    ],
+                  ProfileTextFields(
+                    text: 'Confirm password',
+                    hintText: '*************',
+                    obscureText: true,
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     height: Get.height * 0.1,
@@ -134,7 +115,7 @@ class _ProfileState extends State<Profile> {
                         );
                       },
                       borderRadius: 23,
-                      text: 'Logout',
+                      text: 'Confirm',
                     ),
                   ),
                 ],
@@ -147,39 +128,11 @@ class _ProfileState extends State<Profile> {
             color: Constants.backgroundContColor,
           ),
           Positioned(
-            top: (size.height * 0.23) - (profileSize / 2),
-            left: 0,
-            right: 0,
-            child: Container(
-              width: profileSize,
-              height: profileSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                boxShadow: kElevationToShadow[2],
-              ),
-              padding: EdgeInsets.all(10.0),
-              child: _image != null
-                  ? ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.file(
-                        _image!,
-                        // fit: BoxFit.cover,
-                        // width: profileSize - 20,
-                        // height: profileSize - 20,
-                      ),
-                    )
-                  : Image.asset(
-                      'assets/images/profile_image.png',
-                    ),
-            ),
-          ),
-          Positioned(
-            top: 50,
+            top: 60,
             right: 0,
             left: 0,
             child: Text(
-              'Profile',
+              'Reset password',
               style: GoogleFonts.inter(
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
@@ -187,6 +140,15 @@ class _ProfileState extends State<Profile> {
               ),
               textAlign: TextAlign.center,
             ),
+          ),
+          Positioned(
+            top: 10,
+            left: 20,
+            child: InkWell(
+                onTap: (){
+                  Get.back();
+                },
+                child: Image.asset('assets/images/back_arrow.png')),
           ),
         ],
       ),

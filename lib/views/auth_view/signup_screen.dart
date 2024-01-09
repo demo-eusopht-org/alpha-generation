@@ -138,14 +138,21 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      Text(
-                        'Sign up later',
-                        style: GoogleFonts.inter(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.backgroundContColor,
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => MainScreen(),
+                          );
+                        },
+                        child: Text(
+                          'Sign up later',
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Constants.backgroundContColor,
+                          ),
                         ),
                       ),
                       Container(

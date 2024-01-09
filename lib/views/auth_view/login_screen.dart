@@ -137,6 +137,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => MainScreen(),
+                        );
+                      },
+                      child: Text(
+                        'Log in later',
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Constants.backgroundContColor,
+                        ),
+                      ),
+                    ),
                     Container(
                       height: Get.height * 0.1,
                     ),

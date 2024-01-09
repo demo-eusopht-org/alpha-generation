@@ -7,11 +7,13 @@ class ProfileTextFields extends StatelessWidget {
   final int maxLines;
   final String hintText;
   final String text;
+  final bool? obscureText;
 
   const ProfileTextFields({
     Key? key,
     this.maxLines = 1,
     required this.hintText,
+    this.obscureText,
     required this.text,
   }) : super(key: key);
 
@@ -31,6 +33,7 @@ class ProfileTextFields extends StatelessWidget {
           height: 5,
         ),
         TextField(
+          obscureText: obscureText ?? false,
           style: TextStyle(color: Colors.white),
           maxLines: maxLines,
           decoration: InputDecoration(

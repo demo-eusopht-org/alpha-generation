@@ -47,7 +47,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           backgroundColor: Constants.backgroundContColor,
           items: [
             TabItem(
-              icon: Icons.home,
+              icon: Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
               activeIcon: Icon(
                 Icons.home,
                 color: Colors.black,
@@ -55,7 +58,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             ),
             TabItem(
-              icon: Icons.camera_alt,
+              icon: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+              ),
               activeIcon: Icon(
                 Icons.camera_alt,
                 color: Colors.black,
@@ -65,7 +71,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             TabItem(
               icon: Icon(
                 Icons.person,
-                color: Colors.grey,
+                color: Colors.white,
               ),
               activeIcon: Icon(
                 Icons.person,
@@ -187,20 +193,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Sign up later',
-                          style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                              color: Colors.white),
-                        ),
                       ],
                     ),
                   ),
-                  isDismissible: false,
                 );
               } else {
                 selectedPage = index;

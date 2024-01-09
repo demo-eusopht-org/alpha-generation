@@ -95,12 +95,10 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  List<String> variantsList = [
-    'Leather Products',
-    "Watches",
-  ];
+  List<ProductType> types = List.of(ProductType.values);
   @override
   Widget build(BuildContext context) {
+    types.remove(ProductType.all);
     List<String> selectedCheckBoxValue = [];
     return DefaultWidget(
       blueRatio: 0.4,
@@ -129,11 +127,11 @@ class _AddProductState extends State<AddProduct> {
                         padding: const EdgeInsets.all(20),
                         child: DropdownMenu<ProductType>(
                           dropdownMenuEntries: List.generate(
-                            ProductType.values.length,
+                            types.length,
                             (index) {
                               return DropdownMenuEntry(
-                                value: ProductType.values[index],
-                                label: ProductType.values[index].getLabel(),
+                                value: types[index],
+                                label: types[index].getLabel(),
                               );
                             },
                           ),
