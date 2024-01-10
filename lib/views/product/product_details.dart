@@ -166,7 +166,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                               }),
                           // Slider(),
                           Padding(
-                            padding: EdgeInsets.only(left: 20, top: 10),
+                            padding:
+                                EdgeInsets.only(left: 12, right: 12, top: 10),
                             child: SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

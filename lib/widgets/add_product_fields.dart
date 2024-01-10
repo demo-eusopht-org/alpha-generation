@@ -24,9 +24,11 @@ class AddProductFields extends StatelessWidget {
             fontSize: 13,
           ),
         ),
-        TextField(
+        TextFormField(
           style: TextStyle(color: Colors.white),
           maxLines: maxLines,
+          textInputAction: TextInputAction.next,
+          onTapOutside: (event) {},
           decoration: InputDecoration(
             isDense: true,
             fillColor: Constants.backgroundContColor,

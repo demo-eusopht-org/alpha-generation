@@ -15,6 +15,7 @@ import '../../widgets/add_product_fields.dart';
 import '../../widgets/bottom_Navigation.dart';
 import '../../widgets/default_widget.dart';
 import '../../widgets/icon_text.dart';
+import '../../widgets/select_files.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -31,28 +32,15 @@ class _AddProductState extends State<AddProduct> {
   PlatformFile? file;
   String? fileName;
   String? filePath;
-  Future<void> pickSingleFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc'],
+  List<PlatformFile> files = [];
+
+  void _showSelectedFilesModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SelectedFilesModal(files: files);
+      },
     );
-
-    if (result != null) {
-      PlatformFile file = result.files.first;
-
-      setState(() {
-        fileName = file.name;
-        filePath = file.path;
-      });
-
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
-
-      // navigateToNewPage();
-    } else {}
   }
 
   void navigateToNewPage() {
@@ -204,6 +192,13 @@ class _AddProductState extends State<AddProduct> {
                       SizedBox(
                         height: 10,
                       ),
+                      AddProductFields(
+                        text: 'Estimated Amount',
+                        hintText: 'Enter Estimated Amount',
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -278,7 +273,9 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 InkWell(
                                   onTap: () async {
-                                    await pickSingleFile();
+                                    setState(() {
+                                      _showSelectedFilesModal();
+                                    });
                                   },
                                   child: Container(
                                     height: 40,
@@ -298,7 +295,9 @@ class _AddProductState extends State<AddProduct> {
                                           Container(
                                             width: 120,
                                             child: Text(
-                                              fileName ?? 'Upload',
+                                              files.isEmpty
+                                                  ? 'Upload'
+                                                  : '${files.length} Files Selected',
                                               style: GoogleFonts.inter(
                                                 color: Colors.white,
                                               ),
@@ -326,12 +325,11 @@ class _AddProductState extends State<AddProduct> {
                         physics: NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          childAspectRatio: 0.8,
+                          childAspectRatio: 0.95,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                         ),
-                        itemCount:
-                            images.length + 1, // plus one for the "Add" button
+                        itemCount: images.length + 1,
                         itemBuilder: (context, index) {
                           if (index < images.length) {
                             return uploadCategory(images[index], index);
@@ -343,29 +341,33 @@ class _AddProductState extends State<AddProduct> {
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Constants.backgroundContColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        width: Get.width * 0.35,
+                        height: Get.height * 0.06,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Constants.backgroundContColor,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          AppDialogs.showConfirmDialog(
-                            dialogTitle: 'Finance With It',
-                            label: 'Finance with it',
-                            secondaryLabel: 'Cancel',
-                            onConfirm: () {
-                              Get.offAll(
-                                () => MainScreen(),
-                              );
-                            },
-                            onSecondaryTap: () => Get.back(),
-                          );
-                        },
-                        child: Text(
-                          'Submit',
+                          onPressed: () {
+                            AppDialogs.showConfirmDialog(
+                              dialogTitle: 'Finance With It',
+                              label: 'Finance with it',
+                              secondaryLabel: 'Cancel',
+                              onConfirm: () {
+                                Get.offAll(
+                                  () => MainScreen(),
+                                );
+                              },
+                              onSecondaryTap: () => Get.back(),
+                            );
+                          },
+                          child: Text(
+                            'Submit',
+                          ),
                         ),
                       )
                     ],
