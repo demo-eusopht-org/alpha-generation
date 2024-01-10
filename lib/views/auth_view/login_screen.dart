@@ -91,9 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 20),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: Get.width * 0.3,
                       child: RoundedElevatedButton(
+                        borderRadius: 23,
                         text: 'Login',
                         onPressed: () {
                           Get.to(
@@ -105,36 +105,41 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       height: Get.height * 0.1,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Constants.backgroundContColor,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Image(
-                            image: AssetImage(
-                              "assets/images/Google.png",
-                            ),
+                    Container(
+                      height: Get.height * 0.06,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.backgroundContColor,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 24, right: 8),
-                            child: Text(
-                              'Sign in with Google',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                        ),
+                        onPressed: () {
+                          Get.to(() => MainScreen());
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Image(
+                              image: AssetImage(
+                                "assets/images/Google.png",
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(left: 24, right: 8),
+                              child: Text(
+                                'Sign in with Google',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -159,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: Get.height * 0.1,
                     ),
                     Text(
-                      'Terms Of Services',
+                      'Terms Of Service',
                       style: GoogleFonts.inter(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,

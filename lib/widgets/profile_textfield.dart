@@ -36,6 +36,7 @@ class ProfileTextFields extends StatelessWidget {
           obscureText: obscureText ?? false,
           style: TextStyle(color: Colors.white),
           maxLines: maxLines,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             isDense: true,
             fillColor: Constants.backgroundContColor,
@@ -52,7 +53,7 @@ class ProfileTextFields extends StatelessWidget {
             hintStyle: GoogleFonts.inter(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
+              color: Colors.grey.shade400,
             ),
           ),
         ),

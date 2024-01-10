@@ -78,10 +78,10 @@ class _ResetPasswordState extends State<ResetPassword> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: (size.height * 0.28)),
+                  SizedBox(height: (size.height * 0.25)),
                   ProfileTextFields(
                     text: 'Old password',
-                    hintText: '*************',
+                    hintText: 'Enter old password',
                     obscureText: true,
                   ),
                   SizedBox(
@@ -89,7 +89,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   ProfileTextFields(
                     text: 'New password',
-                    hintText: '*************',
+                    hintText: 'Enter new password',
                     obscureText: true,
                   ),
                   SizedBox(
@@ -97,14 +97,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   ProfileTextFields(
                     text: 'Confirm password',
-                    hintText: '*************',
+                    hintText: 'Enter new password again',
                     obscureText: true,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Container(
-                    height: Get.height * 0.1,
+                    height: Get.height * 0.07,
                   ),
                   Container(
                     width: Get.width * 0.3,
@@ -124,35 +124,78 @@ class _ResetPasswordState extends State<ResetPassword> {
           ),
           Container(
             width: double.infinity,
-            height: size.height * 0.23,
+            height: size.height * 0.20,
             color: Constants.backgroundContColor,
-          ),
-          Positioned(
-            top: 65,
-            right: 0,
-            left: 0,
-            child: Text(
-              'Reset password',
-              style: GoogleFonts.inter(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                color: Constants.splashTextColor,
-              ),
-              textAlign: TextAlign.center,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Image.asset('assets/images/back_arrow.png'),
+                  ),
+                ),
+
+                // // Row(
+                // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // //   crossAxisAlignment: CrossAxisAlignment.start,
+                // //   children: [
+                // //     // InkWell(
+                // //     //   onTap: () {
+                // //     //   Navigator.pop(context);
+                // //     //   },
+                // //     //   child: Image.asset(
+                // //     //     'assets/images/back_arrow.png',
+                // //     //   ),
+                // //     // ),
+                // //   ],
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: Text(
+                    'Reset Password',
+                    style: GoogleFonts.inter(
+                      color: Constants.splashTextColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned(
-            top: 15,
-            left: 20,
-            child: InkWell(
-              onTap: () {
-                Get.back();
-              },
-              child: Image.asset(
-                'assets/images/back_arrow.png',
-              ),
-            ),
-          ),
+
+          // Positioned(
+          //   top: 65,
+          //   right: 0,
+          //   left: 0,
+          //   child: Text(
+          //     'Reset Password',
+          //     style: GoogleFonts.inter(
+          //       fontSize: 30,
+          //       fontWeight: FontWeight.w400,
+          //       color: Constants.splashTextColor,
+          //     ),
+          //     textAlign: TextAlign.center,
+          //   ),
+          // ),
+          // Positioned(
+          //   top: 15,
+          //   left: 20,
+          //   child: InkWell(
+          //     onTap: () {
+          //       Get.back();
+          //     },
+          //     child: Image.asset(
+          //       'assets/images/back_arrow.png',
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

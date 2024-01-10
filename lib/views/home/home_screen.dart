@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
@@ -66,9 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 40.0,
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  top: 20,
+                  bottom: 20,
                 ),
                 child: Container(
                   height: 40,
@@ -131,12 +134,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         IgnorePointer(
                           child: Radio<ProductType>(
+                            focusColor: Constants.backgroundContColor,
+                            activeColor: Constants.backgroundContColor,
                             value: type,
                             groupValue: selectedProductType,
                             onChanged: (newType) {},
                           ),
                         ),
-                        Text(type.getLabel()),
+                        Text(
+                          type.getLabel(),
+                          style: GoogleFonts.inter(),
+                        ),
                       ],
                     ),
                   );

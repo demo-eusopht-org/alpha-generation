@@ -7,10 +7,14 @@ class AddProductFields extends StatelessWidget {
   final int maxLines;
   final String hintText;
   final String text;
+  final FocusNode focusNode = FocusNode();
 
-  const AddProductFields(
-      {Key? key, this.maxLines = 1, required this.hintText, required this.text})
-      : super(key: key);
+  AddProductFields({
+    Key? key,
+    this.maxLines = 1,
+    required this.hintText,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +31,11 @@ class AddProductFields extends StatelessWidget {
         TextFormField(
           style: TextStyle(color: Colors.white),
           maxLines: maxLines,
+          focusNode: focusNode,
           textInputAction: TextInputAction.next,
-          onTapOutside: (event) {},
+          onTapOutside: (event) {
+            focusNode.unfocus();
+          },
           decoration: InputDecoration(
             isDense: true,
             fillColor: Constants.backgroundContColor,
@@ -44,7 +51,7 @@ class AddProductFields extends StatelessWidget {
             hintStyle: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
+              color: Colors.grey.shade400,
             ),
           ),
         ),

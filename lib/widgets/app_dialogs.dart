@@ -26,27 +26,47 @@ class AppDialogs {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton(
-              onPressed: onSecondaryTap,
-              child: Text(
-                secondaryLabel,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
+            Container(
+              width: Get.width * 0.33,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Constants.backgroundContColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(31),
+                  ),
+                ),
+                onPressed: onSecondaryTap,
+                child: Text(
+                  secondaryLabel,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),
             SizedBox(
               width: 10,
             ),
-            ElevatedButton(
-              onPressed: () {
-                onConfirm();
-                Get.back();
-              },
-              child: Text(
-                label,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
+            Container(
+              width: Get.width * 0.33,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Constants.backgroundContColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(31),
+                  ),
+                ),
+                onPressed: () {
+                  onConfirm();
+                  Get.back();
+                },
+                child: Text(
+                  label,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),

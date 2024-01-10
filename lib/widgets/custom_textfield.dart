@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/utils/constants.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
@@ -23,6 +24,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       obscureText: isPasswordHidden && widget.showPasswordHideButton,
       decoration: InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Constants.backgroundContColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Constants.backgroundContColor,
+          ),
+        ),
+        focusColor: Constants.backgroundContColor,
         contentPadding: EdgeInsets.only(top: 20),
         isDense: true,
         hintText: widget.hintText,
@@ -47,6 +59,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 icon: Icon(
                   isPasswordHidden ? Icons.visibility : Icons.visibility_off,
                   size: 20,
+                  color: Constants.backgroundContColor,
                   // opticalSize: 1,
                 ),
                 onPressed: () {

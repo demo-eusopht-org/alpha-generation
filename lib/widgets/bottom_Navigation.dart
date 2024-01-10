@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/home/home_screen.dart';
 
 import '../views/product/add_product.dart';
@@ -160,12 +161,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             ),
                           ),
                           onPressed: () {
-                            Get.back<bool>(
-                              result: false,
-                            );
-                            selectedPage = index;
-                            _tabController.index = selectedPage;
-                            setState(() {});
+                            Get.to(()=>LoginScreen());
+                            // Get.back<bool>(
+                            //   result: false,
+                            // );
+                            // selectedPage = index;
+                            // _tabController.index = selectedPage;
+                            // setState(() {});
                           },
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

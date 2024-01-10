@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/widgets/custom_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RoundedElevatedButtonSplash extends StatelessWidget {
   final VoidCallback onPressed;
@@ -18,30 +17,37 @@ class RoundedElevatedButtonSplash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius), // Rounded corners
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(borderRadius), // Rounded corners
+          ),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.white,
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            // vertical: 12.0,
+          ),
+          fixedSize: Size(
+            MediaQuery.of(context).size.width,
+            50,
+          ),
         ),
-        backgroundColor:Colors.white,
-        foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(
-          horizontal: 10.0,
-          // vertical: 12.0,
-        ),
-        fixedSize: Size(
-          MediaQuery.of(context).size.width,
-          50,
-        ),
-      ),
-      onPressed: onPressed,
-      child: loading
-          ? SizedBox(
-        height: 35,
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.white),
-        ),
-      )
-          : textWidget(text: text, color: Colors.black),
-    );
+        onPressed: onPressed,
+        child: loading
+            ? SizedBox(
+                height: 35,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                ),
+              )
+            : Text(
+                text,
+                style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ));
   }
 }

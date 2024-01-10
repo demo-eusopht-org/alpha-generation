@@ -54,6 +54,7 @@ class PopularLocationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MasonryGridView.count(
+
       crossAxisCount: 2,
       shrinkWrap: true,
       mainAxisSpacing: 10,

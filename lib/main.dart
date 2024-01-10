@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      data: MediaQuery.of(context).copyWith(
+        textScaleFactor: 1.0,
+      ),
       child: GetMaterialApp(
         title: 'Alpha Generation',
         debugShowCheckedModeBanner: false,

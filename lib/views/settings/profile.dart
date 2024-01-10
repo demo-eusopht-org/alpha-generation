@@ -80,18 +80,18 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: (size.height * 0.28) + (profileSize / 2),
+                    height: (size.height * 0.25) + (profileSize / 2),
                   ),
                   ProfileTextFields(
                     text: 'Email address',
-                    hintText: 'example.@gmail.com',
+                    hintText: 'Enter Email',
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   ProfileTextFields(
                     text: 'Username',
-                    hintText: 'Lorem Ipsum',
+                    hintText: 'Enter Name',
                   ),
                   SizedBox(
                     height: 10,
@@ -101,7 +101,7 @@ class _ProfileState extends State<Profile> {
                     children: [
                       ProfileTextFields(
                         text: 'Password',
-                        hintText: '*************',
+                        hintText: 'Enter Password',
                         obscureText: true,
                       ),
                       SizedBox(
@@ -143,11 +143,11 @@ class _ProfileState extends State<Profile> {
           ),
           Container(
             width: double.infinity,
-            height: size.height * 0.23,
+            height: size.height * 0.20,
             color: Constants.backgroundContColor,
           ),
           Positioned(
-            top: (size.height * 0.23) - (profileSize / 2),
+            top: (size.height * 0.20) - (profileSize / 2),
             left: 0,
             right: 0,
             child: Container(
@@ -175,14 +175,14 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Positioned(
-            top: 50,
+            top: Get.height * 0.05,
             right: 0,
             left: 0,
             child: Text(
               'Profile',
               style: GoogleFonts.inter(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
+                fontSize: 30,
+                fontWeight: FontWeight.w400,
                 color: Constants.splashTextColor,
               ),
               textAlign: TextAlign.center,

@@ -123,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             () => SignupScreen(),
                           );
                         },
-                        text: 'SignUp',
+                        text: 'Sign Up',
                         borderRadius: 30,
                       ),
                     ),

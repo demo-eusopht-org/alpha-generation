@@ -67,13 +67,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ],
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    'Rating',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: Colors.black,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      'Rating',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   Stack(
@@ -289,29 +293,32 @@ class _ProductDetailsState extends State<ProductDetails> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Image.asset(
-                    'assets/images/back_arrow.png',
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Image.asset(
+                      'assets/images/back_arrow.png',
+                    ),
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
+                      horizontal: 10.0,
                       vertical: 10.0,
                     ),
                     child: Container(
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10, left: 20, right: 30),
                       child: Text(
-                        'PRODUCT DETAILS',
+                        'Product Details',
                         style: GoogleFonts.inter(
                           color: Constants.splashTextColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
