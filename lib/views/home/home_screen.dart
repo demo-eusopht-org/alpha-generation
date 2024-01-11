@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultWidget(
+      showBackIcon: false,
       blueRatio: isKeyboardOpen ? 0.5 : 0.3,
       child: Column(
         // mainAxisSize: MainAxisSize.max,

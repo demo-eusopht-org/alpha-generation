@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/splash_screen.dart';
-
-import 'utils/constants.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(

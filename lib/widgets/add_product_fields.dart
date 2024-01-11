@@ -7,6 +7,7 @@ class AddProductFields extends StatelessWidget {
   final int maxLines;
   final String hintText;
   final String text;
+  final textInputType;
   final FocusNode focusNode = FocusNode();
 
   AddProductFields({
@@ -14,6 +15,7 @@ class AddProductFields extends StatelessWidget {
     this.maxLines = 1,
     required this.hintText,
     required this.text,
+    this.textInputType,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class AddProductFields extends StatelessWidget {
           maxLines: maxLines,
           focusNode: focusNode,
           textInputAction: TextInputAction.next,
+          keyboardType: textInputType,
           onTapOutside: (event) {
             focusNode.unfocus();
           },

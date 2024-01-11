@@ -58,10 +58,17 @@ class _SplashScreenState extends State<SplashScreen> {
             left: 0,
             right: 0,
             top: MediaQuery.of(context).size.height * 0.2,
-            child: Image.asset(
-              'assets/images/Logo_Alpha.png',
-              height: 80,
-              width: 80,
+            child: Container(
+              height: 75,
+              width: 75,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/main_logo.png',
+                  ),
+                ),
+              ),
             ),
           ),
           Center(

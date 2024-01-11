@@ -39,180 +39,178 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: ConvexAppBar(
-          top: -20,
-          controller: _tabController,
-          height: 50,
-          backgroundColor: Constants.backgroundContColor,
-          items: [
-            TabItem(
-              icon: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              activeIcon: Icon(
-                Icons.home,
-                color: Colors.black,
-                size: 35,
-              ),
+      bottomNavigationBar: ConvexAppBar(
+        top: -20,
+        controller: _tabController,
+        height: 50,
+        backgroundColor: Constants.backgroundContColor,
+        items: [
+          TabItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
             ),
-            TabItem(
-              icon: Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-              ),
-              activeIcon: Icon(
-                Icons.camera_alt,
-                color: Colors.black,
-                size: 35,
-              ),
+            activeIcon: Icon(
+              Icons.home,
+              color: Colors.black,
+              size: 35,
             ),
-            TabItem(
-              icon: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
-              activeIcon: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: 35,
-              ),
+          ),
+          TabItem(
+            icon: Icon(
+              Icons.camera_alt,
+              color: Colors.white,
             ),
-          ],
-          onTap: (int index) async {
-            print('Tapped item at index $index');
-            if (index == 1) {
-              final shouldChange = await Get.bottomSheet<bool>(
-                Container(
-                  color: Colors.black,
-                  height: 200,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: Get.width * 0.72,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Constants.backgroundContColor,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+            activeIcon: Icon(
+              Icons.camera_alt,
+              color: Colors.black,
+              size: 35,
+            ),
+          ),
+          TabItem(
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            activeIcon: Icon(
+              Icons.person,
+              color: Colors.black,
+              size: 35,
+            ),
+          ),
+        ],
+        onTap: (int index) async {
+          print('Tapped item at index $index');
+          if (index == 1) {
+            final shouldChange = await Get.bottomSheet<bool>(
+              Container(
+                color: Colors.black,
+                height: 200,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: Get.width * 0.72,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.backgroundContColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {
-                            // _handleSignIn();
-                            Get.back<bool>(
-                              result: false,
-                            );
-                            selectedPage = index;
-                            _tabController.index = selectedPage;
-                            setState(() {});
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image(
-                                  image: AssetImage(
-                                    "assets/images/Google.png",
-                                  ),
-                                  height: 18.0,
-                                  width: 20,
+                        ),
+                        onPressed: () {
+                          // _handleSignIn();
+                          Get.back<bool>(
+                            result: false,
+                          );
+                          selectedPage = index;
+                          _tabController.index = selectedPage;
+                          setState(() {});
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                  "assets/images/Google.png",
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Text(
-                                    'Continue with Google',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                height: 18.0,
+                                width: 20,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 10,
+                                ),
+                                child: Text(
+                                  'Continue with Google',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     Get.back();
-                      //     selectedPage = index;
-                      //     _tabController.index = selectedPage;
-                      //     setState(() {});
-                      //   },
-                      //   child: Text('Sign In with Google'),
-                      // ),
-                      Container(
-                        width: Get.width * 0.72,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Constants.backgroundContColor,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Get.back();
+                    //     selectedPage = index;
+                    //     _tabController.index = selectedPage;
+                    //     setState(() {});
+                    //   },
+                    //   child: Text('Sign In with Google'),
+                    // ),
+                    Container(
+                      width: Get.width * 0.72,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.backgroundContColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {
-                            Get.to(()=>LoginScreen());
-                            // Get.back<bool>(
-                            //   result: false,
-                            // );
-                            // selectedPage = index;
-                            // _tabController.index = selectedPage;
-                            // setState(() {});
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Image(
-                                  image: AssetImage(
-                                    "assets/images/email.png",
-                                  ),
-                                  height: 18.0,
-                                  width: 24,
+                        ),
+                        onPressed: () {
+                          Get.to(() => LoginScreen());
+                          // Get.back<bool>(
+                          //   result: false,
+                          // );
+                          // selectedPage = index;
+                          // _tabController.index = selectedPage;
+                          // setState(() {});
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Image(
+                                image: AssetImage(
+                                  "assets/images/email.png",
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 12),
-                                  child: Text(
-                                    'Continue with Email',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                height: 18.0,
+                                width: 24,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, right: 12),
+                                child: Text(
+                                  'Continue with Email',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-              if (shouldChange ?? true) {
-                _tabController.index = 0;
-              }
-            } else {
-              selectedPage = index;
-              print(screens[index]);
+              ),
+            );
+
+            if (shouldChange ?? true) {
+              _tabController.index = selectedPage;
             }
-            setState(() {});
-          },
-          initialActiveIndex: selectedPage,
-          style: TabStyle.reactCircle,
-        ),
+          } else {
+            selectedPage = index;
+            print(screens[index]);
+          }
+          setState(() {});
+        },
+        initialActiveIndex: selectedPage,
+        style: TabStyle.reactCircle,
       ),
       body: screens[selectedPage],
     );

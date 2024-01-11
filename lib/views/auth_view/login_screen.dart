@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/views/settings/forgot_password.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
 import '../../widgets/custom_button.dart';
@@ -79,13 +80,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 15,
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'Forgot Password?',
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => ForgotPassword(),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'Forgot Password?',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),

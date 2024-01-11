@@ -47,7 +47,6 @@ class _AddProductState extends State<AddProduct> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now().add(Duration(days: 730)),
-      // Modify the theme of the date picker
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -74,8 +73,10 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     types.remove(ProductType.all);
+
     return DefaultWidget(
-      blueRatio: 0.4,
+      showBackIcon: false,
+      blueRatio: 0.3,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -207,14 +208,14 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       AddProductFields(
                         text: 'Product Title',
-                        hintText: 'Enter',
+                        hintText: 'Enter Title',
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       AddProductFields(
                         text: 'Description',
-                        hintText: 'Enter',
+                        hintText: 'Enter Description',
                         maxLines: 3,
                       ),
                       SizedBox(
@@ -222,7 +223,8 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       AddProductFields(
                         text: 'Serial Number',
-                        hintText: 'Enter',
+                        hintText: 'Enter Serial Number',
+                        textInputType: TextInputType.number,
                       ),
                       SizedBox(
                         height: 10,
@@ -308,7 +310,7 @@ class _AddProductState extends State<AddProduct> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Purchase Date:',
+                            'Purchase Date',
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w700,
                               fontSize: 13,
@@ -359,25 +361,38 @@ class _AddProductState extends State<AddProduct> {
                         ],
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 0.95,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: images.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index < images.length) {
-                            return uploadCategory(images[index], index);
-                          } else {
-                            return uploadCategory(null, index);
-                          }
-                        },
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Product Image',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 0.95,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemCount: images.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index < images.length) {
+                                return uploadCategory(images[index], index);
+                              } else {
+                                return uploadCategory(null, index);
+                              }
+                            },
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 20,
@@ -547,42 +562,47 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Container topContainer() {
+    final size = MediaQuery.sizeOf(context);
     return Container(
+      height: size.height * 0.15,
       width: double.infinity,
-      color: Constants.backgroundContColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // // Row(
-            // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // //   crossAxisAlignment: CrossAxisAlignment.start,
-            // //   children: [
-            // //     // InkWell(
-            // //     //   onTap: () {
-            // //     //   Navigator.pop(context);
-            // //     //   },
-            // //     //   child: Image.asset(
-            // //     //     'assets/images/back_arrow.png',
-            // //     //   ),
-            // //     // ),
-            // //   ],
-            // ),
-            Text(
-              'Add Product ',
-              style: GoogleFonts.inter(
-                color: Constants.splashTextColor,
-                fontSize: 30,
-                fontWeight: FontWeight.w400,
-              ),
+      // color: Constants.backgroundContColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // // Row(
+          // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // //   crossAxisAlignment: CrossAxisAlignment.start,
+          // //   children: [
+          // //     // InkWell(
+          // //     //   onTap: () {
+          // //     //   Navigator.pop(context);
+          // //     //   },
+          // //     //   child: Image.asset(
+          // //     //     'assets/images/back_arrow.png',
+          // //     //   ),
+          // //     // ),
+          // //   ],
+          // ),
+          Text(
+            'Add Product',
+            style: GoogleFonts.inter(
+              fontSize: 30,
+              fontWeight: FontWeight.w400,
+              color: Constants.splashTextColor,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: buildUploadIcon(),
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          // Icon(
+          //   Icons.camera_alt,
+          //   color: Colors.white,
+          //   size: 35,
+          // ),
+        ],
       ),
     );
   }

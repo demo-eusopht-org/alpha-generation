@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/slider.dart';
 
-import '../../utils/constants.dart';
 import '../../widgets/icon_text.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -26,81 +26,132 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return DefaultWidget(
+      showBackIcon: true,
+      heading: 'Product Details',
       blueRatio: 0.3,
-      bottomBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Estimated',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        color: Colors.black,
+      bottomBar: ColoredBox(
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 8),
+                      child: Text(
+                        'Estimated',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/estimated_box.png',
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Constants.backgroundContColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          // topLeft: Radius.circular(5),
+                        ),
                       ),
-                      Text(
+                      alignment: Alignment.center,
+                      width: Get.width * 0.27,
+                      height: Get.height * 0.08,
+                      child: Text(
                         '300',
                         style: GoogleFonts.inter(
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      'Rating',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        color: Colors.black,
                       ),
                     ),
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/rating_box.png',
+                    // Stack(
+                    //   alignment: Alignment.center,
+                    //   children: [
+                    //     Image.asset(
+                    //       'assets/images/estimated_box.png',
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.only(right: 10),
+                    //       child: Text(
+                    //         '300',
+                    //         style: GoogleFonts.inter(
+                    //           fontSize: 25,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12, top: 5),
+                      child: Text(
+                        'Rating',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
                       ),
-                      Text(
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Constants.backgroundContColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          // topLeft: Radius.circular(5),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      width: Get.width * 0.27,
+                      height: Get.height * 0.08,
+                      child: Text(
                         '5',
                         style: GoogleFonts.inter(
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                      ),
+                    ),
+                    // Stack(
+                    //   alignment: Alignment.center,
+                    //   children: [
+                    //     Image.asset(
+                    //       'assets/images/new_estimated_box.png',
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.only(left: 12),
+                    //       child: Text(
+                    //         '5',
+                    //         style: GoogleFonts.inter(
+                    //           fontSize: 25,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.only(
@@ -108,8 +159,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           right: 15,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            topContainer(),
             Expanded(
               child: Column(
                 children: [
@@ -176,21 +227,52 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Beirutimes - Patek Philippe',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Brand Name',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Rolex',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'Nautilus 7118R',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
-                                    ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Model Number',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        'A-1234',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
                                   ),
 
                                   Row(
@@ -200,7 +282,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       Text(
                                         'Purchase Date:1/2/24 ',
                                         style: GoogleFonts.inter(
-                                          fontSize: 11,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,
                                         ),
@@ -281,56 +363,16 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Container topContainer() {
-    return Container(
-      width: double.infinity,
-      color: Constants.backgroundContColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      'assets/images/back_arrow.png',
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 10.0,
-                    ),
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      margin: EdgeInsets.only(top: 10, left: 20, right: 30),
-                      child: Text(
-                        'Product Details',
-                        style: GoogleFonts.inter(
-                          color: Constants.splashTextColor,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget topContainer() {
+  //   return Container(
+  //     width: double.infinity,
+  //     color: Constants.backgroundContColor,
+  //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
+  //     alignment: Alignment.topCenter,
+  //     margin: EdgeInsets.only(left: 20, right: 20),
+  //     child:
+  //   );
+  // }
 }
 
 class PopularLocationItem extends StatelessWidget {
