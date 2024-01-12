@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "885780777429",
+    "project_id": "alpha-generation",
+    "storage_bucket": "alpha-generation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885780777429:android:ff3ecffc0f7494419c555c",
+        "android_client_info": {
+          "package_name": "com.eusopht.alpha_generation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885780777429-7clabib3l6m1g28svh052055tm8gv3vj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eusopht.alpha_generation",
+            "certificate_hash": "9154128256c0beae7270f952f63ef35cd14f4b8e"
+          }
+        },
+        {
+          "client_id": "885780777429-mam0eif4hodl4k3l6ggo4qv9481fpo57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQEPNsVQzIRSoLrTUor7oUUEc57918T1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885780777429-mam0eif4hodl4k3l6ggo4qv9481fpo57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/settings/forgot_password.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
@@ -16,6 +17,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  Future<bool> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      return true;
+    } catch (error) {
+      print('Error signing in: $error');
+      return false;
+    }
+  }
+
   bool hidePassword = true;
   @override
   Widget build(BuildContext context) {
@@ -124,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         onPressed: () {
+                          // _handleSignIn();
                           Get.to(() => MainScreen());
                         },
                         child: Row(

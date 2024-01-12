@@ -54,12 +54,13 @@ class _ProfileState extends State<Profile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => ResetPassword(),
-                      ),
-                    );
+                    Get.to(() => ResetPassword()
+                        // Navigator.push(
+                        //   context,
+                        //   CupertinoPageRoute(
+                        //     builder: (context) => ResetPassword(),
+                        //   ),
+                        );
                   },
                   child: Text(
                     'Change Password?',

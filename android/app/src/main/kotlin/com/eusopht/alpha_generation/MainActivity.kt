@@ -1,4 +1,4 @@
-package com.example.noble_vintage
+package com.eusopht.alpha_generation
 
 import io.flutter.embedding.android.FlutterActivity
 

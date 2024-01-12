@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/auth_view/login_screen.dart';
@@ -19,7 +20,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   int selectedPage = 0;
   final screens = [HomeScreen(), AddProduct(), Profile()];
   @override
@@ -28,13 +29,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  // void _handleSignIn() async {
-  //   try {
-  //     await _googleSignIn.signIn();
-  //   } catch (error) {
-  //     print('Error signing in: $error');
-  //   }
-  // }
+  Future<bool> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      return true;
+    } catch (error) {
+      print('Error signing in: $error');
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +104,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ),
                         ),
                         onPressed: () {
-                          // _handleSignIn();
-                          Get.back<bool>(
-                            result: false,
-                          );
-                          selectedPage = index;
-                          _tabController.index = selectedPage;
-                          setState(() {});
+                          _handleSignIn();
+                          // Get.back<bool>(
+                          //   result: false,
+                          // );
+                          // selectedPage = index;
+                          // _tabController.index = selectedPage;
+                          // setState(() {});
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
