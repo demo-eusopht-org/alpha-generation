@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:noble_vintage/utils/constants.dart';
 
 Widget textFormField({
   controller,
@@ -65,4 +67,18 @@ Widget textWidget({
       fontSize: fSize,
     ),
   );
+}
+
+void customToast(String? message) {
+  if (message != null) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Constants.backgroundContColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 }

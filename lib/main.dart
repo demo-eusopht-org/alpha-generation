@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:noble_vintage/services/local_storage_service.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/splash_screen.dart';
+import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
-void main() {
+import 'services/locator.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Constants.backgroundContColor,
     ),
   );
+  await Hive.initFlutter();
+  await initializeLocator();
+  await locator<LocalStorageService>().initializeBox();
   runApp(const MyApp());
 }
 
@@ -29,7 +38,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const SplashScreen(),
+        home: locator<LocalStorageService>().getData('token') == null
+            ? const SplashScreen()
+            : MainScreen(),
       ),
     );
   }

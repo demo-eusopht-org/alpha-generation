@@ -27,7 +27,7 @@ class AppDialogs {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              width: Get.width * 0.33,
+              width: Get.width * 0.35,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -49,7 +49,7 @@ class AppDialogs {
               width: 10,
             ),
             Container(
-              width: Get.width * 0.33,
+              width: Get.width * 0.35,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,

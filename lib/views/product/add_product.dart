@@ -6,12 +6,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:noble_vintage/controller/product_controller.dart';
 import 'package:noble_vintage/model/enums/product_type_enum.dart';
+import 'package:noble_vintage/model/product_model/add_product_model.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
+import 'package:noble_vintage/widgets/custom_widgets.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/add_product_fields.dart';
 import '../../widgets/bottom_Navigation.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/default_widget.dart';
 import '../../widgets/icon_text.dart';
 
@@ -23,11 +27,50 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  DateTime? selectedDate;
+  final productController = Get.put(ProductController());
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController serialNumberController = TextEditingController();
+  TextEditingController estimatedAmountController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  DateTime? purchaseDate;
   bool productSelected = false;
-  List<XFile> images = [];
-  List<PlatformFile> files = [];
+  List<XFile> productImages = [];
+  List<PlatformFile> certificates = [];
   ProductType? selectedProductType;
+  bool financeWitIt = false;
+
+  Future<void> addProduct() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        productController.buttonLoading.value = true;
+        AddProductModel? response = await productController.addProduct(
+          productImages,
+          certificates,
+          titleController.text,
+          descriptionController.text,
+          serialNumberController.text,
+          purchaseDate!,
+          double.parse(estimatedAmountController.text),
+          0,
+          financeWitIt,
+          selectedProductType!.index + 1,
+        );
+        if (response?.status != 200) {
+          productController.buttonLoading.value = false;
+          throw Exception(response?.message ?? 'Something went wrong!');
+        }
+        customToast(response!.message);
+        Get.offAll(
+          () => MainScreen(),
+        );
+      } catch (e) {
+        productController.buttonLoading.value = false;
+        customToast(e.toString());
+        print(e.toString());
+      }
+    }
+  }
 
   Future<void> pickSingleFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -36,7 +79,7 @@ class _AddProductState extends State<AddProduct> {
     );
 
     if (result != null) {
-      files.addAll(result.files);
+      certificates.addAll(result.files);
       setState(() {});
     }
   }
@@ -63,378 +106,431 @@ class _AddProductState extends State<AddProduct> {
 
     if (pickedDate != null) {
       setState(() {
-        print('date:${selectedDate = pickedDate}');
-        selectedDate = pickedDate;
+        print('date:${purchaseDate = pickedDate}');
+        purchaseDate = pickedDate;
       });
     }
   }
 
-  List<ProductType> types = List.of(ProductType.values);
   @override
   Widget build(BuildContext context) {
-    types.remove(ProductType.all);
-
     return DefaultWidget(
       showBackIcon: false,
       blueRatio: 0.3,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            topContainer(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: kElevationToShadow[0],
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                  ),
-                  // height: Get.height,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Product Category',
-                          style: GoogleFonts.inter(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
+        child: Obx(
+          () => productController.loading.value
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    topContainer(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: kElevationToShadow[0],
+                            color: Colors.white,
                           ),
-                        ),
-                      ),
-                      Container(
-                        // margin: EdgeInsets.only(top: 15),
-                        alignment: Alignment.center,
-                        height: 50,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: Constants.backgroundContColor,
-                        ),
-
-                        child: DropdownButton<ProductType>(
-                          underline: SizedBox.shrink(),
-                          hint: Text(
-                            'Select Category',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                            ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
                           ),
-                          value: selectedProductType,
-                          isExpanded: true,
-                          onChanged: (value) {
-                            selectedProductType = value;
-                            setState(() {});
-                          },
-                          dropdownColor: Constants.backgroundContColor,
-                          iconEnabledColor: Colors.white,
-                          items: List.generate(
-                            types.length,
-                            (index) {
-                              return DropdownMenuItem(
-                                value: types[index],
-                                child: Text(
-                                  types[index].getLabel(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                          // height: Get.height,
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 15,
                                 ),
-                              );
-                            },
-                          ),
-
-                          // hintText: 'Select Category',
-                          // trailingIcon: Icon(
-                          //   Icons.arrow_drop_down,
-                          //   color: Colors.red,
-                          // ),
-                          // inputDecorationTheme: InputDecorationTheme(
-                          //     border: OutlineInputBorder(
-                          //         borderSide: BorderSide.none)),
-                        ),
-
-                        // child: DropDownMultiSelect(
-                        //   decoration: InputDecoration(
-                        //     fillColor: Theme.of(context).colorScheme.onPrimary,
-                        //     focusColor: Theme.of(context).colorScheme.onPrimary,
-                        //     enabledBorder: const OutlineInputBorder(
-                        //       borderRadius: BorderRadius.all(
-                        //         Radius.circular(4),
-                        //       ),
-                        //       borderSide: BorderSide(
-                        //         color: Colors.grey,
-                        //         width: 1.5,
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   options: variantsList,
-                        //   selectedValues: selectedValues,
-                        //   // selectedProductItem != null
-                        //   //     ? [selectedProductItem!]
-                        //   //     : [],
-                        //   // onChanged: (List<ProductItem> newList) {
-                        //   //   log('NAMES: ${newList}');
-                        //   //   if (newList.isNotEmpty) {
-                        //   //     selectedProductItem = newList.first;
-                        //   //     newList.clear();
-                        //   //     setState(() {});
-                        //   //   }
-                        //   // },
-                        //   onChanged: (List<String> selectedList) {
-                        //     setState(() {
-                        //       if (selectedList.isNotEmpty) {
-                        //         selectedValues = [
-                        //           selectedList[0]
-                        //         ]; // Update selected value
-                        //       } else {
-                        //         selectedValues.clear();
-                        //       }
-                        //     });
-                        //     print("$selectedValues");
-                        //   },
-                        //   whenEmpty: 'Select Category',
-                        // ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AddProductFields(
-                        text: 'Product Title',
-                        hintText: 'Enter Title',
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AddProductFields(
-                        text: 'Description',
-                        hintText: 'Enter Description',
-                        maxLines: 3,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AddProductFields(
-                        text: 'Serial Number',
-                        hintText: 'Enter Serial Number',
-                        textInputType: TextInputType.number,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AddProductFields(
-                        text: 'Estimated Amount',
-                        hintText: 'Enter Estimated Amount',
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Certificate/Documents',
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              if (files.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      pickSingleFile();
-                                    },
-                                    child: Icon(
-                                      Icons.add,
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Product Category',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
-                            ],
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              await pickSingleFile();
-                            },
-                            child: Container(
-                              constraints: BoxConstraints(
-                                minHeight: Get.height * 0.07,
-                              ),
-                              alignment: Alignment.center,
-                              height: files.isEmpty ? Get.height * 0.07 : null,
-                              decoration: BoxDecoration(
-                                color: Constants.backgroundContColor,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 10,
-                                  right: 10,
-                                  top: 5,
-                                  bottom: 5,
-                                ),
-                                child: files.isNotEmpty
-                                    ? Column(
-                                        children: List.generate(files.length,
-                                            (index) {
-                                          final file = files[index];
-                                          return _buildFileName(file,
-                                              (deletedFile) {
-                                            setState(() {
-                                              files.remove(deletedFile);
-                                            });
-                                          });
-                                        }),
-                                      )
-                                    : _buildFileName(null, (_) {}),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Purchase Date',
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              await _showDatePicker1();
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: Get.height * 0.07,
-                              decoration: BoxDecoration(
-                                color: Constants.backgroundContColor,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 6,
-                                  right: 6,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      selectedDate != null
-                                          ? DateFormat(
-                                              'dd-MM-yyyy',
-                                            ).format(
-                                              selectedDate!,
-                                            )
-                                          : 'Enter Date',
+                                Container(
+                                  // margin: EdgeInsets.only(top: 15),
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: Constants.backgroundContColor,
+                                  ),
+
+                                  child: DropdownButton<ProductType>(
+                                    underline: SizedBox.shrink(),
+                                    hint: Text(
+                                      'Select Category',
                                       style: GoogleFonts.inter(
-                                        color: Colors.grey.shade400,
-                                        fontSize: 16,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    Icon(
-                                      Icons.calendar_month,
-                                      color: Colors.white,
+                                    value: selectedProductType,
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      selectedProductType = value;
+                                      setState(() {});
+                                    },
+                                    dropdownColor:
+                                        Constants.backgroundContColor,
+                                    iconEnabledColor: Colors.white,
+                                    items: List.generate(
+                                      productController.categories.length,
+                                      (index) {
+                                        return DropdownMenuItem(
+                                          value: productController
+                                              .categories[index].id,
+                                          child: Text(
+                                            productController
+                                                .categories[index].id!
+                                                .getLabel(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+
+                                    // hintText: 'Select Category',
+                                    // trailingIcon: Icon(
+                                    //   Icons.arrow_drop_down,
+                                    //   color: Colors.red,
+                                    // ),
+                                    // inputDecorationTheme: InputDecorationTheme(
+                                    //     border: OutlineInputBorder(
+                                    //         borderSide: BorderSide.none)),
+                                  ),
+
+                                  // child: DropDownMultiSelect(
+                                  //   decoration: InputDecoration(
+                                  //     fillColor: Theme.of(context).colorScheme.onPrimary,
+                                  //     focusColor: Theme.of(context).colorScheme.onPrimary,
+                                  //     enabledBorder: const OutlineInputBorder(
+                                  //       borderRadius: BorderRadius.all(
+                                  //         Radius.circular(4),
+                                  //       ),
+                                  //       borderSide: BorderSide(
+                                  //         color: Colors.grey,
+                                  //         width: 1.5,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  //   options: variantsList,
+                                  //   selectedValues: selectedValues,
+                                  //   // selectedProductItem != null
+                                  //   //     ? [selectedProductItem!]
+                                  //   //     : [],
+                                  //   // onChanged: (List<ProductItem> newList) {
+                                  //   //   log('NAMES: ${newList}');
+                                  //   //   if (newList.isNotEmpty) {
+                                  //   //     selectedProductItem = newList.first;
+                                  //   //     newList.clear();
+                                  //   //     setState(() {});
+                                  //   //   }
+                                  //   // },
+                                  //   onChanged: (List<String> selectedList) {
+                                  //     setState(() {
+                                  //       if (selectedList.isNotEmpty) {
+                                  //         selectedValues = [
+                                  //           selectedList[0]
+                                  //         ]; // Update selected value
+                                  //       } else {
+                                  //         selectedValues.clear();
+                                  //       }
+                                  //     });
+                                  //     print("$selectedValues");
+                                  //   },
+                                  //   whenEmpty: 'Select Category',
+                                  // ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                AddProductFields(
+                                  controller: titleController,
+                                  text: 'Product Title',
+                                  hintText: 'Enter Title',
+                                  validatorCondition: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your product title';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                AddProductFields(
+                                  controller: descriptionController,
+                                  text: 'Description',
+                                  hintText: 'Enter Description',
+                                  maxLines: 3,
+                                  validatorCondition: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your description';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                AddProductFields(
+                                  controller: serialNumberController,
+                                  text: 'Serial Number',
+                                  hintText: 'Enter Serial Number',
+                                  textInputType: TextInputType.number,
+                                  validatorCondition: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your serial number';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                AddProductFields(
+                                  controller: estimatedAmountController,
+                                  text: 'Estimated Amount',
+                                  hintText: 'Enter Estimated Amount',
+                                  validatorCondition: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your estimated amount';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Certificate/Documents',
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        if (certificates.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: InkWell(
+                                              onTap: () {
+                                                pickSingleFile();
+                                              },
+                                              child: Icon(
+                                                Icons.add,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await pickSingleFile();
+                                      },
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          minHeight: Get.height * 0.07,
+                                        ),
+                                        alignment: Alignment.center,
+                                        height: certificates.isEmpty
+                                            ? Get.height * 0.07
+                                            : null,
+                                        decoration: BoxDecoration(
+                                          color: Constants.backgroundContColor,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 5,
+                                            bottom: 5,
+                                          ),
+                                          child: certificates.isNotEmpty
+                                              ? Column(
+                                                  children: List.generate(
+                                                      certificates.length,
+                                                      (index) {
+                                                    final file =
+                                                        certificates[index];
+                                                    return _buildFileName(file,
+                                                        (deletedFile) {
+                                                      setState(() {
+                                                        certificates.remove(
+                                                            deletedFile);
+                                                      });
+                                                    });
+                                                  }),
+                                                )
+                                              : _buildFileName(null, (_) {}),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Purchase Date',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await _showDatePicker1();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: Get.height * 0.07,
+                                        decoration: BoxDecoration(
+                                          color: Constants.backgroundContColor,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 6,
+                                            right: 6,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                purchaseDate != null
+                                                    ? DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).format(
+                                                        purchaseDate!,
+                                                      )
+                                                    : 'Enter Date',
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.grey.shade400,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.calendar_month,
+                                                color: Colors.white,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Product Image',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        childAspectRatio: 0.95,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                      ),
+                                      itemCount: productImages.length + 1,
+                                      itemBuilder: (context, index) {
+                                        if (index < productImages.length) {
+                                          return uploadCategory(
+                                              productImages[index], index);
+                                        } else {
+                                          return uploadCategory(null, index);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: Get.width * 0.35,
+                                  height: Get.height * 0.06,
+                                  child: RoundedElevatedButton(
+                                    loading:
+                                        productController.buttonLoading.value,
+                                    onPressed: () {
+                                      if (selectedProductType == null) {
+                                        customToast('Please select category');
+                                      } else if (certificates.isEmpty) {
+                                        customToast(
+                                            'Please upload certificates');
+                                      } else if (purchaseDate == null) {
+                                        customToast(
+                                            'Please select purchased date');
+                                      } else if (productImages.isEmpty) {
+                                        customToast(
+                                            'Please upload product images');
+                                      } else {
+                                        addProduct();
+                                      }
+                                      // AppDialogs.showConfirmDialog(
+                                      //   dialogTitle: 'Finance With It',
+                                      //   label: 'Finance with it',
+                                      //   secondaryLabel: 'Cancel',
+                                      //   onConfirm: () {
+                                      //     Get.offAll(
+                                      //       () => MainScreen(),
+                                      //     );
+                                      //   },
+                                      //   onSecondaryTap: () => Get.back(),
+                                      // );
+                                    },
+                                    text: 'Submit',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Product Image',
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
-                            ),
-                          ),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.95,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: images.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index < images.length) {
-                                return uploadCategory(images[index], index);
-                              } else {
-                                return uploadCategory(null, index);
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: Get.width * 0.35,
-                        height: Get.height * 0.06,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Constants.backgroundContColor,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            AppDialogs.showConfirmDialog(
-                              dialogTitle: 'Finance With It',
-                              label: 'Finance with it',
-                              secondaryLabel: 'Cancel',
-                              onConfirm: () {
-                                Get.offAll(
-                                  () => MainScreen(),
-                                );
-                              },
-                              onSecondaryTap: () => Get.back(),
-                            );
-                          },
-                          child: Text(
-                            'Submit',
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -492,7 +588,7 @@ class _AddProductState extends State<AddProduct> {
     final pickedImage = await picker.pickImage(source: source);
 
     if (pickedImage != null) {
-      images.add(pickedImage);
+      productImages.add(pickedImage);
       setState(() {});
     }
   }
@@ -541,7 +637,7 @@ class _AddProductState extends State<AddProduct> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      images.removeAt(index);
+                      productImages.removeAt(index);
                     });
                   },
                   child: CircleAvatar(

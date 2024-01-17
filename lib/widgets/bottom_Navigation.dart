@@ -7,6 +7,8 @@ import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/home/home_screen.dart';
 
+import '../services/local_storage_service.dart';
+import '../services/locator.dart';
 import '../views/product/add_product.dart';
 import '../views/settings/profile.dart';
 
@@ -82,11 +84,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ],
         onTap: (int index) async {
-          print('Tapped item at index $index');
-          print('currentUser${_googleSignIn.currentUser?.displayName}');
-          if (index == 1
-              // && _googleSignIn.currentUser == null
-              ) {
+          final token = await locator<LocalStorageService>().getData('token');
+          if (index == 1 &&
+              _googleSignIn.currentUser == null &&
+              token == null) {
             final shouldChange = await Get.bottomSheet<bool>(
               Container(
                 color: Colors.black,
@@ -106,13 +107,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ),
                         ),
                         onPressed: () {
-                          // _handleSignIn();
-                          Get.back<bool>(
-                            result: false,
-                          );
-                          selectedPage = index;
-                          _tabController.index = selectedPage;
-                          setState(() {});
+                          _handleSignIn();
+                          // Get.back<bool>(
+                          //   result: false,
+                          // );
+                          // selectedPage = index;
+                          // _tabController.index = selectedPage;
+                          // setState(() {});
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

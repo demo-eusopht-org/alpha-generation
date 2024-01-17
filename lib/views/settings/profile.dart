@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/services/local_storage_service.dart';
+import 'package:noble_vintage/services/locator.dart';
 import 'package:noble_vintage/views/settings/reset_password.dart';
 import 'package:noble_vintage/widgets/profile_default_view.dart';
 
@@ -79,8 +81,9 @@ class _ProfileState extends State<Profile> {
             Container(
               width: Get.width * 0.3,
               child: RoundedElevatedButton(
-                onPressed: () {
-                  Get.to(
+                onPressed: () async {
+                  await locator<LocalStorageService>().clearAll();
+                  Get.offAll(
                     () => LoginScreen(),
                   );
                 },

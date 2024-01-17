@@ -8,8 +8,11 @@ import 'package:noble_vintage/widgets/slider.dart';
 import '../../widgets/icon_text.dart';
 
 class ProductDetails extends StatefulWidget {
-  final Map<String, dynamic> item;
-  const ProductDetails({super.key, required this.item});
+  // final Map<String, dynamic> item;
+  const ProductDetails({
+    super.key,
+    // required this.item
+  });
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();

@@ -1,4 +1,4 @@
-enum ProductType { all, leatherProducts, watches }
+enum ProductType { watches, leatherProducts, all }
 
 extension ProductTypeUtils on ProductType {
   String getLabel() {

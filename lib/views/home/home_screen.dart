@@ -8,6 +8,7 @@ import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
+import '../../controller/product_controller.dart';
 import '../../model/enums/product_type_enum.dart';
 import '../../widgets/icon_text.dart';
 
@@ -19,13 +20,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ProductType selectedProductType = ProductType.all;
+  final productController = Get.put(ProductController());
+  ProductType? selectedProductType;
+  // ProductType selectedProductType = ProductType.all;
   bool isKeyboardOpen = false;
+
   final searchFocus = FocusNode();
+  Future<void> getCategories() async {
+    await productController.getCategories();
+  }
 
   @override
   void initState() {
     super.initState();
+    getCategories();
     searchFocus.addListener(() {
       isKeyboardOpen = searchFocus.hasFocus;
       log('OPEN: $isKeyboardOpen');
@@ -115,54 +123,67 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            PopupMenuButton<ProductType>(
-              padding: EdgeInsets.zero,
-              icon: Image.asset(
-                'assets/images/filter_icon.png',
-                height: 50,
-                width: 50,
-                color: Colors.white,
-              ),
-              onSelected: (newType) {
-                selectedProductType = newType;
-                setState(() {});
-              },
-              itemBuilder: (context) {
-                return ProductType.values.map((type) {
-                  return PopupMenuItem<ProductType>(
-                    value: type,
-                    child: Row(
-                      children: [
-                        IgnorePointer(
-                          child: Radio<ProductType>(
-                            focusColor: Constants.backgroundContColor,
-                            activeColor: Constants.backgroundContColor,
-                            value: type,
-                            groupValue: selectedProductType,
-                            onChanged: (newType) {},
-                          ),
-                        ),
-                        Text(
-                          type.getLabel(),
-                          style: GoogleFonts.inter(),
-                        ),
-                      ],
+            Obx(() {
+              if (productController.categories.isEmpty) {
+                return SizedBox.shrink();
+              }
+              return PopupMenuButton<ProductType?>(
+                padding: EdgeInsets.zero,
+                icon: Image.asset(
+                  'assets/images/filter_icon.png',
+                  height: 50,
+                  width: 50,
+                  color: Colors.white,
+                ),
+                onSelected: (newType) {
+                  productController.updateSelectedType(newType);
+                  // selectedProductType = newType!;
+                  setState(() {});
+                },
+                itemBuilder: (context) {
+                  return [
+                    ...productController.categories.map((category) {
+                      return _buildFilterItem(type: category.id);
+                    }).toList(),
+                    _buildFilterItem(
+                      type: ProductType.all,
                     ),
-                  );
-                }).toList();
-              },
-            )
-            // Icon(Icons.add)
-            // InkWell(
-            //   onTap: (){},
-            //   child: Image.asset(
-            //     'assets/images/filter_icon.png',
-            //     height: 50,
-            //     width: 50,
-            //   ),
-            // )
+                  ];
+                },
+              );
+            }),
           ],
         ),
+      ),
+    );
+  }
+
+  PopupMenuItem<ProductType> _buildFilterItem({
+    required ProductType? type,
+  }) {
+    return PopupMenuItem<ProductType>(
+      value: type,
+      child: Row(
+        children: [
+          IgnorePointer(
+            child: Radio<ProductType?>(
+              focusColor: Constants.backgroundContColor,
+              activeColor: Constants.backgroundContColor,
+              value: type,
+              groupValue: productController.selectedProductType.value,
+              onChanged: (newType) {
+                productController.updateSelectedType(newType);
+                // selectedProductType = newType;
+                // TODO: Do this using Getx;
+                setState(() {});
+              },
+            ),
+          ),
+          Text(
+            type?.getLabel() ?? '',
+            style: GoogleFonts.inter(),
+          ),
+        ],
       ),
     );
   }

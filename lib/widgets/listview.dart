@@ -1,67 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/model/enums/product_type_enum.dart';
+import 'package:noble_vintage/model/product_model/get_products_model.dart';
 
+import '../controller/product_controller.dart';
 import '../views/product/product_details.dart';
 
-class PopularLocationsList extends StatelessWidget {
-  final List<Map<String, String>> popularLocations = [
-    {
-      'name': '100',
-      "title": 'Horizon Glimmer',
-      'image': 'assets/images/Rolex_watch.png',
-      'description':
-          'Exuding timeless elegance, this precision-crafted watch embodies artful refinement for style-conscious individuals valuing substance.'
-    },
-    {
-      'name': '110',
-      "title": 'Nebula Essence',
-      'image': 'assets/images/Rectangle 7.png',
-      'description':
-          "Infused with an eternal charm, this meticulously crafted timepiece personifies refined sophistication, tailored for discerning individual."
-    },
-    {
-      'name': '100',
-      "title": 'Horizon Glimmer',
-      'image': 'assets/images/Rolex_watch.png',
-      'description':
-          "Infused with an eternal charm, this meticulously crafted timepiece personifies refined sophistication, tailored for discerning individual."
-    },
-    {
-      'name': '110',
-      "title": 'Nebula Essence',
-      'image': 'assets/images/Rectangle 7.png',
-      'description':
-          'Exuding timeless elegance, this precision-crafted watch embodies artful refinement for style-conscious individuals valuing substance.'
-    },
-    {
-      'name': '110',
-      "title": 'Horizon Glimmer',
-      'image': 'assets/images/Rolex_watch.png',
-      'description':
-          "Infused with an eternal charm, this meticulously crafted timepiece personifies refined sophistication, tailored for discerning individual."
-    },
-    {
-      'name': '100',
-      "title": 'Nebula Essence',
-      'image': 'assets/images/Rectangle 7.png',
-      'description':
-          'Exuding timeless elegance, this precision-crafted watch embodies artful refinement for style-conscious individuals valuing substance.'
-    },
-  ];
+class PopularLocationsList extends StatefulWidget {
+  @override
+  State<PopularLocationsList> createState() => _PopularLocationsListState();
+}
+
+class _PopularLocationsListState extends State<PopularLocationsList> {
+  final productController = Get.put(ProductController());
+
+  GetProductsModel? getProductsModel;
+
+  Future<void> getProducts() async {
+    getProductsModel = await productController.getProducts();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (getProductsModel?.data?.isEmpty ?? true) {
+      return productController.loading.value
+          ? Center(child: CircularProgressIndicator())
+          : Center(
+              child: Text('No Products are Available'),
+            );
+    }
+    final filter = productController.selectedProductType.value !=
+            ProductType.all
+        ? getProductsModel!.data!
+            .where(
+              (i) =>
+                  i.categoryId == productController.selectedProductType.value,
+            )
+            .toList()
+        : getProductsModel!.data;
+    print(filter!.length);
     return MasonryGridView.count(
-
       crossAxisCount: 2,
       shrinkWrap: true,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
-      itemCount: popularLocations.length,
+      itemCount: filter.length,
       itemBuilder: (BuildContext context, int index) {
-        final item = popularLocations[index];
+        final items = filter[index];
         return PopularLocationItem(
           // onTap: () {
           //   Get.to(() => ProductDetails(item: item));
@@ -70,14 +65,17 @@ class PopularLocationsList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductDetails(item: item),
+                builder: (context) => ProductDetails(),
               ),
             );
           },
-          name: popularLocations[index]['name']!,
-          title: popularLocations[index]['title']!,
-          image: popularLocations[index]['image']!,
-          description: popularLocations[index]['description'] ?? '',
+          title: items.title!,
+          name: items.categoryName ?? '',
+          price: items.estimatedAmount!,
+          // image: popularLocations[index]['image']!,
+          description: items.description!,
+          image: 'assets/images/Rolex_watch.png',
+          // description: popularLocations[index]['description'] ?? '',
         );
       },
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
@@ -159,6 +157,7 @@ class PopularLocationItem extends StatefulWidget {
   final String image;
   final String name;
   final String title;
+  final double price;
   final String description;
   final VoidCallback onTap;
   PopularLocationItem({
@@ -166,6 +165,7 @@ class PopularLocationItem extends StatefulWidget {
     required this.name,
     required this.title,
     required this.description,
+    required this.price,
     required this.onTap,
   });
 
@@ -208,11 +208,11 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
                       height: 5,
                     ),
                     Text(
-                      widget.title,
-                      style: GoogleFonts.inter(
+                      widget.name,
+                      style: TextStyle(
                         color: Colors.black,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
                       ),
                     ),
                     SizedBox(
@@ -230,12 +230,15 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
                       height: 5,
                     ),
                     Text(
-                      widget.name,
-                      style: TextStyle(
+                      widget.price.toString(),
+                      style: GoogleFonts.inter(
                         color: Colors.black,
-                        fontSize: 24,
                         fontWeight: FontWeight.w600,
+                        fontSize: 20,
                       ),
+                    ),
+                    SizedBox(
+                      height: 5,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
