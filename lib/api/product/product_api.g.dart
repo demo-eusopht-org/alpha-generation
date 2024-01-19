@@ -13,7 +13,7 @@ class _ProductApi implements ProductApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://34.223.102.186/apis/api/';
+    baseUrl ??= 'http://34.223.102.186/apis/api//api/';
   }
 
   final Dio _dio;
@@ -21,11 +21,10 @@ class _ProductApi implements ProductApi {
   String? baseUrl;
 
   @override
-  Future<GetCategoriesModel> getCategory(String token) async {
+  Future<GetCategoriesModel> getCategory() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<GetCategoriesModel>(Options(
@@ -49,7 +48,34 @@ class _ProductApi implements ProductApi {
   }
 
   @override
-  Future<GetProductsModel> getProducts(String token) async {
+  Future<GetProductsModel> getProducts() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<GetProductsModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/get-all-products',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = GetProductsModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<GetProductsModel> getUserProducts(String token) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': token};
@@ -63,7 +89,7 @@ class _ProductApi implements ProductApi {
     )
             .compose(
               _dio.options,
-              'user/get-products',
+              'user/get-user-products',
               queryParameters: queryParameters,
               data: _data,
             )

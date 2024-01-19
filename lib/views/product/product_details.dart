@@ -1,15 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/utils/date_time_utils.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/slider.dart';
 
+import '../../model/product_model/get_products_model.dart';
 import '../../widgets/icon_text.dart';
 
 class ProductDetails extends StatefulWidget {
   // final Map<String, dynamic> item;
-  const ProductDetails({
+  final Data items;
+  ProductDetails({
+    required this.items,
     super.key,
     // required this.item
   });
@@ -19,15 +24,10 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  List<Map<String, String>> popularLocations = [
-    {'image': 'assets/images/product_banner.png'},
-    {'image': 'assets/images/slider1.png'},
-    {'image': 'assets/images/slider1.png'},
-    {'image': 'assets/images/slider1.png'},
-  ];
   int selectedImageIndex = 0;
   @override
   Widget build(BuildContext context) {
+    print('CheckIten:${widget.items.title}');
     return DefaultWidget(
       showBackIcon: true,
       heading: 'Product Details',
@@ -67,9 +67,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                       width: Get.width * 0.27,
                       height: Get.height * 0.08,
                       child: Text(
-                        '300',
+                        widget.items.estimatedAmount.toString(),
                         style: GoogleFonts.inter(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
@@ -122,9 +122,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                       width: Get.width * 0.27,
                       height: Get.height * 0.08,
                       child: Text(
-                        '5',
+                        widget.items.rating.toString(),
                         style: GoogleFonts.inter(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
@@ -175,13 +175,37 @@ class _ProductDetailsState extends State<ProductDetails> {
                       //   width: Get.width * 0.01,
                       // ),
                       // Spacer(),
-                      Image.asset(
-                        popularLocations[selectedImageIndex]['image']
-                            .toString(),
+                      CachedNetworkImage(
+                        imageUrl:
+                            '${Constants.imageUrl}${widget.items.productImages?[selectedImageIndex].fileName}',
                         height: 250,
                         width: Get.width * 0.75,
                         fit: BoxFit.fill,
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/no_image.png',
+                          height: 120,
+                          width: Get.width * 0.2,
+                        ),
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            color: Constants.backgroundContColor,
+                          ),
+                        ),
                       ),
+                      // Image.network(
+                      //   '${Constants.imageUrl}${widget.items.productImages?[selectedImageIndex].fileName}',
+                      //   height: 250,
+                      //   width: Get.width * 0.75,
+                      //   fit: BoxFit.fill,
+                      // ),
+
+                      // Image.asset(
+                      //   popularLocations[selectedImageIndex]['image']
+                      //       .toString(),
+                      //   height: 250,
+                      //   width: Get.width * 0.75,
+                      //   fit: BoxFit.fill,
+                      // ),
                       // Padding(
                       //   padding: EdgeInsets.symmetric(
                       //     horizontal: 2.5,
@@ -217,7 +241,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: Column(
                         children: [
                           Sliderproduct(
-                              popularLocations: popularLocations,
+                              items: widget.items,
+                              // popularLocations: popularLocations,
                               ontap: (index) {
                                 selectedImageIndex = index;
                                 setState(() {});
@@ -243,7 +268,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         ),
                                       ),
                                       Text(
-                                        'Rolex',
+                                        widget.items.brand ?? 'unknown',
                                         style: GoogleFonts.inter(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w400,
@@ -268,7 +293,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         ),
                                       ),
                                       Text(
-                                        'A-1234',
+                                        widget.items.model ?? 'unknown',
                                         style: GoogleFonts.inter(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w400,
@@ -283,7 +308,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Purchase Date:1/2/24 ',
+                                        'Purchased Date:${widget.items.purchaseDate!.getFormattedDate()}',
                                         style: GoogleFonts.inter(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w400,
@@ -293,6 +318,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       Image.asset(
                                         'assets/images/certificate.png',
                                       ),
+                                      // Image.network(
+                                      //   '${Constants.certificateUrl}${widget.items.productCertificates!.first.filename}',
+                                      // ),
                                     ],
                                   ),
                                   SizedBox(
@@ -307,7 +335,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     ),
                                   ),
                                   Text(
-                                    'The Patek Philippe Nautilus 7118R: A radiant fusion of rose gold elegance and timeless sophistication. Its diamond-adorned bezel and sunburst brown dial exude luxury, while its precision movement reflects horological mastery at its finest.',
+                                    widget.items.description ?? '',
                                     style: GoogleFonts.inter(
                                       fontSize: 17,
                                       fontWeight: FontWeight.w400,

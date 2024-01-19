@@ -12,8 +12,12 @@ abstract class ProductApi {
   factory ProductApi(Dio dio, {String baseUrl}) = _ProductApi;
 
   @GET("user/get-categories")
-  Future<GetCategoriesModel> getCategory(@Header('Authorization') String token);
+  Future<GetCategoriesModel> getCategory();
 
-  @GET("user/get-products")
-  Future<GetProductsModel> getProducts(@Header('Authorization') String token);
+  @GET("user/get-all-products")
+  Future<GetProductsModel> getProducts();
+
+  @GET("user/get-user-products")
+  Future<GetProductsModel> getUserProducts(
+      @Header('Authorization') String token);
 }

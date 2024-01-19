@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/model/auth_model/signup_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/auth_view/login_screen.dart';
+import 'package:noble_vintage/views/settings/terms_of_service.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 import 'package:noble_vintage/widgets/custom_button.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
@@ -35,11 +36,11 @@ class _SignupScreenState extends State<SignupScreen> {
       try {
         userController.loading.value = true;
         SignUpModel signUpModel = await userController.signUp(
-          usernameController.text,
+          usernameController.text.trim(),
           '',
           '',
-          emailController.text,
-          passController.text,
+          emailController.text.trim(),
+          passController.text.trim(),
         );
         if (signUpModel.status == 200) {
           userController.loading.value = false;
@@ -47,6 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
           Get.offAll(
             () => LoginScreen(),
           );
+          confirmPasswordController.clear();
         } else {
           customToast('Something went wrong');
         }
@@ -123,6 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         SizedBox(height: 20),
                         CustomTextField(
+                          textCapitalization: TextCapitalization.words,
                           controller: emailController,
                           hintText: 'Email address',
                           validatorCondition: (String? input) =>
@@ -130,6 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextField(
+                          textCapitalization: TextCapitalization.words,
                           controller: usernameController,
                           hintText: 'Username',
                           validatorCondition: (value) {
@@ -244,12 +248,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         Container(
                           height: Get.height * 0.04,
                         ),
-                        Text(
-                          'Terms Of Service',
-                          style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline),
+                        InkWell(
+                          onTap: () {
+                            Get.to(
+                              () => TermsOfServiceScreen(),
+                            );
+                          },
+                          child: Text(
+                            'Terms Of Service',
+                            style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                       ],
                     ),

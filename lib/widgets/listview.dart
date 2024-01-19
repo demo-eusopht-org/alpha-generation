@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart';
+import 'package:noble_vintage/utils/constants.dart';
 
 import '../controller/product_controller.dart';
 import '../views/product/product_details.dart';
@@ -27,131 +28,75 @@ class _PopularLocationsListState extends State<PopularLocationsList> {
   @override
   void initState() {
     super.initState();
-    getProducts();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getProducts();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (getProductsModel?.data?.isEmpty ?? true) {
-      return productController.loading.value
-          ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: Text('No Products are Available'),
-            );
-    }
-    final filter = productController.selectedProductType.value !=
-            ProductType.all
-        ? getProductsModel!.data!
-            .where(
-              (i) =>
-                  i.categoryId == productController.selectedProductType.value,
-            )
-            .toList()
-        : getProductsModel!.data;
-    print(filter!.length);
-    return MasonryGridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      itemCount: filter.length,
-      itemBuilder: (BuildContext context, int index) {
-        final items = filter[index];
-        return PopularLocationItem(
-          // onTap: () {
-          //   Get.to(() => ProductDetails(item: item));
-          // },
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetails(),
-              ),
-            );
-          },
-          title: items.title!,
-          name: items.categoryName ?? '',
-          price: items.estimatedAmount!,
-          // image: popularLocations[index]['image']!,
-          description: items.description!,
-          image: 'assets/images/Rolex_watch.png',
-          // description: popularLocations[index]['description'] ?? '',
+    return Obx(() {
+      final filter = _getFilteredProducts();
+      print(filter.length);
+      if (productController.loading.value) {
+        return Center(
+          child: CircularProgressIndicator(
+            color: Constants.backgroundContColor,
+          ),
         );
-      },
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-    );
+      } else if (filter.isEmpty) {
+        return Center(
+          child: Text('No Products are Available'),
+        );
+      }
+      return GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 0.6,
+        // itemCount: filter.length,
+        children: List.generate(filter.length, (index) {
+          final items = filter[index];
+          return PopularLocationItem(
+            // onTap: () {
+            //   Get.to(() => ProductDetails(item: item));
+            // },
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetails(
+                    items: items,
+                  ),
+                ),
+              );
+            },
+            title: items.title!,
+            name: items.categoryName ?? '',
+            price: items.estimatedAmount!,
+            // image: popularLocations[index]['image']!,
+            description: items.description!,
+            image:
+                '${Constants.imageUrl}${items.productImages?.first.fileName}',
+            // description: popularLocations[index]['description'] ?? '',
+          );
+        }),
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      );
+    });
+  }
 
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   mainAxisSize: MainAxisSize.min,
-    //   children: [
-    //     Expanded(
-    //       child: GridView.builder(
-    //         itemCount: popularLocations.length,
-    //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //           crossAxisCount: 2,
-    //           crossAxisSpacing: 10,
-    //           mainAxisSpacing: 10,
-    //         ),
-    //         padding: EdgeInsets.only(
-    //           left: 10,
-    //           right: 10,
-    //         ),
-    //         itemBuilder: (context, index) {
-    //           return PopularLocationItem(
-    //             onTap: () {
-    //               Get.to(() => CategoryList(
-    //                     showBackArrow: true,
-    //                   ));
-    //             },
-    //             name: popularLocations[index]['name']!,
-    //             title: popularLocations[index]['title']!,
-    //             image: popularLocations[index]['image']!,
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    // );
+  List<Data> _getFilteredProducts() {
+    List<Data> products = productController.searchProducts;
+    return productController.selectedProductType.value == ProductType.all
+        ? products
+        : products.where((product) {
+            return product.categoryId ==
+                productController.selectedProductType.value;
+          }).toList();
   }
 }
-
-//   Column(
-//   crossAxisAlignment: CrossAxisAlignment.start,
-//   mainAxisSize: MainAxisSize.min,
-//   children: [
-//     Expanded(
-//       child: GridView.builder(
-//         itemCount: popularLocations.length,
-//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//           childAspectRatio: 1.6,
-//           crossAxisCount: 2,
-//           crossAxisSpacing: 10,
-//           mainAxisSpacing: 10,
-//         ),
-//         padding: EdgeInsets.only(
-//           left: 10,
-//           right: 10,
-//         ),
-//         itemBuilder: (context, index) {
-//           return PopularLocationItem(
-//             onTap: () {
-//               Get.to(() => CategoryList(
-//                     showBackArrow: true,
-//                   ));
-//             },
-//             name: popularLocations[index]['name']!,
-//             title: popularLocations[index]['title']!,
-//             image: popularLocations[index]['image']!,
-//             description: popularLocations[index]['description']!,
-//           );
-//         },
-//       ),
-//     ),
-//   ],
-// );
-//   }
-// }
 
 class PopularLocationItem extends StatefulWidget {
   final String image;
@@ -192,12 +137,25 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(
-                widget.image,
+              CachedNetworkImage(
+                imageUrl: widget.image,
                 fit: BoxFit.fill,
                 height: 160,
-                width: 190,
+                width: 160,
+                errorWidget: (context, url, error) =>
+                    Image.asset('assets/images/no_image.png'),
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(
+                    color: Constants.backgroundContColor,
+                  ),
+                ),
               ),
+              // Image.network(
+              //   widget.image,
+              //   fit: BoxFit.fill,
+              //   height: 160,
+              //   width: 190,
+              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
                 child: Column(
@@ -208,12 +166,14 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
                       height: 5,
                     ),
                     Text(
-                      widget.name,
+                      widget.title,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 24,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(
                       height: 5,
@@ -225,6 +185,8 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
                         fontWeight: FontWeight.w400,
                         fontSize: 11,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(
                       height: 5,

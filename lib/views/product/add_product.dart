@@ -56,6 +56,7 @@ class _AddProductState extends State<AddProduct> {
           financeWitIt,
           selectedProductType!.index + 1,
         );
+        productController.buttonLoading.value = false;
         if (response?.status != 200) {
           productController.buttonLoading.value = false;
           throw Exception(response?.message ?? 'Something went wrong!');
@@ -256,6 +257,7 @@ class _AddProductState extends State<AddProduct> {
                                   height: 10,
                                 ),
                                 AddProductFields(
+                                  textCapitalization: TextCapitalization.words,
                                   controller: titleController,
                                   text: 'Product Title',
                                   hintText: 'Enter Title',
@@ -270,6 +272,7 @@ class _AddProductState extends State<AddProduct> {
                                   height: 10,
                                 ),
                                 AddProductFields(
+                                  textCapitalization: TextCapitalization.words,
                                   controller: descriptionController,
                                   text: 'Description',
                                   hintText: 'Enter Description',
@@ -288,7 +291,6 @@ class _AddProductState extends State<AddProduct> {
                                   controller: serialNumberController,
                                   text: 'Serial Number',
                                   hintText: 'Enter Serial Number',
-                                  textInputType: TextInputType.number,
                                   validatorCondition: (value) {
                                     if (value!.isEmpty) {
                                       return 'Please enter your serial number';
@@ -303,6 +305,7 @@ class _AddProductState extends State<AddProduct> {
                                   controller: estimatedAmountController,
                                   text: 'Estimated Amount',
                                   hintText: 'Enter Estimated Amount',
+                                  textInputType: TextInputType.number,
                                   validatorCondition: (value) {
                                     if (value!.isEmpty) {
                                       return 'Please enter your estimated amount';

@@ -10,32 +10,24 @@ import 'package:noble_vintage/widgets/listview.dart';
 
 import '../../controller/product_controller.dart';
 import '../../model/enums/product_type_enum.dart';
-import '../../model/product_model/get_products_model.dart';
 import '../../widgets/icon_text.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class UserProduct extends StatefulWidget {
+  const UserProduct({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<UserProduct> createState() => _UserProductState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _UserProductState extends State<UserProduct> {
   final productController = Get.put(ProductController());
 
   ProductType? selectedProductType;
-  List<Data> productList = [];
-  TextEditingController _searchController = TextEditingController();
-  // ProductType selectedProductType = ProductType.all;
-  bool isKeyboardOpen = false;
 
   final searchFocus = FocusNode();
-  Future<void> getCategories() async {
-    await productController.getCategories();
-  }
 
-  Future<void> getProducts() async {
-    final data = await productController.getProducts();
+  Future<void> getUserProducts() async {
+    final data = await productController.getUserProducts();
     productController.searchProducts.value = data.data ?? [];
     productController.products.value = data;
   }
@@ -43,12 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getCategories();
-    getProducts();
-    searchFocus.addListener(() {
-      isKeyboardOpen = searchFocus.hasFocus;
-      log('OPEN: $isKeyboardOpen');
-      setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    getUserProducts();
     });
   }
 
@@ -56,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return DefaultWidget(
       showBackIcon: false,
-      blueRatio: isKeyboardOpen ? 0.5 : 0.3,
+      blueRatio: 0.3,
       child: Column(
         // mainAxisSize: MainAxisSize.max,
         children: [
@@ -85,102 +73,102 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               width: 40,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                  top: 20,
-                  bottom: 20,
-                ),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(
-                      0.8,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      8.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(
-                          width: 4.0,
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            focusNode: searchFocus,
-                            onChanged: (string) {
-                              if (string.isEmpty) {
-                                productController.searchProducts.value = [];
-                              }
-                              final products = productController.products;
-                              productController.searchProducts.value =
-                                  products.value?.data?.where(
-                                        (i) {
-                                          return i.title!
-                                              .toLowerCase()
-                                              .contains(
-                                                string.toLowerCase(),
-                                              );
-                                        },
-                                      ).toList() ??
-                                      [];
-                            },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Obx(() {
-              if (productController.categories.isEmpty) {
-                return SizedBox.shrink();
-              }
-              return PopupMenuButton<ProductType?>(
-                padding: EdgeInsets.zero,
-                icon: Image.asset(
-                  'assets/images/filter_icon.png',
-                  height: 50,
-                  width: 50,
-                  color: Colors.white,
-                ),
-                onSelected: (newType) {
-                  productController.updateSelectedType(newType);
-                  // selectedProductType = newType!;
-                  setState(() {});
-                },
-                itemBuilder: (context) {
-                  return [
-                    ...productController.categories.map((category) {
-                      return _buildFilterItem(type: category.id);
-                    }).toList(),
-                    _buildFilterItem(
-                      type: ProductType.all,
-                    ),
-                  ];
-                },
-              );
-            }),
+            // Expanded(
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(
+            //       left: 10,
+            //       right: 10,
+            //       top: 20,
+            //       bottom: 20,
+            //     ),
+            //     child: Container(
+            //       height: 40,
+            //       decoration: BoxDecoration(
+            //         color: Colors.white.withOpacity(
+            //           0.8,
+            //         ),
+            //         borderRadius: BorderRadius.circular(
+            //           8.0,
+            //         ),
+            //       ),
+            //       child: Padding(
+            //         padding: const EdgeInsets.symmetric(
+            //           horizontal: 10.0,
+            //         ),
+            //         child: Row(
+            //           children: [
+            //             Icon(
+            //               Icons.search,
+            //               color: Colors.grey,
+            //             ),
+            //             SizedBox(
+            //               width: 4.0,
+            //             ),
+            //             Expanded(
+            //               child: TextField(
+            //                 controller: _searchController,
+            //                 focusNode: searchFocus,
+            //                 onChanged: (string) {
+            //                   if (string.isEmpty) {
+            //                     productController.searchProducts.value = [];
+            //                   }
+            //                   final products = productController.products;
+            //                   productController.searchProducts.value =
+            //                       products.value?.data?.where(
+            //                             (i) {
+            //                               return i.title!
+            //                                   .toLowerCase()
+            //                                   .contains(
+            //                                     string.toLowerCase(),
+            //                                   );
+            //                             },
+            //                           ).toList() ??
+            //                           [];
+            //                 },
+            //                 decoration: InputDecoration(
+            //                   border: InputBorder.none,
+            //                   hintText: 'Search',
+            //                   hintStyle: TextStyle(
+            //                     color: Colors.grey,
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Obx(() {
+            //   if (productController.categories.isEmpty) {
+            //     return SizedBox.shrink();
+            //   }
+            //   return PopupMenuButton<ProductType?>(
+            //     padding: EdgeInsets.zero,
+            //     icon: Image.asset(
+            //       'assets/images/filter_icon.png',
+            //       height: 50,
+            //       width: 50,
+            //       color: Colors.white,
+            //     ),
+            //     onSelected: (newType) {
+            //       productController.updateSelectedType(newType);
+            //       // selectedProductType = newType!;
+            //       setState(() {});
+            //     },
+            //     itemBuilder: (context) {
+            //       return [
+            //         ...productController.categories.map((category) {
+            //           return _buildFilterItem(type: category.id);
+            //         }).toList(),
+            //         _buildFilterItem(
+            //           type: ProductType.all,
+            //         ),
+            //       ];
+            //     },
+            //   );
+            // }),
           ],
         ),
       ),

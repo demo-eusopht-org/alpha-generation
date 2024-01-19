@@ -5,16 +5,24 @@ import '../utils/constants.dart';
 
 class ProfileTextFields extends StatelessWidget {
   final int maxLines;
+  final textInputType;
   final String hintText;
   final String text;
   final bool? obscureText;
+  final TextEditingController controller;
+  final bool? enabled;
+  final validatorCondition;
 
   const ProfileTextFields({
     Key? key,
     this.maxLines = 1,
     required this.hintText,
+    this.textInputType,
+    this.enabled,
     this.obscureText,
     required this.text,
+    required this.controller,
+    this.validatorCondition,
   }) : super(key: key);
 
   @override
@@ -32,8 +40,12 @@ class ProfileTextFields extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
-        TextField(
+        TextFormField(
+          enabled: enabled,
+          controller: controller,
+          validator: validatorCondition,
           obscureText: obscureText ?? false,
+          keyboardType: textInputType,
           style: TextStyle(color: Colors.white),
           maxLines: maxLines,
           textInputAction: TextInputAction.next,

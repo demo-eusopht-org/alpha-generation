@@ -29,7 +29,7 @@ class Data {
   String? title;
   String? description;
   String? serialNumber;
-  DateTime? purchasedDate;
+  DateTime? purchaseDate;
   double? estimatedAmount;
   String? rating;
   @JsonKey(fromJson: _financeFromJson, toJson: _financeToJson)
@@ -47,6 +47,8 @@ class Data {
   String? createdAt;
   String? updatedAt;
   String? categoryName;
+  final List<ProductImage>? productImages;
+  final List<ProductCertificate>? productCertificates;
 
   Data({
     this.id,
@@ -55,7 +57,7 @@ class Data {
     this.title,
     this.description,
     this.serialNumber,
-    this.purchasedDate,
+    this.purchaseDate,
     this.estimatedAmount,
     this.rating,
     this.financeWithIt,
@@ -72,6 +74,8 @@ class Data {
     this.createdAt,
     this.updatedAt,
     this.categoryName,
+    this.productImages,
+    this.productCertificates,
   });
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
@@ -103,4 +107,56 @@ class Data {
     }
     return (productType.index) + 1;
   }
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class ProductImage {
+  int? id;
+  int? productId;
+  String? fileName;
+  int? status;
+  int? createdBy;
+  int? updatedBy;
+  String? createdAt;
+  String? updatedAt;
+  ProductImage({
+    this.id,
+    this.productId,
+    this.fileName,
+    this.status,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+  });
+  factory ProductImage.fromJson(Map<String, dynamic> json) =>
+      _$ProductImageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductImageToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class ProductCertificate {
+  int? id;
+  int? productId;
+  String? filename;
+  int? status;
+  int? createdBy;
+  int? updatedBy;
+  String? createdAt;
+  String? updatedAt;
+  ProductCertificate({
+    this.id,
+    this.productId,
+    this.filename,
+    this.status,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+  });
+  factory ProductCertificate.fromJson(Map<String, dynamic> json) =>
+      _$ProductCertificateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductCertificateToJson(this);
 }

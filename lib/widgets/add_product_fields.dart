@@ -11,6 +11,7 @@ class AddProductFields extends StatelessWidget {
   final FocusNode focusNode = FocusNode();
   final TextEditingController controller;
   final validatorCondition;
+  final TextCapitalization textCapitalization;
 
   AddProductFields({
     Key? key,
@@ -20,6 +21,7 @@ class AddProductFields extends StatelessWidget {
     this.textInputType,
     this.validatorCondition,
     required this.controller,
+    this.textCapitalization = TextCapitalization.none,
   }) : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class AddProductFields extends StatelessWidget {
           ),
         ),
         TextFormField(
+          textCapitalization: textCapitalization,
           controller: controller,
           validator: validatorCondition,
           style: TextStyle(color: Colors.white),

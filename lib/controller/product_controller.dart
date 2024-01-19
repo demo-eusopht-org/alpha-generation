@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:noble_vintage/api/product/product_api.dart';
 import 'package:noble_vintage/model/product_model/get_categories_model.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart'
-    hide Data;
+    as PD;
 import 'package:noble_vintage/services/local_storage_service.dart';
 import 'package:noble_vintage/services/locator.dart';
 import 'package:noble_vintage/utils/date_time_utils.dart';
@@ -25,6 +25,9 @@ class ProductController extends GetxController {
   RxBool loading = false.obs;
   RxBool buttonLoading = false.obs;
   RxList<Data> categories = RxList<Data>([]);
+  Rx<PD.GetProductsModel?> products = Rx(null);
+  RxList<PD.Data> searchProducts = RxList([]);
+  final selectedProductType = ProductType.all.obs;
 
   Future<AddProductModel?> addProduct(
     List<XFile> productImages,
@@ -94,8 +97,6 @@ class ProductController extends GetxController {
     return AddProductModel.fromJson(response.data);
   }
 
-  var selectedProductType = ProductType.all.obs;
-
   void updateSelectedType(ProductType? newType) {
     selectedProductType.value = newType!;
     update();
@@ -104,19 +105,28 @@ class ProductController extends GetxController {
   Future<void> getCategories() async {
     loading.value = true;
     final token = await locator<LocalStorageService>().getData('token');
-    if (token == null) {
-      loading.value = false;
-      throw Exception('Unauthorized, please login!');
-    }
-    final response = await _productsApi.getCategory('Bearer $token');
+    final response = await _productsApi.getCategory();
     categories.value = response.data ?? [];
     loading.value = false;
   }
 
-  Future<GetProductsModel> getProducts() async {
+  Future<PD.GetProductsModel> getProducts() async {
+    loading.value = true;
     final token = await locator<LocalStorageService>().getData('token');
-    final response = await _productsApi.getProducts('Bearer $token');
+    final response = await _productsApi.getProducts();
+    loading.value = false;
     return response;
+
+    print('checkResponse$response');
+  }
+
+  Future<PD.GetProductsModel> getUserProducts() async {
+    loading.value = true;
+    final token = await locator<LocalStorageService>().getData('token');
+    final response = await _productsApi.getUserProducts('Bearer $token');
+    loading.value = false;
+    return response;
+
     print('checkResponse$response');
   }
 }

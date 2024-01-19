@@ -9,12 +9,14 @@ class CustomTextField extends StatefulWidget {
     this.validatorCondition,
     required this.hintText,
     required this.controller,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final bool showPasswordHideButton;
   final String hintText;
   final validatorCondition;
   final TextEditingController controller;
+  final TextCapitalization textCapitalization;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -26,6 +28,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textCapitalization: widget.textCapitalization,
       controller: widget.controller,
       validator: widget.validatorCondition,
       obscureText: isPasswordHidden && widget.showPasswordHideButton,

@@ -7,7 +7,9 @@ import 'package:noble_vintage/model/auth_model/login_model.dart';
 import 'package:noble_vintage/services/local_storage_service.dart';
 import 'package:noble_vintage/services/locator.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/views/auth_view/signup_screen.dart';
 import 'package:noble_vintage/views/settings/forgot_password.dart';
+import 'package:noble_vintage/views/settings/terms_of_service.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 import 'package:noble_vintage/widgets/email_validator.dart';
@@ -35,15 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         userController.loading.value = true;
         LoginModel loginModel = await userController.login(
-          emailController.text,
-          passController.text,
+          emailController.text.trim(),
+          passController.text.trim(),
         );
         if (loginModel.status == 200) {
           userController.loading.value = false;
           customToast(loginModel.message);
-          Get.to(
+          Get.offAll(
             () => MainScreen(),
           );
+
           if (loginModel.token != null) {
             await locator<LocalStorageService>().saveData(
               'token',
@@ -130,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 15,
                       ),
                       CustomTextField(
+                        textCapitalization: TextCapitalization.words,
                         controller: emailController,
                         hintText: 'Email Address',
                         validatorCondition: (String? input) =>
@@ -184,6 +188,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                      // Container(
+                      //   width: Get.width * 0.3,
+                      //   child: Obx(
+                      //     () => RoundedElevatedButton(
+                      //       loading: userController.loading.value,
+                      //       borderRadius: 23,
+                      //       text: 'Signup',
+                      //       onPressed: () async {
+                      //         Get.to(() => SignupScreen());
+                      //         // Get.to(
+                      //         //   () => MainScreen(),
+                      //         // );
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         height: Get.height * 0.1,
                       ),
@@ -246,12 +266,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         height: Get.height * 0.1,
                       ),
-                      Text(
-                        'Terms Of Service',
-                        style: GoogleFonts.inter(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline),
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => TermsOfServiceScreen());
+                        },
+                        child: Text(
+                          'Terms Of Service',
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.underline),
+                        ),
                       )
                     ],
                   ),
