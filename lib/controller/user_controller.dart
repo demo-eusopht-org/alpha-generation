@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:noble_vintage/api/auth/auth_api.dart';
 import 'package:noble_vintage/model/auth_model/login_model.dart';
+import 'package:noble_vintage/model/auth_model/login_with_google.dart';
 import 'package:noble_vintage/model/auth_model/signup_model.dart';
 import 'package:noble_vintage/model/profile_model/forgot_password_model.dart';
 import 'package:noble_vintage/model/profile_model/get_profle_model.dart';
@@ -40,6 +41,26 @@ class UserController extends GetxController {
       'email': email,
       'password': password,
     });
+    return value;
+  }
+
+  Future<LoginWithGoogle> userLoginWithGoogle({
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String googleId,
+  }) async {
+    loading.value = true;
+    final googleLogin = AuthApi(dio, baseUrl: Constants.baseUrl);
+    final value = await googleLogin.googleLogin(
+      {
+        'first_name': firstname,
+        'last_name': lastname,
+        'email': email,
+        "google_id": googleId,
+      },
+    );
+    loading.value = false;
     return value;
   }
 

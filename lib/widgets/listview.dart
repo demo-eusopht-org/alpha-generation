@@ -11,6 +11,9 @@ import '../controller/product_controller.dart';
 import '../views/product/product_details.dart';
 
 class PopularLocationsList extends StatefulWidget {
+  final List<Data> items;
+  final bool showFilter;
+  PopularLocationsList({required this.items, required this.showFilter});
   @override
   State<PopularLocationsList> createState() => _PopularLocationsListState();
 }
@@ -18,83 +21,83 @@ class PopularLocationsList extends StatefulWidget {
 class _PopularLocationsListState extends State<PopularLocationsList> {
   final productController = Get.put(ProductController());
 
-  GetProductsModel? getProductsModel;
+  // GetProductsModel? getProductsModel;
 
-  Future<void> getProducts() async {
-    getProductsModel = await productController.getProducts();
-    setState(() {});
-  }
+  // Future<void> getProducts() async {
+  //   getProductsModel = await productController.getProducts();
+  //   setState(() {});
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getProducts();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     getProducts();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       final filter = _getFilteredProducts();
       print(filter.length);
+
       if (productController.loading.value) {
         return Center(
           child: CircularProgressIndicator(
             color: Constants.backgroundContColor,
           ),
         );
-      } else if (filter.isEmpty) {
-        return Center(
-          child: Text('No Products are Available'),
-        );
-      }
-      return GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 0.6,
-        // itemCount: filter.length,
-        children: List.generate(filter.length, (index) {
-          final items = filter[index];
-          return PopularLocationItem(
-            // onTap: () {
-            //   Get.to(() => ProductDetails(item: item));
-            // },
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductDetails(
-                    items: items,
-                  ),
-                ),
-              );
-            },
-            title: items.title!,
-            name: items.categoryName ?? '',
-            price: items.estimatedAmount!,
-            // image: popularLocations[index]['image']!,
-            description: items.description!,
-            image:
-                '${Constants.imageUrl}${items.productImages?.first.fileName}',
-            // description: popularLocations[index]['description'] ?? '',
+      } else {
+        if (filter.isEmpty) {
+          return Center(
+            child: Text('No Products are Available'),
           );
-        }),
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      );
+        } else {
+          return GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.6,
+            children: List.generate(filter.length, (index) {
+              final items = filter[index];
+              return PopularLocationItem(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetails(
+                        items: items,
+                      ),
+                    ),
+                  );
+                },
+                title: items.title!,
+                name: items.categoryName ?? '',
+                price: items.estimatedAmount!,
+                description: items.description!,
+                image:
+                    '${Constants.imageUrl}${items.productImages?.first.fileName}',
+              );
+            }),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          );
+        }
+      }
     });
   }
 
   List<Data> _getFilteredProducts() {
-    List<Data> products = productController.searchProducts;
-    return productController.selectedProductType.value == ProductType.all
-        ? products
-        : products.where((product) {
-            return product.categoryId ==
-                productController.selectedProductType.value;
-          }).toList();
+    List<Data> products = widget.items;
+    return widget.showFilter
+        ? productController.selectedProductType.value == ProductType.all
+            ? products
+            : products.where((product) {
+                return product.categoryId ==
+                    productController.selectedProductType.value;
+              }).toList()
+        : productController.myProducts;
   }
 }
 

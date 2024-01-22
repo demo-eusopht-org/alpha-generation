@@ -62,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           topContainer(),
           Expanded(
-            child: PopularLocationsList(),
+            child: PopularLocationsList(
+                items: productController.searchProducts, showFilter: true),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import '../services/local_storage_service.dart';
 import '../services/locator.dart';
 import '../views/product/add_product.dart';
 import '../views/settings/profile.dart';
+import 'custom_widgets.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -24,21 +26,67 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   int selectedPage = 0;
-  final screens = [HomeScreen(), AddProduct(), UserProduct(), Profile()];
+  final screens = [
+    HomeScreen(),
+    AddProduct(),
+    UserProduct(),
+    Profile(),
+  ];
+
+  String _getFirstName(String fullName) {
+    if (fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.isNotEmpty ? nameParts[0] : '';
+  }
+
+  String _getLastName(String fullName) {
+    if (fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+  }
+
+  Future<void> googleLogin(int index) async {
+    try {
+      await _googleSignIn.signIn();
+      final userLogin = await userController.userLoginWithGoogle(
+        firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
+        lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
+        email: _googleSignIn.currentUser?.email ?? '',
+        googleId: _googleSignIn.currentUser?.id ?? '',
+      );
+
+      if (userLogin.status == 200 && userLogin.token != null) {
+        await locator<LocalStorageService>().saveData(
+          'token',
+          userLogin.token!,
+        );
+        customToast(userLogin.message);
+        Get.back<bool>(
+          result: false,
+        );
+        selectedPage = index;
+        _tabController.index = index;
+        setState(() {});
+      } else {
+        throw Exception(userLogin.message ?? 'Invalid email!');
+      }
+    } on DioException catch (e) {
+      customToast(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      customToast(e.toString());
+    }
+  }
+
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
     super.initState();
-  }
-
-  Future<bool> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-      return true;
-    } catch (error) {
-      print('Error signing in: $error');
-      return false;
-    }
   }
 
   @override
@@ -96,6 +144,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ],
         onTap: (int index) async {
+          print('userLogin${_googleSignIn.currentUser?.photoUrl}');
           final token = await locator<LocalStorageService>().getData('token');
           if (index == 1 &&
               _googleSignIn.currentUser == null &&
@@ -119,14 +168,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          _handleSignIn();
-                          // Get.back<bool>(
-                          //   result: false,
-                          // );
-                          // selectedPage = index;
-                          // _tabController.index = selectedPage;
-                          // setState(() {});
+                        onPressed: () async {
+                          await googleLogin(1);
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -158,15 +201,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     Get.back();
-                    //     selectedPage = index;
-                    //     _tabController.index = selectedPage;
-                    //     setState(() {});
-                    //   },
-                    //   child: Text('Sign In with Google'),
-                    // ),
                     Container(
                       width: Get.width * 0.72,
                       child: ElevatedButton(
@@ -179,19 +213,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                         ),
                         onPressed: () {
                           Get.to(() => LoginScreen());
-                          // Get.back<bool>(
-                          //   result: false,
-                          // );
-                          // selectedPage = index;
-                          // _tabController.index = selectedPage;
-                          // setState(() {});
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Image(
                                 image: AssetImage(
                                   "assets/images/email.png",
@@ -204,7 +232,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 padding: EdgeInsets.only(left: 10, right: 12),
                                 child: Text(
                                   'Continue with Email',
-                                  style: TextStyle(
+                                  style: GoogleFonts.inter(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -245,14 +273,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          _handleSignIn();
-                          // Get.back<bool>(
-                          //   result: false,
-                          // );
-                          // selectedPage = index;
-                          // _tabController.index = selectedPage;
-                          // setState(() {});
+                        onPressed: () async {
+                          await googleLogin(2);
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -284,15 +306,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     Get.back();
-                    //     selectedPage = index;
-                    //     _tabController.index = selectedPage;
-                    //     setState(() {});
-                    //   },
-                    //   child: Text('Sign In with Google'),
-                    // ),
                     Container(
                       width: Get.width * 0.72,
                       child: ElevatedButton(
@@ -317,7 +330,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Image(
                                 image: AssetImage(
                                   "assets/images/email.png",
@@ -330,7 +343,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 padding: EdgeInsets.only(left: 10, right: 12),
                                 child: Text(
                                   'Continue with Email',
-                                  style: TextStyle(
+                                  style: GoogleFonts.inter(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -371,14 +384,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          _handleSignIn();
-                          // Get.back<bool>(
-                          //   result: false,
-                          // );
-                          // selectedPage = index;
-                          // _tabController.index = selectedPage;
-                          // setState(() {});
+                        onPressed: () async {
+                          await googleLogin(3);
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -443,7 +450,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Image(
                                 image: AssetImage(
                                   "assets/images/email.png",
@@ -456,7 +463,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 padding: EdgeInsets.only(left: 10, right: 12),
                                 child: Text(
                                   'Continue with Email',
-                                  style: TextStyle(
+                                  style: GoogleFonts.inter(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w800,
                                   ),

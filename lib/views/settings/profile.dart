@@ -26,6 +26,7 @@ class _ProfileState extends State<Profile> {
   TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   GetProfileModel? getProfileModel;
+
   Future<void> getUserProfile() async {
     getProfileModel = await userController.getUserProfile();
 
@@ -38,7 +39,9 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    getUserProfile();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getUserProfile();
+    });
   }
 
   @override
@@ -69,28 +72,30 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 10,
               ),
-              ProfileTextFields(
-                enabled: false,
-                controller: userNameController,
-                text: 'Username',
-                hintText: '',
-              ),
+              if (getProfileModel?.data?.username?.isNotEmpty ?? false)
+                ProfileTextFields(
+                  enabled: false,
+                  controller: userNameController,
+                  text: 'Username',
+                  hintText: '',
+                ),
               SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => ResetPassword());
-                },
-                child: Text(
-                  'Change Password?',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Constants.backgroundContColor,
+              if (getProfileModel?.data?.googleId?.isEmpty ?? true)
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => ResetPassword());
+                  },
+                  child: Text(
+                    'Change Password?',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Constants.backgroundContColor,
+                    ),
                   ),
                 ),
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

@@ -30,7 +30,25 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _getFirstName(String fullName) {
+    if (fullName == null || fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.isNotEmpty ? nameParts[0] : '';
+  }
+
+  String _getLastName(String fullName) {
+    if (fullName == null || fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+  }
 
   Future<void> onLogin() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
@@ -66,8 +84,40 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> googlelogin() async {
+    try {
+      await _googleSignIn.signIn();
+      final userLogin = await userController.userLoginWithGoogle(
+        firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
+        lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
+        email: _googleSignIn.currentUser?.email ?? '',
+        googleId: _googleSignIn.currentUser?.id ?? '',
+      );
+
+      if (userLogin.status == 200) {
+        if (userLogin.token != null) {
+          await locator<LocalStorageService>().saveData(
+            'token',
+            userLogin.token!,
+          );
+        }
+        customToast(userLogin.message);
+        Get.offAll(
+          () => MainScreen(),
+        );
+      } else {
+        throw Exception(userLogin.message ?? 'Invalid email!');
+      }
+    } on DioException catch (e) {
+      customToast(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      customToast(e.toString());
+    }
+  }
+
   Future<bool> _handleSignIn() async {
     try {
+      // await _googleSignIn.disconnect();
       await _googleSignIn.signIn();
       return true;
     } catch (error) {
@@ -217,8 +267,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                           ),
-                          onPressed: () {
-                            // _handleSignIn();
+                          onPressed: () async {
+                            await googlelogin();
+                            print('checkUser${_googleSignIn.currentUser}');
                             // Get.to(() => MainScreen());
                           },
                           child: Row(
@@ -263,9 +314,36 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        height: Get.height * 0.1,
+                      SizedBox(
+                        height: 10,
                       ),
+                      Text(
+                        'OR',
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Constants.backgroundContColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => SignupScreen(),
+                          );
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Constants.backgroundContColor,
+                          ),
+                        ),
+                      ),
+                      Container(height: Get.height * 0.05),
                       InkWell(
                         onTap: () {
                           Get.to(() => TermsOfServiceScreen());

@@ -13,7 +13,7 @@ class _ProductApi implements ProductApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://34.223.102.186/apis/api//api/';
+    baseUrl ??= 'http://192.168.100.39:3000/api/';
   }
 
   final Dio _dio;

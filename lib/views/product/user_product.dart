@@ -28,15 +28,14 @@ class _UserProductState extends State<UserProduct> {
 
   Future<void> getUserProducts() async {
     final data = await productController.getUserProducts();
-    productController.searchProducts.value = data.data ?? [];
-    productController.products.value = data;
+    productController.myProducts.value = data.data ?? [];
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    getUserProducts();
+      getUserProducts();
     });
   }
 
@@ -50,7 +49,10 @@ class _UserProductState extends State<UserProduct> {
         children: [
           topContainer(),
           Expanded(
-            child: PopularLocationsList(),
+            child: PopularLocationsList(
+              items: productController.myProducts,
+              showFilter: false,
+            ),
           ),
         ],
       ),
@@ -70,105 +72,25 @@ class _UserProductState extends State<UserProduct> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 40,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  top: 20,
+                  bottom: 20,
+                ),
+                child: Text(
+                  'My Products',
+                  style: GoogleFonts.inter(
+                    color: Constants.splashTextColor,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            // Expanded(
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(
-            //       left: 10,
-            //       right: 10,
-            //       top: 20,
-            //       bottom: 20,
-            //     ),
-            //     child: Container(
-            //       height: 40,
-            //       decoration: BoxDecoration(
-            //         color: Colors.white.withOpacity(
-            //           0.8,
-            //         ),
-            //         borderRadius: BorderRadius.circular(
-            //           8.0,
-            //         ),
-            //       ),
-            //       child: Padding(
-            //         padding: const EdgeInsets.symmetric(
-            //           horizontal: 10.0,
-            //         ),
-            //         child: Row(
-            //           children: [
-            //             Icon(
-            //               Icons.search,
-            //               color: Colors.grey,
-            //             ),
-            //             SizedBox(
-            //               width: 4.0,
-            //             ),
-            //             Expanded(
-            //               child: TextField(
-            //                 controller: _searchController,
-            //                 focusNode: searchFocus,
-            //                 onChanged: (string) {
-            //                   if (string.isEmpty) {
-            //                     productController.searchProducts.value = [];
-            //                   }
-            //                   final products = productController.products;
-            //                   productController.searchProducts.value =
-            //                       products.value?.data?.where(
-            //                             (i) {
-            //                               return i.title!
-            //                                   .toLowerCase()
-            //                                   .contains(
-            //                                     string.toLowerCase(),
-            //                                   );
-            //                             },
-            //                           ).toList() ??
-            //                           [];
-            //                 },
-            //                 decoration: InputDecoration(
-            //                   border: InputBorder.none,
-            //                   hintText: 'Search',
-            //                   hintStyle: TextStyle(
-            //                     color: Colors.grey,
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Obx(() {
-            //   if (productController.categories.isEmpty) {
-            //     return SizedBox.shrink();
-            //   }
-            //   return PopupMenuButton<ProductType?>(
-            //     padding: EdgeInsets.zero,
-            //     icon: Image.asset(
-            //       'assets/images/filter_icon.png',
-            //       height: 50,
-            //       width: 50,
-            //       color: Colors.white,
-            //     ),
-            //     onSelected: (newType) {
-            //       productController.updateSelectedType(newType);
-            //       // selectedProductType = newType!;
-            //       setState(() {});
-            //     },
-            //     itemBuilder: (context) {
-            //       return [
-            //         ...productController.categories.map((category) {
-            //           return _buildFilterItem(type: category.id);
-            //         }).toList(),
-            //         _buildFilterItem(
-            //           type: ProductType.all,
-            //         ),
-            //       ];
-            //     },
-            //   );
-            // }),
           ],
         ),
       ),

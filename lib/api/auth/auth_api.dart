@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:noble_vintage/model/auth_model/login_with_google.dart';
 import 'package:noble_vintage/model/auth_model/signup_model.dart';
 import 'package:noble_vintage/model/profile_model/forgot_password_model.dart';
 import 'package:noble_vintage/model/profile_model/get_profle_model.dart';
@@ -25,6 +26,9 @@ abstract class AuthApi {
 
   @POST("user/forgot-password")
   Future<ForgotPasswordModel> forgotPassword(@Body() Map<String, dynamic> body);
+
+  @POST("user/auth-with-google")
+  Future<LoginWithGoogle> googleLogin(@Body() Map<String, dynamic> body);
 
   @GET("user/get-profile")
   Future<GetProfileModel> getProfile(@Header('Authorization') String token);

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,8 @@ import 'package:noble_vintage/widgets/custom_widgets.dart';
 import 'package:noble_vintage/widgets/email_validator.dart';
 
 import '../../controller/user_controller.dart';
+import '../../services/local_storage_service.dart';
+import '../../services/locator.dart';
 import '../../widgets/custom_textfield.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -30,6 +33,54 @@ class _SignupScreenState extends State<SignupScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   bool hidePassword = true;
+  String _getFirstName(String fullName) {
+    if (fullName == null || fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.isNotEmpty ? nameParts[0] : '';
+  }
+
+  String _getLastName(String fullName) {
+    if (fullName == null || fullName.isEmpty) {
+      return '';
+    }
+
+    List<String> nameParts = fullName.split(' ');
+    return nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+  }
+
+  Future<void> googlelogin() async {
+    try {
+      await _googleSignIn.signIn();
+      final userLogin = await userController.userLoginWithGoogle(
+        firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
+        lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
+        email: _googleSignIn.currentUser?.email ?? '',
+        googleId: _googleSignIn.currentUser?.id ?? '',
+      );
+
+      if (userLogin.status == 200) {
+        if (userLogin.token != null) {
+          await locator<LocalStorageService>().saveData(
+            'token',
+            userLogin.token!,
+          );
+        }
+        customToast(userLogin.message);
+        Get.offAll(
+          () => MainScreen(),
+        );
+      } else {
+        throw Exception(userLogin.message ?? 'Invalid email!');
+      }
+    } on DioException catch (e) {
+      customToast(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      customToast(e.toString());
+    }
+  }
 
   Future<void> onSignup() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
@@ -199,7 +250,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
+                              await googlelogin();
                               // _handleSignIn();
                               // Get.to(() => MainScreen());
                             },

@@ -13,7 +13,7 @@ class _AuthApi implements AuthApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://34.223.102.186/apis/api//api/';
+    baseUrl ??= 'http://192.168.100.39:3000/api/';
   }
 
   final Dio _dio;
@@ -133,6 +133,34 @@ class _AuthApi implements AuthApi {
               baseUrl,
             ))));
     final value = ForgotPasswordModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<LoginWithGoogle> googleLogin(Map<String, dynamic> body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<LoginWithGoogle>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/auth-with-google',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = LoginWithGoogle.fromJson(_result.data!);
     return value;
   }
 

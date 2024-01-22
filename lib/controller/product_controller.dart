@@ -27,6 +27,7 @@ class ProductController extends GetxController {
   RxList<Data> categories = RxList<Data>([]);
   Rx<PD.GetProductsModel?> products = Rx(null);
   RxList<PD.Data> searchProducts = RxList([]);
+  RxList<PD.Data> myProducts = RxList([]);
   final selectedProductType = ProductType.all.obs;
 
   Future<AddProductModel?> addProduct(
