@@ -87,15 +87,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> googlelogin() async {
     try {
-      await _googleSignIn.signIn();
+      final account = await _googleSignIn.signIn();
+      final authentication = await account?.authentication;
+      if (authentication?.idToken == null) {
+        throw Exception("Google sign in failed!");
+      }
       final userLogin = await userController.userLoginWithGoogle(
         firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
         lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
         email: _googleSignIn.currentUser?.email ?? '',
-        googleId: _googleSignIn.currentUser?.id ?? '',
+        googleId: authentication?.idToken ?? '',
       );
 
       if (userLogin.status == 200) {
+        userController.loading.value = false;
         if (userLogin.token != null) {
           await locator<LocalStorageService>().saveData(
             'token',
@@ -110,11 +115,12 @@ class _LoginScreenState extends State<LoginScreen> {
         throw Exception(userLogin.message ?? 'Invalid email!');
       }
     } on DioException catch (e) {
+      userController.loading.value = false;
       print('check$e');
       customToast(e.response?.data['message'] ?? e.message);
     } catch (e) {
       print('Check${e}');
-
+      userController.loading.value = false;
       customToast(e.toString());
     }
   }

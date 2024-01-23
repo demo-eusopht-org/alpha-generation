@@ -23,12 +23,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  late TabController _tabController;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email'],
     clientId: Constants.clientId,
   );
-  int selectedPage = 0;
   final screens = [
     HomeScreen(),
     AddProduct(),
@@ -73,8 +71,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         Get.back<bool>(
           result: false,
         );
-        selectedPage = index;
-        _tabController.index = index;
+        userController.tabController.index = index;
         setState(() {});
       } else {
         throw Exception(userLogin.message ?? 'Invalid email!');
@@ -88,7 +85,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    userController.tabController = TabController(length: 4, vsync: this);
+    userController.tabController.addListener(() {
+      final index = userController.tabController.index;
+      userController.selectedPage.value = index;
+    });
     super.initState();
   }
 
@@ -97,7 +98,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
       bottomNavigationBar: ConvexAppBar(
         top: -20,
-        controller: _tabController,
+        controller: userController.tabController,
         height: 50,
         backgroundColor: Constants.backgroundContColor,
         items: [
@@ -252,7 +253,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             );
 
             if (shouldChange ?? true) {
-              _tabController.index = selectedPage;
+              userController.tabController.index =
+                  userController.tabController.index;
             }
           } else if (index == 2 &&
               _googleSignIn.currentUser == null &&
@@ -363,7 +365,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             );
 
             if (shouldChange ?? true) {
-              _tabController.index = selectedPage;
+              userController.tabController.index =
+                  userController.tabController.index;
             }
           } else if (index == 3 &&
               _googleSignIn.currentUser == null &&
@@ -483,60 +486,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             );
 
             if (shouldChange ?? true) {
-              _tabController.index = selectedPage;
+              userController.tabController.index =
+                  userController.tabController.index;
             }
           } else {
-            selectedPage = index;
             print(screens[index]);
           }
           setState(() {});
         },
-        initialActiveIndex: selectedPage,
+        initialActiveIndex: 0,
         style: TabStyle.reactCircle,
       ),
-      body: screens[selectedPage],
+      body: Obx(
+        () => screens[userController.selectedPage.value],
+      ),
     );
   }
 }
-// Padding(
-//   padding: const EdgeInsets.only(left: 10, right: 10),
-//   child: Container(
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.only(
-//           bottomRight: Radius.circular(20),
-//           bottomLeft: Radius.circular(20)),
-//       color: Constants.backgroundContColor,
-//     ),
-//     child: Padding(
-//       padding: const EdgeInsets.only(left: 10, right: 10),
-//       child: BottomNavigationBar(
-//         backgroundColor: Constants.backgroundContColor,
-//         selectedItemColor: Colors.black,
-//         unselectedItemColor: Colors.white,
-//         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-//         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
-//         type: BottomNavigationBarType.fixed,
-//         items: [
-//           BottomNavigationBarItem(
-//               icon: Icon(
-//                 Icons.home,
-//               ),
-//               label: ''),
-//           BottomNavigationBarItem(
-//               icon: Icon(Icons.shopping_cart), label: ''),
-//           BottomNavigationBarItem(
-//               icon: Icon(Icons.manage_accounts), label: ''),
-//         ],
-//         currentIndex: selectedPage,
-//         onTap: (int index) {
-//           setState(() {
-//             selectedPage = index;
-//             print(screens[index]);
-//           });
-//           print('Tapped item at index $index');
-//         },
-//       ),
-//     ),
-//   ),
-// ),
-// body: screens[selectedPage],

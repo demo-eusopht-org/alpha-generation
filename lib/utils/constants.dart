@@ -16,6 +16,6 @@ class Constants {
   static const String imageUrl = '$_common/product-image/';
   static const String certificateUrl = '$_common/certificate/';
   static final String? clientId = Platform.isAndroid
-      ? null
+      ? '885780777429-mam0eif4hodl4k3l6ggo4qv9481fpo57.apps.googleusercontent.com'
       : '885780777429-pclphg7jtf5b4ecr9fh2qrqlr2ia0mj6.apps.googleusercontent.com';
 }

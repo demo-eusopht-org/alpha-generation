@@ -9,12 +9,12 @@ import 'package:intl/intl.dart';
 import 'package:noble_vintage/controller/product_controller.dart';
 import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/add_product_model.dart';
+import 'package:noble_vintage/views/settings/profile.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/add_product_fields.dart';
-import '../../widgets/bottom_Navigation.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/default_widget.dart';
 import '../../widgets/icon_text.dart';
@@ -26,7 +26,7 @@ class AddProduct extends StatefulWidget {
   State<AddProduct> createState() => _AddProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   final productController = Get.put(ProductController());
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -40,7 +40,10 @@ class _AddProductState extends State<AddProduct> {
   ProductType? selectedProductType;
   bool financeWitIt = false;
 
+  int selectedPage = 0;
+
   Future<void> addProduct() async {
+    print('hello');
     if (_formKey.currentState?.validate() ?? false) {
       try {
         productController.buttonLoading.value = true;
@@ -62,9 +65,18 @@ class _AddProductState extends State<AddProduct> {
           throw Exception(response?.message ?? 'Something went wrong!');
         }
         customToast(response!.message);
-        Get.offAll(
-          () => MainScreen(),
+        AppDialogs.showConfirmDialog(
+          dialogTitle: 'Finance With It',
+          label: 'Finance with it',
+          secondaryLabel: 'Cancel',
+          onConfirm: () {
+            userController.tabController.index = 2;
+          },
+          onSecondaryTap: () => Get.back(),
         );
+        // Get.offAll(
+        //   () => MainScreen(),
+        // );
       } catch (e) {
         productController.buttonLoading.value = false;
         customToast(e.toString());
@@ -514,7 +526,7 @@ class _AddProductState extends State<AddProduct> {
                                       //   secondaryLabel: 'Cancel',
                                       //   onConfirm: () {
                                       //     Get.offAll(
-                                      //       () => MainScreen(),
+                                      //       () => UserProduct(),
                                       //     );
                                       //   },
                                       //   onSecondaryTap: () => Get.back(),
@@ -589,36 +601,17 @@ class _AddProductState extends State<AddProduct> {
   Future<void> _selectedImageUsingSource(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
-    print('before${pickedImage?.length()}');
     if (pickedImage != null) {
       productImages.add(pickedImage);
       setState(() {});
     }
     // if (pickedImage != null) {
     //   XFile compressedImage = await compressImage(pickedImage);
-    //   print('after${compressedImage.length()}');
     //
     //   productImages.add(compressedImage);
     //   setState(() {});
     // }
   }
-
-  // Future<XFile> compressImage(XFile pickedImage) async {
-  //   Uint8List imageBytes = await pickedImage.readAsBytes();
-  //
-  //   List<int> compressedBytes = await FlutterImageCompress.compressWithList(
-  //     imageBytes,
-  //     minHeight: 800,
-  //     minWidth: 800,
-  //     quality: 85,
-  //   );
-  //
-  //   String compressedFilePath = pickedImage.path!
-  //       .replaceFirst(RegExp(r'\.[a-zA-Z0-9]+'), '_compressed.jpg');
-  //   await File(compressedFilePath).writeAsBytes(compressedBytes);
-  //
-  //   return XFile(compressedFilePath);
-  // }
 
   Widget uploadCategory(XFile? file, int index) {
     return GestureDetector(
