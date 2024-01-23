@@ -110,8 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
         throw Exception(userLogin.message ?? 'Invalid email!');
       }
     } on DioException catch (e) {
+      print('check$e');
       customToast(e.response?.data['message'] ?? e.message);
     } catch (e) {
+      print('Check${e}');
+
       customToast(e.toString());
     }
   }
