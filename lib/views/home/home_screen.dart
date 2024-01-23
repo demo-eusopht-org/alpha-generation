@@ -43,8 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getCategories();
-    getProducts();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getCategories();
+      getProducts();
+    });
     searchFocus.addListener(() {
       isKeyboardOpen = searchFocus.hasFocus;
       log('OPEN: $isKeyboardOpen');

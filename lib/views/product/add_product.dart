@@ -589,12 +589,36 @@ class _AddProductState extends State<AddProduct> {
   Future<void> _selectedImageUsingSource(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
-
+    print('before${pickedImage?.length()}');
     if (pickedImage != null) {
       productImages.add(pickedImage);
       setState(() {});
     }
+    // if (pickedImage != null) {
+    //   XFile compressedImage = await compressImage(pickedImage);
+    //   print('after${compressedImage.length()}');
+    //
+    //   productImages.add(compressedImage);
+    //   setState(() {});
+    // }
   }
+
+  // Future<XFile> compressImage(XFile pickedImage) async {
+  //   Uint8List imageBytes = await pickedImage.readAsBytes();
+  //
+  //   List<int> compressedBytes = await FlutterImageCompress.compressWithList(
+  //     imageBytes,
+  //     minHeight: 800,
+  //     minWidth: 800,
+  //     quality: 85,
+  //   );
+  //
+  //   String compressedFilePath = pickedImage.path!
+  //       .replaceFirst(RegExp(r'\.[a-zA-Z0-9]+'), '_compressed.jpg');
+  //   await File(compressedFilePath).writeAsBytes(compressedBytes);
+  //
+  //   return XFile(compressedFilePath);
+  // }
 
   Widget uploadCategory(XFile? file, int index) {
     return GestureDetector(

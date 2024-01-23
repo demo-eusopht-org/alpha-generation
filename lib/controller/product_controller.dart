@@ -86,6 +86,9 @@ class ProductController extends GetxController {
         'category_id': categoryId,
       },
     );
+    final kb = data.length / 1024;
+    final mb = kb / 1024;
+    log('Size: ${mb}');
     final response = await dio.post(
       '${Constants.baseUrl}user/add-product',
       options: Options(
