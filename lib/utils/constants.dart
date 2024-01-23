@@ -13,4 +13,6 @@ class Constants {
   static const String baseUrl = "$_common/api/";
   static const String imageUrl = '$_common/product-image/';
   static const String certificateUrl = '$_common/certificate/';
+  static const String clientId =
+      '885780777429-pclphg7jtf5b4ecr9fh2qrqlr2ia0mj6.apps.googleusercontent.com';
 }

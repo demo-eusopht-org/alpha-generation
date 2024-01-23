@@ -29,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final userController = Get.put(UserController());
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final GoogleSignIn _googleSignIn =
+      GoogleSignIn(scopes: ['email'], clientId: Constants.clientId);
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _getFirstName(String fullName) {

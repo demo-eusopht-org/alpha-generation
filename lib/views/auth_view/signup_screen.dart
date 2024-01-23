@@ -31,7 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final GoogleSignIn _googleSignIn =
+      GoogleSignIn(scopes: ['email'], clientId: Constants.clientId);
   bool hidePassword = true;
   String _getFirstName(String fullName) {
     if (fullName == null || fullName.isEmpty) {
