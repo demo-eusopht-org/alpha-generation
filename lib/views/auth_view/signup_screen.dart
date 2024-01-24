@@ -25,7 +25,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final userController = Get.put(UserController());
+  final userController = Get.find<UserController>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -54,12 +54,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Future<void> googlelogin() async {
     try {
-      await _googleSignIn.signIn();
+      final account = await _googleSignIn.signIn();
+      final authentication = await account?.authentication;
+      if (authentication?.idToken == null) {
+        throw Exception("Google sign in failed!");
+      }
       final userLogin = await userController.userLoginWithGoogle(
         firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
         lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
         email: _googleSignIn.currentUser?.email ?? '',
-        googleId: _googleSignIn.currentUser?.id ?? '',
+        googleId: authentication?.idToken ?? '',
       );
 
       if (userLogin.status == 200) {
@@ -70,6 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
           );
         }
         customToast(userLogin.message);
+        userController.selectedPage.value = 0;
         Get.offAll(
           () => MainScreen(),
         );
@@ -77,8 +82,10 @@ class _SignupScreenState extends State<SignupScreen> {
         throw Exception(userLogin.message ?? 'Invalid email!');
       }
     } on DioException catch (e) {
+      userController.loading.value = false;
       customToast(e.response?.data['message'] ?? e.message);
     } catch (e) {
+      userController.loading.value = false;
       customToast(e.toString());
     }
   }
@@ -86,6 +93,11 @@ class _SignupScreenState extends State<SignupScreen> {
   Future<void> onSignup() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       try {
+        final pass = passController.text;
+        final confirm = confirmPasswordController.text;
+        if (pass != confirm) {
+          throw Exception('Password does not match!');
+        }
         userController.loading.value = true;
         SignUpModel signUpModel = await userController.signUp(
           usernameController.text.trim(),
@@ -102,10 +114,12 @@ class _SignupScreenState extends State<SignupScreen> {
           );
           confirmPasswordController.clear();
         } else {
-          customToast('Something went wrong');
+          throw Exception(signUpModel.message);
         }
       } catch (e) {
+        userController.loading.value = false;
         print(e.toString());
+        customToast(e.toString());
       }
     }
   }
@@ -177,15 +191,17 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         SizedBox(height: 20),
                         CustomTextField(
-                          textCapitalization: TextCapitalization.words,
+                          // textCapitalization: TextCapitalization.words,
                           controller: emailController,
                           hintText: 'Email address',
                           validatorCondition: (String? input) =>
-                              input!.isValidEmail() ? null : "Invalid Email",
+                              input!.trim().isValidEmail()
+                                  ? null
+                                  : "Invalid Email",
                         ),
                         SizedBox(height: 10),
                         CustomTextField(
-                          textCapitalization: TextCapitalization.words,
+                          // textCapitalization: TextCapitalization.words,
                           controller: usernameController,
                           hintText: 'Username',
                           validatorCondition: (value) {
@@ -285,6 +301,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            userController.selectedPage.value = 0;
                             Get.to(
                               () => MainScreen(),
                             );

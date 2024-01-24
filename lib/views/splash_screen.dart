@@ -6,6 +6,7 @@ import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/auth_view/signup_screen.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
+import '../controller/user_controller.dart';
 import '../widgets/splash_button.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +143,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    userController.selectedPage.value = 0;
                     Get.to(
                       () => MainScreen(),
                     );

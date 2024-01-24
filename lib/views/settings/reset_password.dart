@@ -18,7 +18,7 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  final userController = Get.put(UserController());
+  final userController = Get.find<UserController>();
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -26,24 +26,31 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   Future<void> changePassword() async {
     if (_formKey.currentState!.validate()) {
-      userController.loading.value == true;
-      final oldPassword = oldPasswordController.text;
-      final newPassword = newPasswordController.text;
-      final confirmPassword = confirmPasswordController.text;
-      if (newPassword != confirmPassword) {
-        customToast('Passowrd dont Match');
-        return;
-      }
-      final response = await userController.userUpdatePassword(
-        currentPassword: oldPassword,
-        newPassword: newPassword,
-      );
-      if (response != null) {
-        userController.loading.value == false;
-        customToast(
-          response.message ?? 'Password changed successfully!',
+      try {
+        userController.loading.value == true;
+        final oldPassword = oldPasswordController.text;
+        final newPassword = newPasswordController.text;
+        final confirmPassword = confirmPasswordController.text;
+        if (newPassword != confirmPassword) {
+          customToast('Passowrd dont Match');
+          return;
+        }
+        final response = await userController.userUpdatePassword(
+          currentPassword: oldPassword,
+          newPassword: newPassword,
         );
-        Get.back();
+        if (response.status == 200) {
+          userController.loading.value == false;
+          customToast(
+            response.message ?? 'Password changed successfully!',
+          );
+          Get.back();
+        } else {
+          throw Exception(response.message);
+        }
+      } catch (e) {
+        userController.loading.value = false;
+        customToast(e.toString());
       }
     }
   }

@@ -22,7 +22,7 @@ class ProductController extends GetxController {
     dio,
     baseUrl: Constants.baseUrl,
   );
-  RxBool loading = false.obs;
+  RxBool loading = true.obs;
   RxBool buttonLoading = false.obs;
   RxList<Data> categories = RxList<Data>([]);
   Rx<PD.GetProductsModel?> products = Rx(null);
@@ -107,18 +107,12 @@ class ProductController extends GetxController {
   }
 
   Future<void> getCategories() async {
-    loading.value = true;
-    final token = await locator<LocalStorageService>().getData('token');
     final response = await _productsApi.getCategory();
     categories.value = response.data ?? [];
-    loading.value = false;
   }
 
   Future<PD.GetProductsModel> getProducts() async {
-    loading.value = true;
-    final token = await locator<LocalStorageService>().getData('token');
     final response = await _productsApi.getProducts();
-    loading.value = false;
     return response;
 
     print('checkResponse$response');

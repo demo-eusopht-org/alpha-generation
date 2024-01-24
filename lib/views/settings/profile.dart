@@ -20,11 +20,10 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-final userController = Get.put(UserController());
-
 class _ProfileState extends State<Profile> {
   TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  final userController = Get.find<UserController>();
   GetProfileModel? getProfileModel;
 
   Future<void> getUserProfile() async {

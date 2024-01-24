@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
@@ -124,19 +121,6 @@ class _UserProductState extends State<UserProduct> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildUploadIcon() {
-    return IconText(
-      text: '',
-      icon: Icons.camera_alt,
-      onTap: () {
-        Get.to(
-          () => AddProduct(),
-        );
-        log('Camera tapped!');
-      },
     );
   }
 

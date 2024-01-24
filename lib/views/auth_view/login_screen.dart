@@ -26,7 +26,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final userController = Get.put(UserController());
+  final userController = Get.find<UserController>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   final GoogleSignIn _googleSignIn =
@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _getFirstName(String fullName) {
-    if (fullName == null || fullName.isEmpty) {
+    if (fullName.isEmpty) {
       return '';
     }
 
@@ -61,7 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         if (loginModel.status == 200) {
           userController.loading.value = false;
+          userController.selectedPage.value = 0;
           customToast(loginModel.message);
+
           Get.offAll(
             () => MainScreen(),
           );
@@ -108,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
         customToast(userLogin.message);
+        userController.selectedPage.value = 0;
         Get.offAll(
           () => MainScreen(),
         );
@@ -125,18 +128,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<bool> _handleSignIn() async {
-    try {
-      // await _googleSignIn.disconnect();
-      await _googleSignIn.signIn();
-      return true;
-    } catch (error) {
-      print('Error signing in: $error');
-      return false;
-    }
-  }
-
   bool hidePassword = true;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      userController.loading.value = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,11 +192,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 15,
                       ),
                       CustomTextField(
-                        textCapitalization: TextCapitalization.words,
+                        // textCapitalization: TextCapitalization.words,
                         controller: emailController,
                         hintText: 'Email Address',
                         validatorCondition: (String? input) =>
-                            input!.isValidEmail() ? null : "Invalid Email",
+                            input!.trim().isValidEmail()
+                                ? null
+                                : "Invalid Email",
                       ),
                       SizedBox(height: 10),
                       CustomTextField(
@@ -311,6 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          userController.selectedPage.value = 0;
                           Get.to(
                             () => MainScreen(),
                           );

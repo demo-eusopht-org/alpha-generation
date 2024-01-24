@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/views/product/add_product.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
@@ -43,9 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getCategories();
-      getProducts();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      productController.loading.value = true;
+      await getCategories();
+      await getProducts();
+      productController.loading.value = false;
     });
     searchFocus.addListener(() {
       isKeyboardOpen = searchFocus.hasFocus;
@@ -217,19 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildUploadIcon() {
-    return IconText(
-      text: '',
-      icon: Icons.camera_alt,
-      onTap: () {
-        Get.to(
-          () => AddProduct(),
-        );
-        log('Camera tapped!');
-      },
     );
   }
 

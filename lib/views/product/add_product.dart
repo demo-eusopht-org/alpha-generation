@@ -9,10 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:noble_vintage/controller/product_controller.dart';
 import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/add_product_model.dart';
-import 'package:noble_vintage/views/settings/profile.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 
+import '../../controller/user_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/add_product_fields.dart';
 import '../../widgets/custom_button.dart';
@@ -20,7 +20,11 @@ import '../../widgets/default_widget.dart';
 import '../../widgets/icon_text.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({super.key});
+  final VoidCallback onProductAdded;
+  const AddProduct({
+    super.key,
+    required this.onProductAdded,
+  });
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -28,6 +32,7 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   final productController = Get.put(ProductController());
+  final userController = Get.find<UserController>();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController serialNumberController = TextEditingController();
@@ -39,49 +44,50 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   List<PlatformFile> certificates = [];
   ProductType? selectedProductType;
   bool financeWitIt = false;
-
   int selectedPage = 0;
 
-  Future<void> addProduct() async {
-    print('hello');
+  Future<void> _financeWithItDialog() async {
     if (_formKey.currentState?.validate() ?? false) {
-      try {
-        productController.buttonLoading.value = true;
-        AddProductModel? response = await productController.addProduct(
-          productImages,
-          certificates,
-          titleController.text,
-          descriptionController.text,
-          serialNumberController.text,
-          purchaseDate!,
-          double.parse(estimatedAmountController.text),
-          0,
-          financeWitIt,
-          selectedProductType!.index + 1,
-        );
+      AppDialogs.showConfirmDialog(
+        dialogTitle: 'Finance With It',
+        label: 'Finance with it',
+        secondaryLabel: 'Cancel',
+        onConfirm: () {
+          addProduct();
+        },
+        onSecondaryTap: () => Get.back(),
+      );
+    }
+  }
+
+  Future<void> addProduct() async {
+    try {
+      productController.buttonLoading.value = true;
+      AddProductModel? response = await productController.addProduct(
+        productImages,
+        certificates,
+        titleController.text,
+        descriptionController.text,
+        serialNumberController.text,
+        purchaseDate!,
+        double.parse(estimatedAmountController.text),
+        0,
+        financeWitIt,
+        selectedProductType!.index + 1,
+      );
+      productController.buttonLoading.value = false;
+      if (response?.status != 200) {
         productController.buttonLoading.value = false;
-        if (response?.status != 200) {
-          productController.buttonLoading.value = false;
-          throw Exception(response?.message ?? 'Something went wrong!');
-        }
-        customToast(response!.message);
-        AppDialogs.showConfirmDialog(
-          dialogTitle: 'Finance With It',
-          label: 'Finance with it',
-          secondaryLabel: 'Cancel',
-          onConfirm: () {
-            userController.tabController.index = 2;
-          },
-          onSecondaryTap: () => Get.back(),
-        );
-        // Get.offAll(
-        //   () => MainScreen(),
-        // );
-      } catch (e) {
-        productController.buttonLoading.value = false;
-        customToast(e.toString());
-        print(e.toString());
+        throw Exception(response?.message ?? 'Something went wrong!');
       }
+
+      userController.selectedPage.value = 2;
+      widget.onProductAdded();
+      customToast(response!.message);
+    } catch (e) {
+      productController.buttonLoading.value = false;
+      customToast(e.toString());
+      print(e.toString());
     }
   }
 
@@ -518,19 +524,8 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                         customToast(
                                             'Please upload product images');
                                       } else {
-                                        addProduct();
+                                        _financeWithItDialog();
                                       }
-                                      // AppDialogs.showConfirmDialog(
-                                      //   dialogTitle: 'Finance With It',
-                                      //   label: 'Finance with it',
-                                      //   secondaryLabel: 'Cancel',
-                                      //   onConfirm: () {
-                                      //     Get.offAll(
-                                      //       () => UserProduct(),
-                                      //     );
-                                      //   },
-                                      //   onSecondaryTap: () => Get.back(),
-                                      // );
                                     },
                                     text: 'Submit',
                                   ),

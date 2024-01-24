@@ -7,6 +7,7 @@ import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/views/splash_screen.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 
+import 'controller/user_controller.dart';
 import 'services/locator.dart';
 
 void main() async {
@@ -19,11 +20,14 @@ void main() async {
   await Hive.initFlutter();
   await initializeLocator();
   await locator<LocalStorageService>().initializeBox();
-  runApp(const MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final userController = Get.put(UserController());
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override

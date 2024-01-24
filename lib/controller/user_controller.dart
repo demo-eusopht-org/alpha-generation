@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noble_vintage/api/auth/auth_api.dart';
 import 'package:noble_vintage/model/auth_model/login_model.dart';
@@ -16,7 +15,6 @@ import '../utils/constants.dart';
 class UserController extends GetxController {
   RxBool loading = false.obs;
   final selectedPage = 0.obs;
-  late TabController tabController;
 
   Future<LoginModel> login(String email, String password) async {
     print('hello');

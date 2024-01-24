@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/home/home_screen.dart';
 import 'package:noble_vintage/views/product/user_product.dart';
 
+import '../controller/user_controller.dart';
 import '../services/local_storage_service.dart';
 import '../services/locator.dart';
 import '../views/product/add_product.dart';
@@ -27,12 +30,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     scopes: ['email'],
     clientId: Constants.clientId,
   );
-  final screens = [
-    HomeScreen(),
-    AddProduct(),
-    UserProduct(),
-    Profile(),
-  ];
+  final userController = Get.find<UserController>();
+  late TabController tabController;
+  late List<Widget> screens;
 
   String _getFirstName(String fullName) {
     if (fullName.isEmpty) {
@@ -54,12 +54,17 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   Future<void> googleLogin(int index) async {
     try {
-      await _googleSignIn.signIn();
+      final account = await _googleSignIn.signIn();
+      final authentication = await account?.authentication;
+      if (authentication?.idToken == null) {
+        throw Exception("Google sign in failed!");
+      }
+      log('ID TOKEN: ${authentication?.idToken}');
       final userLogin = await userController.userLoginWithGoogle(
         firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
         lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),
         email: _googleSignIn.currentUser?.email ?? '',
-        googleId: _googleSignIn.currentUser?.id ?? '',
+        googleId: authentication?.idToken ?? '',
       );
 
       if (userLogin.status == 200 && userLogin.token != null) {
@@ -69,9 +74,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         );
         customToast(userLogin.message);
         Get.back<bool>(
-          result: false,
+          result: true,
         );
-        userController.tabController.index = index;
+        tabController.index = index;
         setState(() {});
       } else {
         throw Exception(userLogin.message ?? 'Invalid email!');
@@ -85,11 +90,18 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    userController.tabController = TabController(length: 4, vsync: this);
-    userController.tabController.addListener(() {
-      final index = userController.tabController.index;
-      userController.selectedPage.value = index;
-    });
+    tabController = TabController(length: 4, vsync: this);
+    screens = [
+      HomeScreen(),
+      AddProduct(
+        onProductAdded: () {
+          tabController.index = 2;
+          userController.selectedPage.value = 2;
+        },
+      ),
+      UserProduct(),
+      Profile(),
+    ];
     super.initState();
   }
 
@@ -98,7 +110,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
       bottomNavigationBar: ConvexAppBar(
         top: -20,
-        controller: userController.tabController,
+        controller: tabController,
         height: 50,
         backgroundColor: Constants.backgroundContColor,
         items: [
@@ -150,9 +162,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         onTap: (int index) async {
           print('userLogin${_googleSignIn.currentUser?.photoUrl}');
           final token = await locator<LocalStorageService>().getData('token');
-          if (index == 1 &&
-              _googleSignIn.currentUser == null &&
-              token == null) {
+          if (index == 1 && token == null) {
             final shouldChange = await Get.bottomSheet<bool>(
               Container(
                 margin: EdgeInsets.only(left: 15, right: 15),
@@ -252,13 +262,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             );
 
-            if (shouldChange ?? true) {
-              userController.tabController.index =
-                  userController.tabController.index;
+            if (shouldChange ?? false) {
+              tabController?.index = tabController!.index;
+              userController.selectedPage.value = index;
+            } else {
+              tabController!.index = userController.selectedPage.value;
             }
-          } else if (index == 2 &&
-              _googleSignIn.currentUser == null &&
-              token == null) {
+          } else if (index == 2 && token == null) {
             final shouldChange = await Get.bottomSheet<bool>(
               Container(
                 margin: EdgeInsets.only(left: 15, right: 15),
@@ -364,13 +374,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             );
 
-            if (shouldChange ?? true) {
-              userController.tabController.index =
-                  userController.tabController.index;
+            if (shouldChange ?? false) {
+              tabController!.index = tabController!.index;
+              userController.selectedPage.value = index;
+            } else {
+              tabController!.index = userController.selectedPage.value;
             }
-          } else if (index == 3 &&
-              _googleSignIn.currentUser == null &&
-              token == null) {
+          } else if (index == 3 && token == null) {
             final shouldChange = await Get.bottomSheet<bool>(
               Container(
                 margin: EdgeInsets.only(left: 15, right: 15),
@@ -485,13 +495,18 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             );
 
-            if (shouldChange ?? true) {
-              userController.tabController.index =
-                  userController.tabController.index;
+            if (shouldChange ?? false) {
+              tabController!.index = tabController!.index;
+              userController.selectedPage.value = index;
+            } else {
+              tabController!.index = userController.selectedPage.value;
             }
           } else {
             print(screens[index]);
+            userController.selectedPage.value = tabController!.index;
+            userController.selectedPage.value = index;
           }
+
           setState(() {});
         },
         initialActiveIndex: 0,
