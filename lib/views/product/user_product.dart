@@ -48,6 +48,9 @@ class _UserProductState extends State<UserProduct> {
           Expanded(
             child: PopularLocationsList(
               items: productController.myProducts,
+              onReloadPressed: () async {
+                await getUserProducts();
+              },
               showFilter: false,
             ),
           ),

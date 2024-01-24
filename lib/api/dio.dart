@@ -12,3 +12,6 @@ final dio = Dio()
       responseHeader: false,
     ),
   );
+// ..options = BaseOptions(
+//   connectTimeout: Duration(milliseconds: kDebugMode ? 100 : 5000),
+// );

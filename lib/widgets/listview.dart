@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
+import 'package:noble_vintage/widgets/custom_button.dart';
 
 import '../controller/product_controller.dart';
 import '../views/product/product_details.dart';
@@ -13,7 +14,12 @@ import '../views/product/product_details.dart';
 class PopularLocationsList extends StatefulWidget {
   final List<Data> items;
   final bool showFilter;
-  PopularLocationsList({required this.items, required this.showFilter});
+  final VoidCallback onReloadPressed;
+  PopularLocationsList({
+    required this.items,
+    required this.showFilter,
+    required this.onReloadPressed,
+  });
   @override
   State<PopularLocationsList> createState() => _PopularLocationsListState();
 }
@@ -48,6 +54,8 @@ class _PopularLocationsListState extends State<PopularLocationsList> {
             color: Constants.backgroundContColor,
           ),
         );
+      } else if (productController.errorMessage.value != null) {
+        return _buildErrorView(productController.errorMessage.value!);
       } else {
         if (filter.isEmpty) {
           return Center(
@@ -86,6 +94,34 @@ class _PopularLocationsListState extends State<PopularLocationsList> {
         }
       }
     });
+  }
+
+  Widget _buildErrorView(String message) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          message,
+          style: GoogleFonts.inter(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: Get.width * 0.4,
+          child: RoundedElevatedButton(
+            onPressed: () {
+              widget.onReloadPressed();
+            },
+            text: 'Reload',
+          ),
+        ),
+      ],
+    );
   }
 
   List<Data> _getFilteredProducts() {

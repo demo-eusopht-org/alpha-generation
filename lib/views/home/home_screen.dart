@@ -29,23 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isKeyboardOpen = false;
 
   final searchFocus = FocusNode();
-  Future<void> getCategories() async {
-    await productController.getCategories();
-  }
-
-  Future<void> getProducts() async {
-    final data = await productController.getProducts();
-    productController.searchProducts.value = data.data ?? [];
-    productController.products.value = data;
-  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       productController.loading.value = true;
-      await getCategories();
-      await getProducts();
+      await productController.getCategories();
+      await productController.getProducts();
       productController.loading.value = false;
     });
     searchFocus.addListener(() {
@@ -66,7 +57,15 @@ class _HomeScreenState extends State<HomeScreen> {
           topContainer(),
           Expanded(
             child: PopularLocationsList(
-                items: productController.searchProducts, showFilter: true),
+              items: productController.searchProducts,
+              showFilter: true,
+              onReloadPressed: () async {
+                productController.loading.value = true;
+                // await getCategories();
+                await productController.getProducts();
+                productController.loading.value = false;
+              },
+            ),
           ),
         ],
       ),

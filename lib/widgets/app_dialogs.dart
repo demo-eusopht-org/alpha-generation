@@ -18,7 +18,7 @@ class AppDialogs {
       titleStyle: TextStyle(
         color: Colors.white,
         fontSize: 23,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w700,
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       content: SizedBox(),
@@ -40,8 +40,8 @@ class AppDialogs {
                 child: Text(
                   secondaryLabel,
                   style: GoogleFonts.inter(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -66,7 +66,7 @@ class AppDialogs {
                 child: Text(
                   label,
                   style: GoogleFonts.inter(
-                      fontSize: 12, fontWeight: FontWeight.w600),
+                      fontSize: 11, fontWeight: FontWeight.w700),
                 ),
               ),
             ),

@@ -58,7 +58,7 @@ class UserController extends GetxController {
         'first_name': firstname,
         'last_name': lastname,
         'email': email,
-        "google_id": googleId,
+        "google_id_token": googleId,
       },
     );
     loading.value = false;

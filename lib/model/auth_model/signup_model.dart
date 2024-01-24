@@ -6,9 +6,11 @@ part 'signup_model.g.dart';
 class SignUpModel {
   int? status;
   String? message;
+  String? token;
   SignUpModel({
     this.status,
     this.message,
+    this.token,
   });
   factory SignUpModel.fromJson(Map<String, dynamic> json) =>
       _$SignUpModelFromJson(json);

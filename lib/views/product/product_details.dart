@@ -317,10 +317,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       ),
                                       Image.asset(
                                         'assets/images/certificate.png',
-                                      ),
-                                      // Image.network(
-                                      //   '${Constants.certificateUrl}${widget.items.productCertificates!.first.filename}',
-                                      // ),
+                                      )
                                     ],
                                   ),
                                   SizedBox(
@@ -381,30 +378,73 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Widget buildListIcon() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: IconText(
-        icon: Icons.arrow_back_ios,
-        text: '',
-        onTap: () {
-          Get.back();
-        },
-      ),
-    );
-  }
-
-  // Widget topContainer() {
-  //   return Container(
-  //     width: double.infinity,
-  //     color: Constants.backgroundContColor,
-  //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-  //     alignment: Alignment.topCenter,
-  //     margin: EdgeInsets.only(left: 20, right: 20),
-  //     child:
-  //   );
+  // void _downloadFile(BuildContext context) async {
+  //   final String fileUrl =
+  //       '${Constants.certificateUrl}${widget.items.productCertificates!.first.filename}';
+  //   if (await canLaunch(fileUrl)) {
+  //     await launch(fileUrl);
+  //   } else {
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         title: Text('Error'),
+  //         content: Text('Unable to launch the file URL.'),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: Text('OK'),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
+  //
+  // void _downloadFile(BuildContext context) async {
+  //   customToast('File is downloading...');
+  //   var status = await Permission.storage.request();
+  //   if (status != PermissionStatus.granted) {
+  //     customToast('Permission denied to save the file');
+  //     return;
+  //   }
+  //
+  //   String fileUrl =
+  //       '${Constants.certificateUrl}${widget.items.productCertificates!.first.filename}';
+  //   Directory appDocDir = await getApplicationDocumentsDirectory();
+  //   String savePath = appDocDir.path;
+  //
+  //   try {
+  //     await Dio().download(fileUrl, savePath);
+  //     customToast('File downloaded successfully. Path: $savePath');
+  //   } catch (e) {
+  //     customToast('Failed to download file');
+  //   }
   // }
 }
+
+Widget buildListIcon() {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: IconText(
+      icon: Icons.arrow_back_ios,
+      text: '',
+      onTap: () {
+        Get.back();
+      },
+    ),
+  );
+}
+
+// Widget topContainer() {
+//   return Container(
+//     width: double.infinity,
+//     color: Constants.backgroundContColor,
+//     padding: const EdgeInsets.symmetric(horizontal: 15.0),
+//     alignment: Alignment.topCenter,
+//     margin: EdgeInsets.only(left: 20, right: 20),
+//     child:
+//   );
+// }
 
 class PopularLocationItem extends StatelessWidget {
   final String image;

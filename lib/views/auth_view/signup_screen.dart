@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/model/auth_model/signup_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
-import 'package:noble_vintage/views/auth_view/login_screen.dart';
 import 'package:noble_vintage/views/settings/terms_of_service.dart';
 import 'package:noble_vintage/widgets/bottom_Navigation.dart';
 import 'package:noble_vintage/widgets/custom_button.dart';
@@ -107,11 +106,20 @@ class _SignupScreenState extends State<SignupScreen> {
           passController.text.trim(),
         );
         if (signUpModel.status == 200) {
-          userController.loading.value = false;
-          customToast(signUpModel.message);
-          Get.offAll(
-            () => LoginScreen(),
-          );
+          if (signUpModel.token != null) {
+            await locator<LocalStorageService>().saveData(
+              'token',
+              signUpModel.token!,
+            );
+            userController.loading.value = false;
+            userController.selectedPage.value = 0;
+            customToast(signUpModel.message);
+            Get.offAll(
+              () => MainScreen(),
+            );
+          } else {
+            throw Exception('Token is invalid!');
+          }
           confirmPasswordController.clear();
         } else {
           throw Exception(signUpModel.message);

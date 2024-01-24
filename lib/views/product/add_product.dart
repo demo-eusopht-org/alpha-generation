@@ -167,7 +167,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Product Category',
+                                    'Product Category *',
                                     style: GoogleFonts.inter(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700,
@@ -307,14 +307,15 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                 ),
                                 AddProductFields(
                                   controller: serialNumberController,
+                                  mandatory: false,
                                   text: 'Serial Number',
                                   hintText: 'Enter Serial Number',
-                                  validatorCondition: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your serial number';
-                                    }
-                                    return null;
-                                  },
+                                  // validatorCondition: (value) {
+                                  //   if (value!.isEmpty) {
+                                  //     return 'Please enter your serial number';
+                                  //   }
+                                  //   return null;
+                                  // },
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -342,7 +343,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Certificate/Documents',
+                                          'Certificate/Documents *',
                                           style: GoogleFonts.inter(
                                             fontWeight: FontWeight.w700,
                                             fontSize: 13,
@@ -416,7 +417,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Purchase Date',
+                                      'Purchase Date *',
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 13,

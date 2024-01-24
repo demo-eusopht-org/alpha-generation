@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +57,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       if (authentication?.idToken == null) {
         throw Exception("Google sign in failed!");
       }
-      log('ID TOKEN: ${authentication?.idToken}');
+      print('ID TOKEN: ${authentication?.idToken}');
       final userLogin = await userController.userLoginWithGoogle(
         firstname: _getFirstName(_googleSignIn.currentUser?.displayName ?? ''),
         lastname: _getLastName(_googleSignIn.currentUser?.displayName ?? ''),

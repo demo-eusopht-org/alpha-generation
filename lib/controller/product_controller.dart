@@ -28,6 +28,7 @@ class ProductController extends GetxController {
   Rx<PD.GetProductsModel?> products = Rx(null);
   RxList<PD.Data> searchProducts = RxList([]);
   RxList<PD.Data> myProducts = RxList([]);
+  Rx<String?> errorMessage = Rx(null);
   final selectedProductType = ProductType.all.obs;
 
   Future<AddProductModel?> addProduct(
@@ -107,15 +108,34 @@ class ProductController extends GetxController {
   }
 
   Future<void> getCategories() async {
-    final response = await _productsApi.getCategory();
-    categories.value = response.data ?? [];
+    try {
+      final response = await _productsApi.getCategory();
+      categories.value = response.data ?? [];
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
+        errorMessage.value = 'Timed Out! Please reload';
+      } else {
+        errorMessage.value = e.message;
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    }
   }
 
-  Future<PD.GetProductsModel> getProducts() async {
-    final response = await _productsApi.getProducts();
-    return response;
-
-    print('checkResponse$response');
+  Future<void> getProducts() async {
+    try {
+      final response = await _productsApi.getProducts();
+      searchProducts.value = response.data ?? [];
+      products.value = response;
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
+        errorMessage.value = 'Timed Out! Please reload';
+      } else {
+        errorMessage.value = e.message;
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    }
   }
 
   Future<PD.GetProductsModel> getUserProducts() async {

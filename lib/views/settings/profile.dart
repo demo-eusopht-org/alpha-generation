@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:noble_vintage/model/profile_model/get_profle_model.dart';
 import 'package:noble_vintage/services/local_storage_service.dart';
 import 'package:noble_vintage/services/locator.dart';
@@ -107,6 +108,16 @@ class _ProfileState extends State<Profile> {
                       return RoundedElevatedButton(
                         loading: userController.loading.value,
                         onPressed: () async {
+                          final _googleSign = GoogleSignIn();
+                          // if (_googleSign.currentUser != null) {
+                          print('user${_googleSign.currentUser}');
+                          try {
+                            await _googleSign.disconnect();
+                            await _googleSign.signOut();
+                          } catch (e) {
+                            print(e.toString());
+                          }
+                          // }
                           await locator<LocalStorageService>().clearAll();
                           Get.offAll(
                             () => LoginScreen(),

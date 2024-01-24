@@ -12,11 +12,13 @@ class AddProductFields extends StatelessWidget {
   final TextEditingController controller;
   final validatorCondition;
   final TextCapitalization textCapitalization;
+  final bool mandatory;
 
   AddProductFields({
     Key? key,
     this.maxLines = 1,
     required this.hintText,
+    this.mandatory = true,
     required this.text,
     this.textInputType,
     this.validatorCondition,
@@ -30,7 +32,7 @@ class AddProductFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          text,
+          text + (mandatory ? ' * ' : ''),
           style: GoogleFonts.inter(
             fontWeight: FontWeight.w700,
             fontSize: 13,
