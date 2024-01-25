@@ -22,7 +22,7 @@ Map<String, dynamic> _$GetProductsModelToJson(GetProductsModel instance) =>
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       id: json['id'] as int?,
-      categoryId: Data._typeFromJson(json['category_id'] as int?),
+      categoryId: json['category_id'] as int?,
       uuid: json['uuid'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
@@ -56,7 +56,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'id': instance.id,
-      'category_id': Data._typeToJson(instance.categoryId),
+      'category_id': instance.categoryId,
       'uuid': instance.uuid,
       'title': instance.title,
       'description': instance.description,
@@ -109,7 +109,7 @@ ProductCertificate _$ProductCertificateFromJson(Map<String, dynamic> json) =>
     ProductCertificate(
       id: json['id'] as int?,
       productId: json['product_id'] as int?,
-      filename: json['filename'] as String?,
+      fileName: json['file_name'] as String?,
       status: json['status'] as int?,
       createdBy: json['created_by'] as int?,
       updatedBy: json['updated_by'] as int?,
@@ -121,7 +121,7 @@ Map<String, dynamic> _$ProductCertificateToJson(ProductCertificate instance) =>
     <String, dynamic>{
       'id': instance.id,
       'product_id': instance.productId,
-      'filename': instance.filename,
+      'file_name': instance.fileName,
       'status': instance.status,
       'created_by': instance.createdBy,
       'updated_by': instance.updatedBy,

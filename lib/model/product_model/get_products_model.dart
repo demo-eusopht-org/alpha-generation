@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../enums/product_type_enum.dart';
-
 part 'get_products_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -23,8 +21,7 @@ class GetProductsModel {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Data {
   int? id;
-  @JsonKey(fromJson: _typeFromJson, toJson: _typeToJson)
-  ProductType? categoryId;
+  int? categoryId;
   String? uuid;
   String? title;
   String? description;
@@ -93,20 +90,6 @@ class Data {
     }
     return (bool);
   }
-
-  static ProductType? _typeFromJson(int? type) {
-    if (type == null) {
-      return null;
-    }
-    return type == 1 ? ProductType.watches : ProductType.leatherProducts;
-  }
-
-  static int? _typeToJson(ProductType? productType) {
-    if (productType == null) {
-      return null;
-    }
-    return (productType.index) + 1;
-  }
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -139,7 +122,7 @@ class ProductImage {
 class ProductCertificate {
   int? id;
   int? productId;
-  String? filename;
+  String? fileName;
   int? status;
   int? createdBy;
   int? updatedBy;
@@ -148,7 +131,7 @@ class ProductCertificate {
   ProductCertificate({
     this.id,
     this.productId,
-    this.filename,
+    this.fileName,
     this.status,
     this.createdBy,
     this.updatedBy,

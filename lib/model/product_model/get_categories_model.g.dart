@@ -21,7 +21,7 @@ Map<String, dynamic> _$GetCategoriesModelToJson(GetCategoriesModel instance) =>
     };
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
-      id: Data._typeFromJson(json['id'] as int?),
+      id: json['id'] as int?,
       name: json['name'] as String?,
       status: json['status'] as int?,
       createdBy: json['created_by'] as int?,
@@ -31,7 +31,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
-      'id': Data._typeToJson(instance.id),
+      'id': instance.id,
       'name': instance.name,
       'status': instance.status,
       'created_by': instance.createdBy,

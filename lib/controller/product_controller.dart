@@ -13,7 +13,6 @@ import 'package:noble_vintage/services/locator.dart';
 import 'package:noble_vintage/utils/date_time_utils.dart';
 
 import '../api/dio.dart';
-import '../model/enums/product_type_enum.dart';
 import '../model/product_model/add_product_model.dart';
 import '../utils/constants.dart';
 
@@ -29,7 +28,7 @@ class ProductController extends GetxController {
   RxList<PD.Data> searchProducts = RxList([]);
   RxList<PD.Data> myProducts = RxList([]);
   Rx<String?> errorMessage = Rx(null);
-  final selectedProductType = ProductType.all.obs;
+  Rx<Data?> selectedProductType = Rx(null);
 
   Future<AddProductModel?> addProduct(
     List<XFile> productImages,
@@ -48,7 +47,7 @@ class ProductController extends GetxController {
         for (final productImage in productImages)
           await MultipartFile.fromFile(
             productImage.path,
-            filename: '123',
+            filename: productImage.name,
           ),
       ],
     );
@@ -57,7 +56,7 @@ class ProductController extends GetxController {
         for (final productCertificate in certificates)
           await MultipartFile.fromFile(
             productCertificate.path!,
-            filename: 'abc',
+            filename: productCertificate.name,
           ),
       ],
     );
@@ -102,15 +101,25 @@ class ProductController extends GetxController {
     return AddProductModel.fromJson(response.data);
   }
 
-  void updateSelectedType(ProductType? newType) {
-    selectedProductType.value = newType!;
+  void updateSelectedType(Data newType) {
+    selectedProductType.value = newType;
     update();
   }
 
   Future<void> getCategories() async {
     try {
       final response = await _productsApi.getCategory();
-      categories.value = response.data ?? [];
+      final data = response.data ?? [];
+      final allData = Data(
+        id: (data.last.id ?? 0) + 1,
+        name: 'All',
+        status: 1,
+      );
+      data.add(
+        allData,
+      );
+      categories.value = data;
+      selectedProductType.value = allData;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout) {
         errorMessage.value = 'Timed Out! Please reload';
@@ -127,9 +136,10 @@ class ProductController extends GetxController {
       final response = await _productsApi.getProducts();
       searchProducts.value = response.data ?? [];
       products.value = response;
+      errorMessage.value = null;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage.value = 'Timed Out! Please reload';
+        errorMessage.value = 'Please reload';
       } else {
         errorMessage.value = e.message;
       }
@@ -137,6 +147,24 @@ class ProductController extends GetxController {
       errorMessage.value = e.toString();
     }
   }
+
+  // Future<void> getUserProducts() async {
+  //   try {
+  //     final token = await locator<LocalStorageService>().getData('token');
+  //     final response = await _productsApi.getUserProducts('Bearer $token');
+  //     searchProducts.value = response.data ?? [];
+  //     products.value = response;
+  //     errorMessage.value = null;
+  //   } on DioException catch (e) {
+  //     if (e.type == DioExceptionType.connectionTimeout) {
+  //       errorMessage.value = 'Please reload';
+  //     } else {
+  //       errorMessage.value = e.message;
+  //     }
+  //   } catch (e) {
+  //     errorMessage.value = e.toString();
+  //   }
+  // }
 
   Future<PD.GetProductsModel> getUserProducts() async {
     loading.value = true;

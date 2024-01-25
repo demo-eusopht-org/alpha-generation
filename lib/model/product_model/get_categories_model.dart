@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:noble_vintage/model/enums/product_type_enum.dart';
 
 part 'get_categories_model.g.dart';
 
@@ -21,8 +20,7 @@ class GetCategoriesModel {
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Data {
-  @JsonKey(fromJson: _typeFromJson, toJson: _typeToJson)
-  ProductType? id;
+  int? id;
   String? name;
   int? status;
   int? createdBy;
@@ -42,18 +40,4 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
-
-  static ProductType? _typeFromJson(int? type) {
-    if (type == null) {
-      return null;
-    }
-    return type == 1 ? ProductType.watches : ProductType.leatherProducts;
-  }
-
-  static int? _typeToJson(ProductType? productType) {
-    if (productType == null) {
-      return null;
-    }
-    return (productType.index) + 1;
-  }
 }

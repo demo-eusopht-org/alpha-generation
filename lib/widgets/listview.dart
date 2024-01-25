@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/custom_button.dart';
@@ -126,14 +127,17 @@ class _PopularLocationsListState extends State<PopularLocationsList> {
 
   List<Data> _getFilteredProducts() {
     List<Data> products = widget.items;
-    return widget.showFilter
-        ? productController.selectedProductType.value == ProductType.all
-            ? products
-            : products.where((product) {
-                return product.categoryId ==
-                    productController.selectedProductType.value;
-              }).toList()
-        : productController.myProducts;
+    log('LENGTH: ${products.length}');
+    if (widget.showFilter) {
+      return productController.selectedProductType.value?.name == 'All'
+          ? products
+          : products.where((product) {
+              return product.categoryId ==
+                  productController.selectedProductType.value?.id;
+            }).toList();
+    } else {
+      return products;
+    }
   }
 }
 

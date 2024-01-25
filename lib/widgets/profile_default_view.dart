@@ -156,6 +156,9 @@ class _ProfileDefaultViewState extends State<ProfileDefaultView> {
                                 // height: profileSize - 20,
                               ),
                             )
+                          // : SvgPicture.asset(
+                          //     'assets/images/Account.svg',
+                          //   )
                           : Image.asset(
                               'assets/images/profile_image.png',
                             ),

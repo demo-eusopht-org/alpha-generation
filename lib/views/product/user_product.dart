@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noble_vintage/model/product_model/get_categories_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
 import '../../controller/product_controller.dart';
-import '../../model/enums/product_type_enum.dart';
 import '../../widgets/icon_text.dart';
 
 class UserProduct extends StatefulWidget {
@@ -19,7 +19,7 @@ class UserProduct extends StatefulWidget {
 class _UserProductState extends State<UserProduct> {
   final productController = Get.put(ProductController());
 
-  ProductType? selectedProductType;
+  Data? selectedProductType;
 
   final searchFocus = FocusNode();
 
@@ -31,8 +31,11 @@ class _UserProductState extends State<UserProduct> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       getUserProducts();
+      // productController.loading.value = true;
+      // await productController.getUserProducts();
+      // productController.loading.value = false;
     });
   }
 
@@ -49,7 +52,7 @@ class _UserProductState extends State<UserProduct> {
             child: PopularLocationsList(
               items: productController.myProducts,
               onReloadPressed: () async {
-                await getUserProducts();
+                await productController.getUserProducts();
               },
               showFilter: false,
             ),
@@ -97,35 +100,35 @@ class _UserProductState extends State<UserProduct> {
     );
   }
 
-  PopupMenuItem<ProductType> _buildFilterItem({
-    required ProductType? type,
-  }) {
-    return PopupMenuItem<ProductType>(
-      value: type,
-      child: Row(
-        children: [
-          IgnorePointer(
-            child: Radio<ProductType?>(
-              focusColor: Constants.backgroundContColor,
-              activeColor: Constants.backgroundContColor,
-              value: type,
-              groupValue: productController.selectedProductType.value,
-              onChanged: (newType) {
-                productController.updateSelectedType(newType);
-                // selectedProductType = newType;
-                // TODO: Do this using Getx;
-                setState(() {});
-              },
-            ),
-          ),
-          Text(
-            type?.getLabel() ?? '',
-            style: GoogleFonts.inter(),
-          ),
-        ],
-      ),
-    );
-  }
+  // PopupMenuItem<D> _buildFilterItem({
+  //   required ProductType? type,
+  // }) {
+  //   return PopupMenuItem<ProductType>(
+  //     value: type,
+  //     child: Row(
+  //       children: [
+  //         IgnorePointer(
+  //           child: Radio<ProductType?>(
+  //             focusColor: Constants.backgroundContColor,
+  //             activeColor: Constants.backgroundContColor,
+  //             value: type,
+  //             groupValue: productController.selectedProductType.value,
+  //             onChanged: (newType) {
+  //               productController.updateSelectedType(newType);
+  //               // selectedProductType = newType;
+  //               // TODO: Do this using Getx;
+  //               setState(() {});
+  //             },
+  //           ),
+  //         ),
+  //         Text(
+  //           type?.getLabel() ?? '',
+  //           style: GoogleFonts.inter(),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget buildListIcon() {
     return IconText(

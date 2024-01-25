@@ -7,8 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:noble_vintage/controller/product_controller.dart';
-import 'package:noble_vintage/model/enums/product_type_enum.dart';
 import 'package:noble_vintage/model/product_model/add_product_model.dart';
+import 'package:noble_vintage/model/product_model/get_categories_model.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
 
@@ -42,15 +42,16 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   bool productSelected = false;
   List<XFile> productImages = [];
   List<PlatformFile> certificates = [];
-  ProductType? selectedProductType;
+  Data? selectedProductType;
   bool financeWitIt = false;
   int selectedPage = 0;
+  late List<Data> categories;
 
   Future<void> _financeWithItDialog() async {
     if (_formKey.currentState?.validate() ?? false) {
       AppDialogs.showConfirmDialog(
-        dialogTitle: 'Finance With It',
-        label: 'Finance with it',
+        dialogTitle: 'Confirm',
+        label: 'Confirm',
         secondaryLabel: 'Cancel',
         onConfirm: () {
           addProduct();
@@ -73,7 +74,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
         double.parse(estimatedAmountController.text),
         0,
         financeWitIt,
-        selectedProductType!.index + 1,
+        selectedProductType!.id!,
       );
       productController.buttonLoading.value = false;
       if (response?.status != 200) {
@@ -132,6 +133,15 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+    categories = productController.categories
+      ..removeWhere(
+        (element) => element.name == 'All',
+      );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultWidget(
       showBackIcon: false,
@@ -184,7 +194,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                     color: Constants.backgroundContColor,
                                   ),
 
-                                  child: DropdownButton<ProductType>(
+                                  child: DropdownButton<Data>(
                                     underline: SizedBox.shrink(),
                                     hint: Text(
                                       'Select Category',
@@ -202,15 +212,12 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                         Constants.backgroundContColor,
                                     iconEnabledColor: Colors.white,
                                     items: List.generate(
-                                      productController.categories.length,
+                                      categories.length,
                                       (index) {
                                         return DropdownMenuItem(
-                                          value: productController
-                                              .categories[index].id,
+                                          value: categories[index],
                                           child: Text(
-                                            productController
-                                                .categories[index].id!
-                                                .getLabel(),
+                                            categories[index].name ?? '',
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -290,17 +297,18 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                   height: 10,
                                 ),
                                 AddProductFields(
+                                  mandatory: false,
                                   textCapitalization: TextCapitalization.words,
                                   controller: descriptionController,
                                   text: 'Description',
                                   hintText: 'Enter Description',
                                   maxLines: 3,
-                                  validatorCondition: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your description';
-                                    }
-                                    return null;
-                                  },
+                                  // validatorCondition: (value) {
+                                  //   if (value!.isEmpty) {
+                                  //     return 'Please enter your description';
+                                  //   }
+                                  //   return null;
+                                  // },
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -322,8 +330,8 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                 ),
                                 AddProductFields(
                                   controller: estimatedAmountController,
-                                  text: 'Estimated Amount',
-                                  hintText: 'Enter Estimated Amount',
+                                  text: 'Selling Price',
+                                  hintText: 'Enter Selling Price',
                                   textInputType: TextInputType.number,
                                   validatorCondition: (value) {
                                     if (value!.isEmpty) {
@@ -343,7 +351,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Certificate/Documents *',
+                                          'Certificate/Documents',
                                           style: GoogleFonts.inter(
                                             fontWeight: FontWeight.w700,
                                             fontSize: 13,
@@ -475,7 +483,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Product Image',
+                                      'Product Image *',
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 13,
@@ -515,9 +523,9 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                     onPressed: () {
                                       if (selectedProductType == null) {
                                         customToast('Please select category');
-                                      } else if (certificates.isEmpty) {
-                                        customToast(
-                                            'Please upload certificates');
+                                        // } else if (certificates.isEmpty) {
+                                        //   customToast(
+                                        //       'Please upload certificates');
                                       } else if (purchaseDate == null) {
                                         customToast(
                                             'Please select purchased date');

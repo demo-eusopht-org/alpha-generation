@@ -41,7 +41,7 @@ class AppDialogs {
                   secondaryLabel,
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -66,7 +66,9 @@ class AppDialogs {
                 child: Text(
                   label,
                   style: GoogleFonts.inter(
-                      fontSize: 11, fontWeight: FontWeight.w700),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),

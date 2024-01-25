@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/utils/date_time_utils.dart';
+import 'package:noble_vintage/views/product/view_selected_file.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/slider.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../model/product_model/get_products_model.dart';
+import '../../widgets/custom_widgets.dart';
 import '../../widgets/icon_text.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -47,7 +53,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Padding(
                       padding: const EdgeInsets.only(left: 5, top: 8),
                       child: Text(
-                        'Estimated',
+                        'Selling Price',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: 15,
@@ -65,7 +71,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       alignment: Alignment.center,
                       width: Get.width * 0.27,
-                      height: Get.height * 0.08,
+                      height: Get.height * 0.07,
                       child: Text(
                         widget.items.estimatedAmount.toString(),
                         style: GoogleFonts.inter(
@@ -120,7 +126,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       alignment: Alignment.center,
                       width: Get.width * 0.27,
-                      height: Get.height * 0.08,
+                      height: Get.height * 0.07,
                       child: Text(
                         widget.items.rating.toString(),
                         style: GoogleFonts.inter(
@@ -175,20 +181,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                       //   width: Get.width * 0.01,
                       // ),
                       // Spacer(),
-                      CachedNetworkImage(
-                        imageUrl:
-                            '${Constants.imageUrl}${widget.items.productImages?[selectedImageIndex].fileName}',
-                        height: 250,
-                        width: Get.width * 0.75,
-                        fit: BoxFit.fill,
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/no_image.png',
-                          height: 120,
-                          width: Get.width * 0.2,
-                        ),
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            color: Constants.backgroundContColor,
+                      InkWell(
+                        onTap: () {
+                          print('hello - check');
+                          Get.to(
+                            () => ViewSelectedFile(
+                              items: widget.items,
+                            ),
+                          );
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              '${Constants.imageUrl}${widget.items.productImages?[selectedImageIndex].fileName}',
+                          height: 250,
+                          width: Get.width * 0.75,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/no_image.png',
+                            height: 120,
+                            width: Get.width * 0.2,
+                          ),
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: Constants.backgroundContColor,
+                            ),
                           ),
                         ),
                       ),
@@ -255,28 +271,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Brand Name',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
+                                  if (widget.items.brand != null)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Brand Name',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        widget.items.brand ?? 'unknown',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
+                                        Text(
+                                          widget.items.brand ?? 'unknown',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -284,25 +301,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Model Number',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
+                                      if (widget.items.model != null)
+                                        Text(
+                                          'Model Number',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        widget.items.model ?? 'unknown',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
+                                      if (widget.items.model != null)
+                                        Text(
+                                          widget.items.model ?? 'unknown',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
-
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -315,22 +336,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      Image.asset(
-                                        'assets/images/certificate.png',
+                                      InkWell(
+                                        onTap: () async {
+                                          _downloadFile(context);
+                                        },
+                                        child: Image.asset(
+                                          'assets/images/certificate.png',
+                                        ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    'Description:',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.black,
+                                  if (widget.items.description != null &&
+                                      widget.items.description != '')
+                                    Text(
+                                      'Description:',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
                                   Text(
                                     widget.items.description ?? '',
                                     style: GoogleFonts.inter(
@@ -339,28 +367,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  // Row(
-                                  //   mainAxisAlignment:
-                                  //       MainAxisAlignment.spaceBetween,
-                                  //   children: [
-                                  //     Column(
-                                  //       children: [
-                                  //         Text('Estimated'),
-                                  //         Image.asset(
-                                  //           'assets/images/estimated_box.png',
-                                  //         )
-                                  //       ],
-                                  //     ),
-                                  //     Column(
-                                  //       children: [
-                                  //         Text('Rating'),
-                                  //         Image.asset(
-                                  //           'assets/images/rating_box.png',
-                                  //         )
-                                  //       ],
-                                  //     ),
-                                  //   ],
-                                  // )
                                 ],
                               ),
                             ),
@@ -400,26 +406,45 @@ class _ProductDetailsState extends State<ProductDetails> {
   //   }
   // }
   //
-  // void _downloadFile(BuildContext context) async {
-  //   customToast('File is downloading...');
-  //   var status = await Permission.storage.request();
-  //   if (status != PermissionStatus.granted) {
-  //     customToast('Permission denied to save the file');
-  //     return;
-  //   }
-  //
-  //   String fileUrl =
-  //       '${Constants.certificateUrl}${widget.items.productCertificates!.first.filename}';
-  //   Directory appDocDir = await getApplicationDocumentsDirectory();
-  //   String savePath = appDocDir.path;
-  //
-  //   try {
-  //     await Dio().download(fileUrl, savePath);
-  //     customToast('File downloaded successfully. Path: $savePath');
-  //   } catch (e) {
-  //     customToast('Failed to download file');
-  //   }
-  // }
+
+  Future<String> _downloadPath() async {
+    Directory? appDocumentsDir = await getDownloadsDirectory();
+    if (appDocumentsDir != null) {
+      String downloadPath = appDocumentsDir.path;
+      Directory(downloadPath).createSync(recursive: true);
+      return downloadPath;
+    } else {
+      throw Exception("App documents directory not available");
+    }
+  }
+
+  void _downloadFile(BuildContext context) async {
+    customToast('File is downloading...');
+    // var status = await Permission.storage.request();
+    // if (status != PermissionStatus.granted) {
+    //   customToast('Permission denied to save the file');
+    //   // return;
+    // }
+    final fileName = widget.items.productCertificates!.first.fileName;
+
+    if (fileName == null) {
+      throw Exception("File name is needed!");
+    }
+    String fileUrl = '${Constants.certificateUrl}$fileName';
+
+    final path = Platform.isAndroid
+        ? '/storage/emulated/0/Download/Alpha-Generation/images'
+        : await _downloadPath();
+    String savePath = '${path}/$fileName';
+    print('checkPath$fileUrl');
+    print('save$savePath');
+    try {
+      await Dio().download(fileUrl, savePath);
+      customToast('File downloaded successfully. Path: $savePath');
+    } catch (e) {
+      customToast('Failed to download file');
+    }
+  }
 }
 
 Widget buildListIcon() {

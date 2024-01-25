@@ -8,7 +8,7 @@ import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/listview.dart';
 
 import '../../controller/product_controller.dart';
-import '../../model/enums/product_type_enum.dart';
+import '../../model/product_model/get_categories_model.dart' as CM;
 import '../../model/product_model/get_products_model.dart';
 import '../../widgets/icon_text.dart';
 
@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final productController = Get.put(ProductController());
 
-  ProductType? selectedProductType;
+  Data? selectedProductType;
   List<Data> productList = [];
   TextEditingController _searchController = TextEditingController();
   // ProductType selectedProductType = ProductType.all;
@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onReloadPressed: () async {
                 productController.loading.value = true;
                 // await getCategories();
+                await productController.getCategories();
                 await productController.getProducts();
                 productController.loading.value = false;
               },
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (productController.categories.isEmpty) {
                 return SizedBox.shrink();
               }
-              return PopupMenuButton<ProductType?>(
+              return PopupMenuButton<CM.Data?>(
                 padding: EdgeInsets.zero,
                 icon: Image.asset(
                   'assets/images/filter_icon.png',
@@ -168,18 +169,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.white,
                 ),
                 onSelected: (newType) {
-                  productController.updateSelectedType(newType);
+                  if (newType != null) {
+                    productController.updateSelectedType(newType);
+                  }
                   // selectedProductType = newType!;
                   setState(() {});
                 },
                 itemBuilder: (context) {
                   return [
                     ...productController.categories.map((category) {
-                      return _buildFilterItem(type: category.id);
+                      return _buildFilterItem(type: category);
                     }).toList(),
-                    _buildFilterItem(
-                      type: ProductType.all,
-                    ),
+                    // TODO: MUST DO FOR ALL
+                    // _buildFilterItem(
+                    //   type: ProductType.all,
+                    // ),
                   ];
                 },
               );
@@ -190,21 +194,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  PopupMenuItem<ProductType> _buildFilterItem({
-    required ProductType? type,
+  PopupMenuItem<CM.Data> _buildFilterItem({
+    required CM.Data? type,
   }) {
-    return PopupMenuItem<ProductType>(
+    return PopupMenuItem<CM.Data>(
       value: type,
       child: Row(
         children: [
           IgnorePointer(
-            child: Radio<ProductType?>(
+            child: Radio<CM.Data?>(
               focusColor: Constants.backgroundContColor,
               activeColor: Constants.backgroundContColor,
               value: type,
               groupValue: productController.selectedProductType.value,
               onChanged: (newType) {
-                productController.updateSelectedType(newType);
+                if (newType != null) {
+                  productController.updateSelectedType(newType);
+                }
                 // selectedProductType = newType;
                 // TODO: Do this using Getx;
                 setState(() {});
@@ -212,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Text(
-            type?.getLabel() ?? '',
+            type?.name ?? '',
             style: GoogleFonts.inter(),
           ),
         ],
