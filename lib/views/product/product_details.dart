@@ -280,10 +280,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Brand Name',
+                                          'Brand Name:',
                                           style: GoogleFonts.inter(
                                             fontSize: 15,
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.w700,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -306,10 +306,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     children: [
                                       if (widget.items.model != null)
                                         Text(
-                                          'Model Number',
+                                          'Model Number:',
                                           style: GoogleFonts.inter(
                                             fontSize: 15,
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.w700,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -325,30 +325,80 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 5,
+                                    height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Purchased Date:${widget.items.purchaseDate!.getFormattedDate()}',
+                                        'Purchased Date:',
+                                        // '${widget.items.purchaseDate!.getFormattedDate()}',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${widget.items.purchaseDate!.getFormattedDate()}',
+                                        // '${widget.items.purchaseDate!.getFormattedDate()}',
                                         style: GoogleFonts.inter(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () async {
-                                          _downloadFile(context);
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/certificate.png',
-                                        ),
-                                      )
+                                      // InkWell(
+                                      //   onTap: () async {
+                                      //     _downloadFile(context);
+                                      //   },
+                                      //   child: Image.asset(
+                                      //     'assets/images/certificate.png',
+                                      //   ),
+                                      // )
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  if (widget.items.productCertificates !=
+                                          null &&
+                                      widget.items.productCertificates
+                                              ?.isNotEmpty ==
+                                          true)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Download Certificate:',
+                                          // '${widget.items.purchaseDate!.getFormattedDate()}',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+
+                                        InkWell(
+                                          onTap: () async {
+                                            _downloadFile(context);
+                                          },
+                                          child: Image.asset(
+                                            'assets/images/certificate.png',
+                                          ),
+                                        ),
+                                        // InkWell(
+                                        //   onTap: () async {
+                                        //     _downloadFile(context);
+                                        //   },
+                                        //   child: Image.asset(
+                                        //     'assets/images/certificate.png',
+                                        //   ),
+                                        // )
+                                      ],
+                                    ),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -357,15 +407,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     Text(
                                       'Description:',
                                       style: GoogleFonts.inter(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
                                         color: Colors.black,
                                       ),
                                     ),
                                   Text(
                                     widget.items.description ?? '',
                                     style: GoogleFonts.inter(
-                                      fontSize: 17,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.black,
                                     ),
@@ -424,14 +474,11 @@ class _ProductDetailsState extends State<ProductDetails> {
   void _downloadFile(BuildContext context) async {
     // print('save$savePath');
     try {
-      final status = await Permission.manageExternalStorage.request();
+      // final status = await Permission.manageExternalStorage.request();
       final media = await Permission.mediaLibrary.request();
-      if (status != PermissionStatus.granted) {
+
+      if (media != PermissionStatus.granted) {
         throw Exception('Permission is needed!');
-      } else {
-        if (media != PermissionStatus.granted) {
-          throw Exception('Permission is needed!');
-        }
       }
       customToast('File is downloading...');
       final fileName = widget.items.productCertificates!.first.fileName;
