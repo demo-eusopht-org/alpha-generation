@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +11,9 @@ import 'package:noble_vintage/utils/date_time_utils.dart';
 import 'package:noble_vintage/views/product/view_selected_file.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
 import 'package:noble_vintage/widgets/slider.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../model/product_model/get_products_model.dart';
 import '../../widgets/custom_widgets.dart';
@@ -354,8 +357,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     Text(
                                       'Description:',
                                       style: GoogleFonts.inter(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.w900,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -419,28 +422,52 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   void _downloadFile(BuildContext context) async {
-    customToast('File is downloading...');
-    // var status = await Permission.storage.request();
-    // if (status != PermissionStatus.granted) {
-    //   customToast('Permission denied to save the file');
-    //   // return;
-    // }
-    final fileName = widget.items.productCertificates!.first.fileName;
-
-    if (fileName == null) {
-      throw Exception("File name is needed!");
-    }
-    String fileUrl = '${Constants.certificateUrl}$fileName';
-
-    final path = Platform.isAndroid
-        ? '/storage/emulated/0/Download/Alpha-Generation/images'
-        : await _downloadPath();
-    String savePath = '${path}/$fileName';
-    print('checkPath$fileUrl');
-    print('save$savePath');
+    // print('save$savePath');
     try {
-      await Dio().download(fileUrl, savePath);
-      customToast('File downloaded successfully. Path: $savePath');
+      final status = await Permission.manageExternalStorage.request();
+      final media = await Permission.mediaLibrary.request();
+      if (status != PermissionStatus.granted) {
+        throw Exception('Permission is needed!');
+      } else {
+        if (media != PermissionStatus.granted) {
+          throw Exception('Permission is needed!');
+        }
+      }
+      customToast('File is downloading...');
+      final fileName = widget.items.productCertificates!.first.fileName;
+
+      if (fileName == null) {
+        throw Exception("File name is needed!");
+      }
+      String fileUrl = '${Constants.certificateUrl}$fileName';
+
+      final path = Platform.isAndroid
+          ? '/storage/emulated/0/Download/Alpha-Generation/images'
+          : await _downloadPath();
+      String savePath = '${path}/$fileName';
+      print('checkPath$fileUrl');
+      final response = await Dio().download(fileUrl, savePath);
+      // customToast('File downloaded successfully. Path: $savePath');
+      if (response.statusCode != 200) {
+        throw Exception(response.statusMessage);
+      }
+      final snackBar = SnackBar(
+        content: Text('File downloaded successfully'),
+        action: SnackBarAction(
+          label: 'Open',
+          onPressed: () async {
+            try {
+              print('New Path:$savePath');
+              final result = await OpenFile.open(savePath);
+              log('Result: ${result.message}');
+            } catch (e) {
+              print(e.toString());
+            }
+          },
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } catch (e) {
       customToast('Failed to download file');
     }
