@@ -182,7 +182,7 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
             children: [
               CachedNetworkImage(
                 imageUrl: widget.image,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 height: 160,
                 width: 160,
                 errorWidget: (context, url, error) =>
