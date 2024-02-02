@@ -6,15 +6,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/utils/date_time_utils.dart';
 import 'package:noble_vintage/views/product/view_selected_file.dart';
+import 'package:noble_vintage/widgets/custom_button.dart';
 import 'package:noble_vintage/widgets/default_widget.dart';
+import 'package:noble_vintage/widgets/enquire_dialog.dart';
 import 'package:noble_vintage/widgets/slider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../controller/product_controller.dart';
 import '../../model/product_model/get_products_model.dart';
 import '../../widgets/custom_widgets.dart';
 import '../../widgets/icon_text.dart';
@@ -33,7 +37,33 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  final productController = Get.put(ProductController());
   int selectedImageIndex = 0;
+
+  Future<void> getEnquiry() async {
+    try {
+      productController.buttonLoading.value = true;
+      final response = await productController.getUserProductEnquiry(
+        productId: widget.items.id!.toInt(),
+      );
+      if (response.status == 200) {
+        EnquireDialog.showConfirmDialog(
+          dialogTitle: 'Thanks for showing interest',
+          label: 'Ok',
+          onConfirm: () => Get.back(),
+        );
+        customToast(response.message);
+        productController.buttonLoading.value = false;
+      }
+    } on DioException catch (e) {
+      productController.buttonLoading.value = false;
+      customToast(e.message);
+    } catch (e) {
+      productController.buttonLoading.value = false;
+      customToast(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     print('CheckIten:${widget.items.title}');
@@ -46,121 +76,139 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5, top: 8),
-                      child: Text(
-                        'Selling Price',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                          color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 8),
+                        child: Text(
+                          'Selling Price',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Constants.backgroundContColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          // topLeft: Radius.circular(5),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Constants.backgroundContColor,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            // topLeft: Radius.circular(5),
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        width: Get.width * 0.27,
+                        height: Get.height * 0.07,
+                        child: Text(
+                          'HK\$ ${NumberFormat('#,##0').format(widget.items.estimatedAmount)}',
+                          // widget.items.estimatedAmount.toString(),
+                          // formatCurrencyPKR(
+                          //     widget.items.estimatedAmount!.toDouble()),
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      alignment: Alignment.center,
-                      width: Get.width * 0.27,
-                      height: Get.height * 0.07,
-                      child: Text(
-                        widget.items.estimatedAmount.toString(),
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                      // Stack(
+                      //   alignment: Alignment.center,
+                      //   children: [
+                      //     Image.asset(
+                      //       'assets/images/estimated_box.png',
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.only(right: 10),
+                      //       child: Text(
+                      //         '300',
+                      //         style: GoogleFonts.inter(
+                      //           fontSize: 25,
+                      //           fontWeight: FontWeight.w500,
+                      //           color: Colors.white,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )
+                    ],
+                  ),
+                  Container(
+                      width: Get.width * 0.35,
+                      height: Get.height * 0.06,
+                      child: Obx(() {
+                        return RoundedElevatedButton(
+                          loading: productController.buttonLoading.value,
+                          onPressed: () {
+                            getEnquiry();
+                          },
+                          text: 'Enquire',
+                        );
+                      })),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12, top: 5),
+                        child: Text(
+                          'Rating',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    // Stack(
-                    //   alignment: Alignment.center,
-                    //   children: [
-                    //     Image.asset(
-                    //       'assets/images/estimated_box.png',
-                    //     ),
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(right: 10),
-                    //       child: Text(
-                    //         '300',
-                    //         style: GoogleFonts.inter(
-                    //           fontSize: 25,
-                    //           fontWeight: FontWeight.w500,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12, top: 5),
-                      child: Text(
-                        'Rating',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                          color: Colors.black,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Constants.backgroundContColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            // topLeft: Radius.circular(5),
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        width: Get.width * 0.27,
+                        height: Get.height * 0.07,
+                        child: Text(
+                          widget.items.rating.toString(),
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Constants.backgroundContColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          // topLeft: Radius.circular(5),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      width: Get.width * 0.27,
-                      height: Get.height * 0.07,
-                      child: Text(
-                        widget.items.rating.toString(),
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    // Stack(
-                    //   alignment: Alignment.center,
-                    //   children: [
-                    //     Image.asset(
-                    //       'assets/images/new_estimated_box.png',
-                    //     ),
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(left: 12),
-                    //       child: Text(
-                    //         '5',
-                    //         style: GoogleFonts.inter(
-                    //           fontSize: 25,
-                    //           fontWeight: FontWeight.w500,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ],
+                      // Stack(
+                      //   alignment: Alignment.center,
+                      //   children: [
+                      //     Image.asset(
+                      //       'assets/images/new_estimated_box.png',
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.only(left: 12),
+                      //       child: Text(
+                      //         '5',
+                      //         style: GoogleFonts.inter(
+                      //           fontSize: 25,
+                      //           fontWeight: FontWeight.w500,
+                      //           color: Colors.white,
+                      //         ),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -274,29 +322,28 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (widget.items.brand != null)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Brand Name:',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Brand Name:',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
                                         ),
-                                        Text(
-                                          widget.items.brand ?? 'unknown',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                          ),
+                                      ),
+                                      Text(
+                                        widget.items.title ?? '',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -304,24 +351,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      if (widget.items.model != null)
-                                        Text(
-                                          'Model Number:',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black,
-                                          ),
+                                      Text(
+                                        'Model Number:',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
                                         ),
-                                      if (widget.items.model != null)
-                                        Text(
-                                          widget.items.model ?? 'unknown',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                          ),
+                                      ),
+                                      Text(
+                                        widget.items.model ?? '',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
                                         ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -349,14 +394,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      // InkWell(
-                                      //   onTap: () async {
-                                      //     _downloadFile(context);
-                                      //   },
-                                      //   child: Image.asset(
-                                      //     'assets/images/certificate.png',
-                                      //   ),
-                                      // )
                                     ],
                                   ),
                                   SizedBox(
@@ -402,6 +439,42 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   SizedBox(
                                     height: 10,
                                   ),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text(
+                                  //       'Status:',
+                                  //       style: GoogleFonts.inter(
+                                  //         fontSize: 15,
+                                  //         fontWeight: FontWeight.w700,
+                                  //         color: Colors.black,
+                                  //       ),
+                                  //     ),
+                                  //     widget.items.status == 0
+                                  //         ? Text(
+                                  //             'Pending From Admin',
+                                  //             style: GoogleFonts.inter(
+                                  //               fontSize: 15,
+                                  //               fontWeight: FontWeight.w400,
+                                  //               color: Colors.black,
+                                  //             ),
+                                  //           )
+                                  //         : widget.items.status == 1
+                                  //             ? Text(
+                                  //                 'Aproved From Admin',
+                                  //                 style: GoogleFonts.inter(
+                                  //                   fontSize: 15,
+                                  //                   fontWeight: FontWeight.w400,
+                                  //                   color: Colors.black,
+                                  //                 ),
+                                  //               )
+                                  //             : SizedBox()
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10,
+                                  // ),
                                   if (widget.items.description != null &&
                                       widget.items.description != '')
                                     Text(

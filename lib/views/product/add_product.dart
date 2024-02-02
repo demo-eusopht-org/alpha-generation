@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:noble_vintage/controller/product_controller.dart';
 import 'package:noble_vintage/model/product_model/add_product_model.dart';
+import 'package:noble_vintage/model/product_model/get_brands_model.dart';
 import 'package:noble_vintage/model/product_model/get_categories_model.dart';
 import 'package:noble_vintage/widgets/app_dialogs.dart';
 import 'package:noble_vintage/widgets/custom_widgets.dart';
@@ -43,9 +44,11 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
   List<XFile> productImages = [];
   List<PlatformFile> certificates = [];
   Data? selectedProductType;
+  BrandData? selectBrand;
   bool financeWitIt = false;
   int selectedPage = 0;
   late List<Data> categories;
+  late List<BrandData> brands;
 
   Future<void> _financeWithItDialog() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -67,7 +70,8 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
       AddProductModel? response = await productController.addProduct(
         productImages,
         certificates,
-        titleController.text,
+        selectBrand!.name!,
+        // titleController.text,
         descriptionController.text,
         serialNumberController.text,
         purchaseDate!,
@@ -139,6 +143,7 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
       ..removeWhere(
         (element) => element.name == 'All',
       );
+    brands = productController.brands;
   }
 
   @override
@@ -281,21 +286,128 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                AddProductFields(
-                                  textCapitalization: TextCapitalization.words,
-                                  controller: titleController,
-                                  text: 'Product Title',
-                                  hintText: 'Enter Title',
-                                  validatorCondition: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your product title';
-                                    }
-                                    return null;
-                                  },
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Brand *',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  // margin: EdgeInsets.only(top: 15),
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: Constants.backgroundContColor,
+                                  ),
+
+                                  child: DropdownButton<BrandData>(
+                                    underline: SizedBox.shrink(),
+                                    hint: Text(
+                                      'Select Brand',
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    value: selectBrand,
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      selectBrand = value;
+                                      setState(() {});
+                                    },
+                                    dropdownColor:
+                                        Constants.backgroundContColor,
+                                    iconEnabledColor: Colors.white,
+                                    items: List.generate(
+                                      brands.length,
+                                      (index) {
+                                        return DropdownMenuItem(
+                                          value: brands[index],
+                                          child: Text(
+                                            brands[index].name ?? '',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+
+                                    // hintText: 'Select Category',
+                                    // trailingIcon: Icon(
+                                    //   Icons.arrow_drop_down,
+                                    //   color: Colors.red,
+                                    // ),
+                                    // inputDecorationTheme: InputDecorationTheme(
+                                    //     border: OutlineInputBorder(
+                                    //         borderSide: BorderSide.none)),
+                                  ),
+
+                                  // child: DropDownMultiSelect(
+                                  //   decoration: InputDecoration(
+                                  //     fillColor: Theme.of(context).colorScheme.onPrimary,
+                                  //     focusColor: Theme.of(context).colorScheme.onPrimary,
+                                  //     enabledBorder: const OutlineInputBorder(
+                                  //       borderRadius: BorderRadius.all(
+                                  //         Radius.circular(4),
+                                  //       ),
+                                  //       borderSide: BorderSide(
+                                  //         color: Colors.grey,
+                                  //         width: 1.5,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  //   options: variantsList,
+                                  //   selectedValues: selectedValues,
+                                  //   // selectedProductItem != null
+                                  //   //     ? [selectedProductItem!]
+                                  //   //     : [],
+                                  //   // onChanged: (List<ProductItem> newList) {
+                                  //   //   log('NAMES: ${newList}');
+                                  //   //   if (newList.isNotEmpty) {
+                                  //   //     selectedProductItem = newList.first;
+                                  //   //     newList.clear();
+                                  //   //     setState(() {});
+                                  //   //   }
+                                  //   // },
+                                  //   onChanged: (List<String> selectedList) {
+                                  //     setState(() {
+                                  //       if (selectedList.isNotEmpty) {
+                                  //         selectedValues = [
+                                  //           selectedList[0]
+                                  //         ]; // Update selected value
+                                  //       } else {
+                                  //         selectedValues.clear();
+                                  //       }
+                                  //     });
+                                  //     print("$selectedValues");
+                                  //   },
+                                  //   whenEmpty: 'Select Category',
+                                  // ),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
+                                // AddProductFields(
+                                //   textCapitalization: TextCapitalization.words,
+                                //   controller: titleController,
+                                //   text: 'Product Title',
+                                //   hintText: 'Enter Title',
+                                //   validatorCondition: (value) {
+                                //     if (value!.isEmpty) {
+                                //       return 'Please enter your product title';
+                                //     }
+                                //     return null;
+                                //   },
+                                // ),
+                                // SizedBox(
+                                //   height: 10,
+                                // ),
                                 AddProductFields(
                                   mandatory: false,
                                   textCapitalization: TextCapitalization.words,
@@ -532,6 +644,8 @@ class _AddProductState extends State<AddProduct> with TickerProviderStateMixin {
                                       } else if (productImages.isEmpty) {
                                         customToast(
                                             'Please upload product images');
+                                      } else if (selectBrand == null) {
+                                        customToast('Please select brand');
                                       } else {
                                         _financeWithItDialog();
                                       }

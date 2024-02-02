@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:noble_vintage/utils/constants.dart';
 
 Widget textFormField({
@@ -80,5 +81,18 @@ void customToast(String? message) {
       textColor: Colors.white,
       fontSize: 16.0,
     );
+  }
+}
+
+String formatCurrencyPKR(double amount) {
+  final formatter = NumberFormat.currency(locale: 'en_PK', symbol: 'PKR');
+
+  if (amount >= 1000) {
+    double amountInK = amount / 1000;
+    return '${amountInK.toStringAsFixed(1)}k';
+  } else if (amount >= 100 && amount < 1000) {
+    return amount.toStringAsFixed(0);
+  } else {
+    return formatter.format(amount);
   }
 }

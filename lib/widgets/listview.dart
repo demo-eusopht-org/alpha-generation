@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart';
 import 'package:noble_vintage/utils/constants.dart';
 import 'package:noble_vintage/widgets/custom_button.dart';
@@ -235,7 +236,7 @@ class _PopularLocationItemState extends State<PopularLocationItem> {
                       height: 5,
                     ),
                     Text(
-                      widget.price.toString(),
+                      'HK\$ ${NumberFormat('#,##0').format(widget.price)}',
                       style: GoogleFonts.inter(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,

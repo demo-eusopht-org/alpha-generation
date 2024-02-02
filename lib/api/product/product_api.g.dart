@@ -13,7 +13,7 @@ class _ProductApi implements ProductApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://34.223.102.186/apis/api/';
+    baseUrl ??= 'http://192.168.100.71:3000/api/';
   }
 
   final Dio _dio;
@@ -44,6 +44,33 @@ class _ProductApi implements ProductApi {
               baseUrl,
             ))));
     final value = GetCategoriesModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<GetBrandsModel> getBrands() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<GetBrandsModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/get-brands',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = GetBrandsModel.fromJson(_result.data!);
     return value;
   }
 
@@ -99,6 +126,38 @@ class _ProductApi implements ProductApi {
               baseUrl,
             ))));
     final value = GetProductsModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ProductEnquiryModel> productEnquiry(
+    String token,
+    Map<String, dynamic> body,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ProductEnquiryModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/add-enquiry',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ProductEnquiryModel.fromJson(_result.data!);
     return value;
   }
 

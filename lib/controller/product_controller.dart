@@ -5,9 +5,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:image_picker/image_picker.dart';
 import 'package:noble_vintage/api/product/product_api.dart';
+import 'package:noble_vintage/model/product_model/get_brands_model.dart';
 import 'package:noble_vintage/model/product_model/get_categories_model.dart';
 import 'package:noble_vintage/model/product_model/get_products_model.dart'
     as PD;
+import 'package:noble_vintage/model/product_model/product_enquiry_model.dart';
 import 'package:noble_vintage/services/local_storage_service.dart';
 import 'package:noble_vintage/services/locator.dart';
 import 'package:noble_vintage/utils/date_time_utils.dart';
@@ -24,6 +26,7 @@ class ProductController extends GetxController {
   RxBool loading = true.obs;
   RxBool buttonLoading = false.obs;
   RxList<Data> categories = RxList<Data>([]);
+  RxList<BrandData> brands = RxList<BrandData>([]);
   Rx<PD.GetProductsModel?> products = Rx(null);
   RxList<PD.Data> searchProducts = RxList([]);
   RxList<PD.Data> myProducts = RxList([]);
@@ -122,7 +125,23 @@ class ProductController extends GetxController {
       selectedProductType.value = allData;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage.value = 'Timed Out! Please reload';
+        errorMessage.value = '  Please reload';
+      } else {
+        errorMessage.value = e.message;
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    }
+  }
+
+  Future<void> getUserBrands() async {
+    try {
+      final response = await _productsApi.getBrands();
+      final data = response.data ?? [];
+      brands.value = data;
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout) {
+        errorMessage.value = '  Please reload';
       } else {
         errorMessage.value = e.message;
       }
@@ -170,6 +189,23 @@ class ProductController extends GetxController {
     loading.value = true;
     final token = await locator<LocalStorageService>().getData('token');
     final response = await _productsApi.getUserProducts('Bearer $token');
+    loading.value = false;
+    return response;
+
+    print('checkResponse$response');
+  }
+
+  Future<ProductEnquiryModel> getUserProductEnquiry({
+    required int productId,
+  }) async {
+    loading.value = true;
+    final token = await locator<LocalStorageService>().getData('token');
+    final response = await _productsApi.productEnquiry(
+      'Bearer $token',
+      {
+        "product_id": productId,
+      },
+    );
     loading.value = false;
     return response;
 

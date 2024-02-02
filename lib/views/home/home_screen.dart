@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       productController.loading.value = true;
       await productController.getCategories();
+      await productController.getUserBrands();
       await productController.getProducts();
       productController.loading.value = false;
     });
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 productController.loading.value = true;
                 // await getCategories();
                 await productController.getCategories();
+                await productController.getUserBrands();
                 await productController.getProducts();
                 productController.loading.value = false;
               },
