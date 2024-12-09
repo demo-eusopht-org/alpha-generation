@@ -69,25 +69,25 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def date = new Date();
-                    def formattedDate = date.format('-MMM-dd--HH-mm')
-                    output.outputFileName = "Alpha-Generation-RELEASE-" + formattedDate + ".apk"
+        buildTypes{
+            release {
+                minifyEnabled true
+                shrinkResources true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                signingConfig signingConfigs.release
+                applicationVariants.all { variant ->
+                    variant.outputs.each { output ->
+                        def date = new Date();
+                        def formattedDate = date.format('-MMM-dd--HH-mm')
+                        output.outputFileName = "Alpha-Generation-RELEASE-" + formattedDate + ".apk"
 
+                    }
                 }
             }
+            debug {
+                signingConfig signingConfigs.release
+            }
         }
-        debug {
-            signingConfig signingConfigs.release
-        }
-    }
 }
 
 flutter {

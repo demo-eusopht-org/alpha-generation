@@ -62,7 +62,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   maxWidth: 30,
                 ),
                 style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.transparent,
+                  ),
                   tapTargetSize: MaterialTapTargetSize.padded,
                 ),
                 icon: Icon(
